@@ -1,3 +1,88 @@
+<?php
+require 'includes/database'
+
+// Verificar si el formulario ha sido enviado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Capturar datos del formulario
+    $tipoReporte = $_POST['tipoReporte'];
+    $nombreR = $_POST['nombreR'] ?? null; // Es opcional si es anónimo
+    $correoR = $_POST['correoR'] ?? null;
+    $numTelR = $_POST['numTelR'] ?? null;
+    $relUniR = $_POST['relUniR'];
+    $tipoDenuncia = $_POST['tipoDenuncia'];
+    $fechaHecho = $_POST['fechaHecho'];
+    $lugarHecho = $_POST['lugarHecho'];
+    $detallesLugar = $_POST['detallesLugar'];
+    $descripcionR = $_POST['descripcionR'];
+    $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
+    $prioridad = $_POST['prioridad']; // Podría depender de la gravedad
+
+    // Insertar datos del reporte en la tabla REPORTE
+    $stmt = $conn->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreR, correoR, numTelR, relUniR, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreR, $correoR, $numTelR, $relUniR, $tipoDenuncia, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
+
+    if ($stmt->execute()) {
+        $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
+        echo "Reporte registrado con éxito. ID: " . $idReporte;
+
+        // Insertar testigos si se proporcionaron
+        if (isset($_POST['testigos'])) {
+            foreach ($_POST['testigos'] as $testigo) {
+                $stmtTestigo = $conn->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
+                $stmtTestigo->bind_param("ss", $testigo['nombre'], $testigo['relacion']);
+                if ($stmtTestigo->execute()) {
+                    $idTestigo = $stmtTestigo->insert_id;
+                    $stmtReporteTestigo = $conn->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
+                    $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
+                    $stmtReporteTestigo->execute();
+                }
+            }
+        }
+
+        // Insertar agresores si se proporcionaron
+        if (isset($_POST['agresores'])) {
+            foreach ($_POST['agresores'] as $agresor) {
+                $stmtAgresor = $conn->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
+                $stmtAgresor->bind_param("ss", $agresor['nombre'], $agresor['relacion']);
+                if ($stmtAgresor->execute()) {
+                    $idAgresor = $stmtAgresor->insert_id;
+                    $stmtReporteAgresor = $conn->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
+                    $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
+                    $stmtReporteAgresor->execute();
+                }
+            }
+        }
+
+        // Insertar evidencias si se proporcionaron
+        if (isset($_FILES['evidencias'])) {
+            foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
+                $nombreEvidencia = $_FILES['evidencias']['name'][$index];
+                $rutaEvidencia = 'uploads/' . basename($nombreEvidencia);
+
+                if (move_uploaded_file($tmpName, $rutaEvidencia)) {
+                    $stmtEvidencia = $conn->prepare("INSERT INTO EVIDENCIAS (nombreE, rutaArchivoE, descripcionE) VALUES (?, ?, ?)");
+                    $descripcionE = $_POST['descripcionEvidencias'][$index]; // Suponiendo que existe un array con las descripciones
+                    $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
+                    if ($stmtEvidencia->execute()) {
+                        $idEvidencia = $stmtEvidencia->insert_id;
+                        $stmtReporteEvidencia = $conn->prepare("INSERT INTO REPORTE_EVIDENCIAS (idReporte, idE) VALUES (?, ?)");
+                        $stmtReporteEvidencia->bind_param("ii", $idReporte, $idEvidencia);
+                        $stmtReporteEvidencia->execute();
+                    }
+                }
+            }
+        }
+
+    } else {
+        echo "Error al registrar el reporte: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,8 +110,8 @@
             <label for="anonimo_no">No</label><br><br>
 
                 <div id="no_anonimo_datos" style="display:none;">
-                    <label for="nombre_completo">Nombre completo:</label>
-                    <input type="text" id="nombre_completo" name="nombre_completo"><br>
+                    <label for="nombreR">Nombre completo:</label>
+                    <input type="text" id="nombreR" name="nombreR"><br>
 
                     <label for="correo">Correo Electrónico (preferentemente institucional):</label>
                     <input type="email" id="correo" name="correo"><br>
@@ -370,7 +455,7 @@
             }
 
             if (anonimato.value === "No") {
-                const nombre = document.getElementById('nombre_completo').value.trim();
+                const nombre = document.getElementById('nombreR').value.trim();
                 const correo = document.getElementById('correo').value.trim();
         
                 if (!nombre || !correo) {
