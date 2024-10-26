@@ -1,5 +1,6 @@
 <?php
 require './includes/database.php';
+require './includes/encryption.php';
 
 // Verificar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
     //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
     $priotidad = 1;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
+
+    $detallesLugar = encryptData($detallesLugar);
 
     // Insertar datos del reporte en la tabla REPORTE
     $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreR, correoR, numTelR, relUniR, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
