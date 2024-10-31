@@ -5,7 +5,7 @@ require './includes/encryption.php';
 // Verificar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capturar datos del formulario
-    $tipoReporte = $_POST['tipoReporte'] ?? null;
+    $tipoReporte = $_POST['tipoReporte'];
     $nombreR = $_POST['nombreR'] ?? null; // Es opcional si es anónimo
     $correoR = $_POST['correoR'] ?? null;
     $numTelR = $_POST['numTelR'] ?? null;
@@ -107,10 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h2>Sección 1: Tipo de denuncia</h2>
             <label>1. ¿Desearías realizar una denuncia anónima?</label><br>
 
-            <input class="radio" type="radio" id="anonimo_si" name="anonimato" value="Sí">
+            <input class="radio" type="radio" id="anonimo_si" name="tipoReporte" value="Sí">
             <label for="anonimo_si">Sí</label><br><br>    
 
-            <input class="radio" type="radio"  id="anonimo_no" name="anonimato" value="No">
+            <input class="radio" type="radio"  id="anonimo_no" name="tipoReporte" value="No">
             <label for="anonimo_no">No</label><br><br>
 
                 <div id="no_anonimo_datos" style="display:none;">
@@ -373,8 +373,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Mostrar u ocultar campos de datos cuando se elige anonimato o no
-        document.getElementsByName('anonimato').forEach(function(radio) {
+        // Mostrar u ocultar campos de datos cuando se elige anonim o no
+        document.getElementsByName('tipoReporte').forEach(function(radio) {
             radio.addEventListener('change', function() {
                 const noAnonimoDatos = document.getElementById('no_anonimo_datos');
                 if (this.value === "No") {
@@ -450,15 +450,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         //Validación de respuestas Sección 1
         function validarSeccion1() {
-            const anonimato = document.querySelector('input[name="anonimato"]:checked');
+            const tipoReporte = document.querySelector('input[name="tipoReporte"]:checked');
             const noAnonimoDatos = document.getElementById('no_anonimo_datos');
     
-            if (!anonimato) {
+            if (!tipoReporte) {
                 alert('Por favor selecciona si deseas realizar una denuncia anónima.');
                 return;
             }
 
-            if (anonimato.value === "No") {
+            if (tipoReporte.value === "No") {
                 const nombre = document.getElementById('nombreR').value.trim();
                 const correoR = document.getElementById('correoR').value.trim();
         
