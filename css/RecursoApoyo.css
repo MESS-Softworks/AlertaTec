@@ -8,6 +8,13 @@
     --Blanco: #ffffff;
 }
 
+.titulo{
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+    font-size: 200%;
+    justify-self: center;
+}
+
 .Fondo{
     min-width: 320px; 
     height: 100vh;
