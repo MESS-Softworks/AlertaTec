@@ -241,7 +241,13 @@
     .imagen, .imagen2, .imagen3 {
         width: 60%;
         margin: 0 auto;
+        padding-top: 5%;
     }
+
+    .imagen2{
+        padding-bottom: 10%;
+        padding-left: 15%;
+        }
 
     .texto, .texto1, .texto2{
         font-size: 160%;
@@ -259,7 +265,7 @@
         border-radius: 5px;
     }
 
-    .logo{
+    #logo{
         text-align: center;
         margin: 0 auto;
     }
@@ -288,6 +294,13 @@
         margin: 0 auto;
     }
 
+    .imagen2{
+        width: 70%;
+        padding-bottom: 10%;
+        padding-left: 0%;
+        padding-top: 5%;
+        }
+
     .texto, .texto1, .texto2, .preg {
         font-size: 150%;
         margin: 0 auto;
@@ -296,6 +309,7 @@
     .boton {
         padding: 12px 40px;
         margin-left: 40%;
+        margin-top: 5%;
     }
 
     #info {
@@ -311,7 +325,7 @@
         border-radius: 5px;
     }
 
-    .logo{
+    #logo{
         text-align: center;
         margin: 0 auto;
     }
@@ -345,7 +359,7 @@
     #logo {
         width: 50%;
         margin-left: 20px;
-        margin: 0 auto;
+        
     }
 
     .imagen, .imagen2, .imagen3 {
@@ -354,8 +368,9 @@
     }
 
     .imagen2{
+        width: 70%;
         padding-bottom: 10%;
-        padding-left: 0%;
+        padding-left: 17.5%;
         padding-top: 5%;
     }
 
@@ -365,7 +380,7 @@
     }
 
     .texto{
-        padding-top: 5%;
+        padding-top: 10%;
    }
 
     .boton {
@@ -374,17 +389,17 @@
     }
 
     #info {
-        grid-template-columns: 1fr;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-top: 0px;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        padding: 0%;
+        margin: 0 auto;
     }
 
     .menu{
-        padding: 0px 30px;
         display: grid;
         grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr;
         border-radius: 5px;
+        margin: 0 auto;
+        font-size: 150%;
     }
 
     #logo{
@@ -395,8 +410,7 @@
     .huella{
         display: grid;
         height: 100%;
-        margin-right: 0%;
-        margin-top: 2%;
+        margin: 0 auto;
         padding: 0;
         grid-template-columns: 1fr; /* Puedes ajustar según el contenido */
     }
