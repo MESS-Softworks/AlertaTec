@@ -238,7 +238,7 @@
         grid-template-columns: 1fr;
     }
 
-    .imagen, .imagen2, .imagen3 {
+    .imagen, .imagen2{
         width: 60%;
         margin: 0 auto;
         padding-top: 5%;
@@ -248,6 +248,11 @@
         padding-bottom: 10%;
         padding-left: 15%;
         }
+
+    .imagen3{
+        width: 60%;
+        margin: 0 auto;
+    }
 
     .texto, .texto1, .texto2{
         font-size: 160%;
