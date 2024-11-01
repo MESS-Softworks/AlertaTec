@@ -6,11 +6,11 @@ require './includes/encryption.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capturar datos del formulario
     $tipoReporte = $_POST['tipoReporte'];
-    $nombreR = $_POST['nombreR'] ?? null; // Es opcional si es anónimo
-    $correoR = $_POST['correoR'] ?? null;
-    $numTelR = $_POST['numTelR'] ?? null;
-    $relUniR = $_POST['relUniR'] ?? null;
-    $tipoDenuncia = $_POST['tipoDenuncia'] ?? null;
+    $nombreR = $_POST['nombreR'] ?? null; // 
+    $correoR = $_POST['correoR'] ?? null; // Es opcional si es anonimo
+    $numTelR = $_POST['numTelR'] ?? null; //
+    $relUniR = $_POST['relUniR'] ?? null;       //Hay que modificar
+    $tipoD = $_POST['tipoD'] ?? null;
     $fechaHecho = $_POST['fechaHecho'];
     $lugarHecho = $_POST['lugarHecho'] ?? null;
     $detallesLugar = $_POST['detallesLugar'] ?? null;
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insertar datos del reporte en la tabla REPORTE
     $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreR, correoR, numTelR, relUniR, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreR, $correoR, $numTelR, $relUniR, $tipoDenuncia, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
+    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreR, $correoR, $numTelR, $relUniR, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
 
     if ($stmt->execute()) {
         $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
@@ -197,15 +197,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="seccion" id="seccion3">
             <h2>Sección 3: Detalles de la denuncia</h2>
             <label>4. ¿Qué tipo de agresión estás denunciando? (Puedes seleccionar más de una opción)</label><br>
-            <input class="radio" type="checkbox" name="agresion" value="Agresión verbal"> Agresión verbal (insultos, amenazas, comentarios ofensivos)<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Agresión física"> Agresión física (golpes, empujones, etc.)<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Agresión sexual"> Agresión sexual (violación, contacto sexual no deseado)<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Acoso"> Acoso (persecución, vigilancia)<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Discriminación"> Discriminación (género, raza, etc.)<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Ciberacoso"> Ciberacoso<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Hostigamiento laboral o académico"> Hostigamiento laboral o académico<br><br>
-            <input class="radio" type="checkbox" name="agresion" value="Otro"> Otro (especificar):<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión verbal"> Agresión verbal (insultos, amenazas, comentarios ofensivos)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión física"> Agresión física (golpes, empujones, etc.)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión sexual"> Agresión sexual (violación, contacto sexual no deseado)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Acoso"> Acoso (persecución, vigilancia)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Discriminación"> Discriminación (género, raza, etc.)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Ciberacoso"> Ciberacoso<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Hostigamiento laboral o académico"> Hostigamiento laboral o académico<br><br>
+            <input class="radio" type="checkbox" id="Otro" value="Otro"> Otro (especificar):<br><br>
             <input type="text" name="agresion_otro" id="agresion_otro"><br>
+            <input type="hidden" name="tipoD" id="tipoD" value= "">
 
             <label for="fechaHecho">5. ¿Cuándo ocurrió el incidente?</label>
             <input type="date" id="fechaHecho" name="fechaHecho"><br>
@@ -526,7 +527,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         //Validación de respuestas Sección 3
         function validarSeccion3() {
-    const tiposAgresion = document.querySelectorAll('input[name="agresion"]:checked');
+    const tiposAgresion = document.querySelectorAll('input[name="tipoDenuncia"]:checked');
     const fechaIncidente = document.getElementById('fechaHecho').value;
     const lugarIncidente = document.querySelector('input[name="lugar_incidente"]:checked');
     const numAgresores = document.getElementById('num_agresores').value;
@@ -637,7 +638,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             alert('Formulario enviado exitosamente.');
+            document.getElementById('tipoD').value = ObtenerCheckbox();
             document.getElementById('formulario').submit();
+        }
+
+        //Obtener el valor de los checkbox
+        function ObtenerCheckbox(){
+            const tipoDenuncia =  document.querySelectorAll('input[name="tipoDenuncia"]:checked');
+            const valores = Array.from(tipoDenuncia).map(checkbox => checkbox.value);
+    
+            // Incluye el valor del campo de texto "Otro" si está lleno
+            const agresionOtro = document.getElementById('agresion_otro').value;
+            let band = document.getElementById('Otro').checked;
+            if (agresionOtro && band) {
+                valores.push(agresionOtro);
+            }
+
+            return valores.join(', ');
+            
         }
         
     </script>
