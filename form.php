@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correoR = $_POST['correoR'] ?? null; // Es opcional si es anonimo
     $numTelR = $_POST['numTelR'] ?? null; //
     $relUniR = $_POST['relUniR'] ?? null;       //Hay que modificar
-    $tipoD = $_POST['tipoD'] ?? null;
+    $tipoD = $_POST['tipoD'];
     $fechaHecho = $_POST['fechaHecho'];
     $lugarHecho = $_POST['lugarHecho'] ?? null;
     $detallesLugar = $_POST['detallesLugar'] ?? null;
@@ -212,14 +212,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="date" id="fechaHecho" name="fechaHecho"><br>
 
             <label>6. ¿Dónde ocurrió el incidente?</label><br>
-            <input class="radio" type="radio" id="dentro" name="lugar_incidente" value="Dentro de la institución">
+            <input class="radio" type="radio" id="dentro" name="lugarHecho" value="Dentro de la institución">
             <label for="dentro">Dentro de la institución</label><br><br>
                 <div id="lugar_dentro" style="display:none;">
                     <label for="detallesLugar">Describir el lugar (aula, edificio, áreas comunes, etc.):</label>
                     <input type="text" id="detallesLugar" name="detallesLugar"><br>
                 </div>
 
-            <input class="radio" type="radio" id="fuera" name="lugar_incidente" value="Fuera de la institución">
+            <input class="radio" type="radio" id="fuera" name="lugarHecho" value="Fuera de la institución">
             <label for="fuera">Fuera de la institución</label><br><br>
 
             <label for="num_agresores">7. Indica el número de agresores involucrados.</label>
@@ -426,7 +426,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
 
         // Mostrar u ocultar campos según el lugar del incidente
-        document.getElementsByName('lugar_incidente').forEach(function(radio) {
+        document.getElementsByName('lugarHecho').forEach(function(radio) {
             radio.addEventListener('change', function() {
                 const lugarDentro = document.getElementById('lugar_dentro');
                 if (this.value === "Dentro de la institución") {
@@ -529,7 +529,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function validarSeccion3() {
     const tiposAgresion = document.querySelectorAll('input[name="tipoDenuncia"]:checked');
     const fechaIncidente = document.getElementById('fechaHecho').value;
-    const lugarIncidente = document.querySelector('input[name="lugar_incidente"]:checked');
+    const lugarIncidente = document.querySelector('input[name="lugarHecho"]:checked');
     const numAgresores = document.getElementById('num_agresores').value;
 
     if (tiposAgresion.length === 0) {
