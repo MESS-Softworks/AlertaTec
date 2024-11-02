@@ -12,13 +12,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $relUniR = $_POST['relUniR'] ?? null;       //Hay que modificar
     $tipoD = $_POST['tipoD'];
     $fechaHecho = $_POST['fechaHecho'];
-    $lugarHecho = $_POST['lugarHecho'] ?? null;
-    $detallesLugar = $_POST['detallesLugar'] ?? null;
-    $descripcionR = $_POST['descripcionR'] ?? null;
+    $lugarHecho = $_POST['lugarHecho'];
+    $detallesLugar = $_POST['detallesLugar'] ?? null; //Opcional 
+    $descripcionR = $_POST['descripcionR'] ?? null; //Este no esta en el formulariooooo!!!
     $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
     //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
-    $priotidad = 1;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
+    $prioridad = 1;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
 
+    if($tipoReporte == "No"){
+        $prioridad += 4;
+    }
+
+    //Encriptamos la información sensible
     $detallesLugar = encryptData($detallesLugar);
 
     // Insertar datos del reporte en la tabla REPORTE
