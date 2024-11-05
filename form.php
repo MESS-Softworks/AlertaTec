@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombreR = $_POST['nombreR'] ?? null; // 
     $correoR = $_POST['correoR'] ?? null; // Es opcional si es anonimo
     $numTelR = $_POST['numTelR'] ?? null; //
-    $relUniR = $_POST['relUniR'] ?? null;       //Hay que modificar
+    $relUniR = $_POST['relUniR'] ?? null; //Hay que modificar
     $tipoD = $_POST['tipoD'];
     $fechaHecho = $_POST['fechaHecho'];
     $lugarHecho = $_POST['lugarHecho'];
@@ -24,7 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     //Encriptamos la información sensible
-    $detallesLugar = encryptData($detallesLugar);
+    $nombreR = encryptData($nombreR);
+    $correoR = encryptData($correoR);
+    $numTelR = encryptData($numTelR);
 
     // Insertar datos del reporte en la tabla REPORTE
     $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreR, correoR, numTelR, relUniR, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -34,13 +36,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
         echo "Reporte registrado con éxito. ID: " . $idReporte;
 
-        // Insertar testigos si se proporcionaron
-        if (isset($_POST['testigos'])) {
-            foreach ($_POST['testigos'] as $testigo) {
+        // // Insertar testigos si se proporcionaron
+        // if (isset($_POST['testigos'])) {
+        //     foreach ($_POST['testigos'] as $testigoNom) {
+        //         $stmtTestigo = $conexion->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
+        //         $stmtTestigo->bind_param("ss", $testigo['nombre'], $testigo['relacion']);
+        //         if ($stmtTestigo->execute()) {
+        //             $idTestigo = $stmtTestigo->insert_id;
+        //             $stmtReporteTestigo = $conexion->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
+        //             $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
+        //             $stmtReporteTestigo->execute();
+        //         }
+        //     }
+        // }
+
+        // Primero, verifica si se seleccionó algún número de testigos
+        if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
+            $numTestigos = $_POST['num_testigos'];
+            
+            // Recorre cada número de testigo y guarda los datos en la base de datos
+            for ($i = 1; $i <= $numTestigos; $i++) {
+                // Obtiene el rol del testigo y el nombre
+                $rolT = $_POST["testigo_rol_{$i}"];
+                $nombreT = $_POST["nombre_testigo_{$i}"];
+                
+                // Si el rol es "Otro", obtiene la especificación adicional
+                if ($rolT == "Otro") {
+                    $rolT = $_POST["testigo_otro_especificar_{$i}"];
+                }
+
+                // Inserta el testigo en la base de datos
                 $stmtTestigo = $conexion->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
-                $stmtTestigo->bind_param("ss", $testigo['nombre'], $testigo['relacion']);
+                $stmtTestigo->bind_param("ss", $nombreT, $rolT);
+
                 if ($stmtTestigo->execute()) {
                     $idTestigo = $stmtTestigo->insert_id;
+
+                    // Inserta la relación entre el reporte y el testigo
                     $stmtReporteTestigo = $conexion->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
                     $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
                     $stmtReporteTestigo->execute();
@@ -48,13 +80,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Insertar agresores si se proporcionaron
-        if (isset($_POST['agresores'])) {
-            foreach ($_POST['agresores'] as $agresor) {
+
+        // // Insertar agresores si se proporcionaron
+        // if (isset($_POST['agresores'])) {
+        //     foreach ($_POST['agresores'] as $agresor) {
+        //         $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
+        //         $stmtAgresor->bind_param("ss", $agresor['nombre'], $agresor['relacion']);
+        //         if ($stmtAgresor->execute()) {
+        //             $idAgresor = $stmtAgresor->insert_id;
+        //             $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
+        //             $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
+        //             $stmtReporteAgresor->execute();
+        //         }
+        //     }
+        // }
+
+        // Primero, verifica si se seleccionó algún número de testigos
+        if (isset($_POST['num_agresores']) && $_POST['num_agresores'] > 0) {
+            $numAgresores = $_POST['num_agresores'];
+            
+            // Recorre cada número de testigo y guarda los datos en la base de datos
+            for ($i = 1; $i <= $numAgresores; $i++) {
+                // Obtiene el rol del testigo y el nombre
+                $rolA = $_POST["agresor_rol_{$i}"];
+                $nombreA = $_POST["nombre_agresor_{$i}"];
+                
+                // Si el rol es "Otro", obtiene la especificación adicional
+                if ($rolA == "Otro") {
+                    $rolA = $_POST["agresor_otro_especificar_{$i}"];
+                }
+
+                // Inserta el testigo en la base de datos
                 $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
-                $stmtAgresor->bind_param("ss", $agresor['nombre'], $agresor['relacion']);
+                $stmtAgresor->bind_param("ss", $nombreA, $rolA);
+
                 if ($stmtAgresor->execute()) {
                     $idAgresor = $stmtAgresor->insert_id;
+
+                    // Inserta la relación entre el reporte y el testigo
                     $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
                     $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
                     $stmtReporteAgresor->execute();
@@ -66,11 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_FILES['evidencias'])) {
             foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
                 $nombreEvidencia = $_FILES['evidencias']['name'][$index];
-                $rutaEvidencia = 'uploads/' . basename($nombreEvidencia);
+                $rutaEvidencia = 'evidencias/'.uniqid()."_".basename($nombreEvidencia);
 
                 if (move_uploaded_file($tmpName, $rutaEvidencia)) {
+                    //Insertar registro en la tabla evidencias
                     $stmtEvidencia = $conexion->prepare("INSERT INTO EVIDENCIAS (nombreE, rutaArchivoE, descripcionE) VALUES (?, ?, ?)");
-                    $descripcionE = $_POST['descripcionEvidencias'][$index]; // Suponiendo que existe un array con las descripciones
+                    $descripcionE = $_POST['descripcionE']; // Suponiendo que existe un array con las descripciones
                     $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
                     if ($stmtEvidencia->execute()) {
                         $idEvidencia = $stmtEvidencia->insert_id;
@@ -80,6 +144,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 }
             }
+        }else{
+            echo "No entro";
         }
 
     } else {
@@ -105,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Formulario de Denuncia</h1>
 
     <!-- Formulario dividido por secciones -->
-    <form id="formulario" method="POST" >
+    <form id="formulario" method="POST" enctype="multipart/form-data">
 
         <!-- Sección 1: Tipo de denuncia -->
         <div class="seccion active" id="seccion1">
@@ -229,6 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <label for="num_agresores">7. Indica el número de agresores involucrados.</label>
             <select id="num_agresores" name="num_agresores" onchange="generarCamposAgresores()">
+                <option value="0">ninguno</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -239,6 +306,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Aquí se generarán las preguntas 7.1 y 7.2 -->
                 <div id="campos_agresores"></div>
 
+
+            <!-- Pregunta 8 -->
+            <label for="descripcionR">8. Proporciona una descripción del hecho</label>
+            <input type="text" id="descripcionR" name="descripcionR"><br>
+            
             <!-- Botón para pasar a la siguiente sección -->
             <button type="button" class="button" onclick="regresarSeccion('seccion2')">Atrás</button>
             <button type="button" class="button" onclick="validarSeccion3()">Siguiente</button>
@@ -254,9 +326,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input class="radio" type="radio" id="evidencia_no" name="evidencia" value="No">
             <label for="evidencia_no">No</label><br><br>
                 <div id="adjunto_evidencias" style="display:none;">
-                    <label for="evidencia_archivo">Adjunta las evidencias:</label>
-                    <input type="file" id="evidencia_archivo" name="evidencia_archivo" multiple><br>
+                    <label for="evidencias">Adjunta las evidencias:</label>
+                    <input type="file" id="evidencias" name="evidencias[]" multiple><br>
+                    <label for="descripcionE">Describe la evidencia: </label>
+                    <input type="text"name="descripcionE"><br>
                 </div>
+            
 
             <label for="num_testigos">10. Indica el número de testigos.</label>
             <select id="num_testigos" name="num_testigos" onchange="generarCamposTestigos()">
@@ -596,7 +671,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             if (evidencia.value === "Sí") {
-                const archivosEvidencia = document.getElementById('evidencia_archivo').files;
+                const archivosEvidencia = document.getElementById('evidencias').files;
                 if (archivosEvidencia.length === 0) {
                     alert('Por favor adjunta al menos una evidencia.');
                     return;
@@ -608,8 +683,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return;
             }
 
-            const num_agresores = document.getElementById('campos_testigos').children;
-            for (let i = 0; i < num_agresores.length; i++) {
+            const num_Testigos = document.getElementById('campos_testigos').children;
+            for (let i = 0; i < numTestigos.length; i++) {
                 const testigoRol = document.querySelector(`input[name="testigo_rol_${i+1}"]:checked`);
                 const nombreTestigo = document.getElementById(`nombre_testigo_${i+1}`).value.trim();
 
