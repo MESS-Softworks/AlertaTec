@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_FILES['evidencias'])) {
             foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
                 $nombreEvidencia = $_FILES['evidencias']['name'][$index];
-                $rutaEvidencia = 'evidencias/'.uniqid()."_".basename($nombreEvidencia);
+                $rutaEvidencia = 'evidencias/'.$idReporte.'/'.$idReporte."_".basename($nombreEvidencia);
 
                 if (move_uploaded_file($tmpName, $rutaEvidencia)) {
                     //Insertar registro en la tabla evidencias
@@ -641,7 +641,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     const num_agresores = document.getElementById('campos_agresores').children;
-    for (let i = 0; i < numAgresores.length; i++) {
+    for (let i = 0; i < numAgresores; i++) {
         const agresorRol = document.querySelector(`input[name="agresor_rol_${i+1}"]:checked`);
         const nombreAgresor = document.getElementById(`nombre_agresor_${i+1}`).value.trim();
 
@@ -684,7 +684,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             const num_Testigos = document.getElementById('campos_testigos').children;
-            for (let i = 0; i < numTestigos.length; i++) {
+            for (let i = 0; i < numTestigos; i++) {
                 const testigoRol = document.querySelector(`input[name="testigo_rol_${i+1}"]:checked`);
                 const nombreTestigo = document.getElementById(`nombre_testigo_${i+1}`).value.trim();
 
