@@ -7,6 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capturar datos del formulario
     $tipoReporte = $_POST['tipoReporte'];
     $nombreD = $_POST['nombreD'] ?? null; // 
+    if($tipoReporte == "Sí"){
+        $correoD = $_POST['correoDA'] ?? null;
+    }
     $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
     $numTelD = $_POST['numTelD'] ?? null; //
     $tipoDenunciante = $_POST['tipoDenunciante'];
@@ -66,20 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
         echo "Reporte registrado con éxito. ID: " . $idReporte;
 
-        // // Insertar testigos si se proporcionaron
-        // if (isset($_POST['testigos'])) {
-        //     foreach ($_POST['testigos'] as $testigoNom) {
-        //         $stmtTestigo = $conexion->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
-        //         $stmtTestigo->bind_param("ss", $testigo['nombre'], $testigo['relacion']);
-        //         if ($stmtTestigo->execute()) {
-        //             $idTestigo = $stmtTestigo->insert_id;
-        //             $stmtReporteTestigo = $conexion->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
-        //             $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
-        //             $stmtReporteTestigo->execute();
-        //         }
-        //     }
-        // }
-
         // Primero, verifica si se seleccionó algún número de testigos
         if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
             $numTestigos = $_POST['num_testigos'];
@@ -109,21 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
-
-
-        // // Insertar agresores si se proporcionaron
-        // if (isset($_POST['agresores'])) {
-        //     foreach ($_POST['agresores'] as $agresor) {
-        //         $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
-        //         $stmtAgresor->bind_param("ss", $agresor['nombre'], $agresor['relacion']);
-        //         if ($stmtAgresor->execute()) {
-        //             $idAgresor = $stmtAgresor->insert_id;
-        //             $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
-        //             $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
-        //             $stmtReporteAgresor->execute();
-        //         }
-        //     }
-        // }
 
         // Primero, verifica si se seleccionó algún número de testigos
         if (isset($_POST['num_agresores']) && $_POST['num_agresores'] > 0) {
@@ -392,10 +366,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="seccion" id="seccion5">
             <h2>Sección 5: Finalizar denuncia</h2>
             <label>11. ¿Deseas recibir actualizaciones sobre el estado de la denuncia?</label><br>
-            <input class="radio" type="radio" id="actualizaciones_correo" name="actualizaciones" value="Correo">
-            <label for="actualizaciones_correo">Sí, por correoD electrónico</label><br><br>
-            <input class="radio" type="radio" id="actualizaciones_telefono" name="actualizaciones" value="Teléfono">
-            <label for="actualizaciones_telefono">Sí, por teléfono</label><br><br>
+            <input class="radio" type="radio" id="actualizaciones_correo" name="actualizaciones" value="Sí">
+            <label for="actualizaciones_correo">Sí, deseo recibir actualizaciones sobre el estado de la denuncia.</label><br><br>
+            <div id="anonimo_actualizacion" style="display:none;">
+                <label for="correoD">Correo Electrónico:</label>
+                <input type="email" id="correoDA" name="correoDA"><br>
+
+                    <p><strong>Aviso legal:</strong><br>
+                    A pesar de que la denuncia es anonima, requerimos de un correo para comunicarnos contigo cuando haya actualizaciones.<br><br></p>
+                </div>
             <input class="radio" type="radio" id="no_actualizaciones" name="actualizaciones" value="No">
             <label for="no_actualizaciones">No, prefiero no recibir actualizaciones</label><br><br>
 
@@ -565,6 +544,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             });
         });
+
+        // Mostrar u ocultar campos de datos cuando se elige anonim o no
+        document.getElementsByName('actualizaciones').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                const anonimoActualizacion = document.getElementById('anonimo_actualizacion');
+                const anonimo = document.querySelector('input[name="tipoReporte"]:checked').value;
+                console.log(anonimo);
+                console.log("hola");
+                console.log(this.value);
+                if (this.value === "Sí" && anonimo === "Sí") {
+                    anonimoActualizacion.style.display = "block";
+                } else {
+                    anonimoActualizacion.style.display = "none";
+                }
+            });
+        });
+
 
         //Validación de respuestas Sección 1
         function validarSeccion1() {
@@ -747,6 +743,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!actualizaciones) {
                 alert('Por favor selecciona si deseas recibir actualizaciones sobre el estado de la denuncia.');
                 return;
+            }
+
+            const block = document.getElementById('anonimo_actualizacion');
+            if(block.style.display === "block"){
+                const correo = document.getElementById('correoDA').value;
+                if(!correo){
+                    alert('Porfavor proporciona un correo.');
+                    return;
+                }
             }
 
             if (!apoyoPsicologico) {
