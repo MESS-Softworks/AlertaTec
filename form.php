@@ -127,9 +127,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Insertar evidencias si se proporcionaron
         if (isset($_FILES['evidencias'])) {
+            $rutaEvidencia = 'evidencias/'.$idReporte;
+            if (!is_dir($rutaEvidencia)) {
+                mkdir($rutaEvidencia, 0777, true); // 0777 da permisos completos, y true crea directorios recursivamente
+            }
+
             foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
                 $nombreEvidencia = $_FILES['evidencias']['name'][$index];
-                $rutaEvidencia = 'evidencias/'.$idReporte.'/'.$idReporte."_".basename($nombreEvidencia);
+                $rutaEvidencia = 'evidencias/'.$idReporte.'/'.basename($nombreEvidencia);
+
+                
 
                 if (move_uploaded_file($tmpName, $rutaEvidencia)) {
                     //Insertar registro en la tabla evidencias
