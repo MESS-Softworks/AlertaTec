@@ -37,10 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $descripcionR = $_POST['descripcionR'] ?? null; 
     $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
     //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
-    $prioridad = 1;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
+    $prioridad = 3;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
+    $evi = $_POST['evidencia'];
+    $numTestigos = $_POST['num_testigos'];
 
-    if($tipoReporte == "No"){
+    if($evi = "Sí"){
+        $prioridad += 5;
+    }
+    if($tipoReporte == "No"){ //Reporte anonimo
         $prioridad += 4;
+    }
+    if($numTestigos != "0"){
+        $prioridad += 3;
     }
 
     //Encriptamos la información sensible
@@ -71,8 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Primero, verifica si se seleccionó algún número de testigos
         if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
-            $numTestigos = $_POST['num_testigos'];
-            
             // Recorre cada número de testigo y guarda los datos en la base de datos
             for ($i = 1; $i <= $numTestigos; $i++) {
                 // Obtiene el rol del testigo y el nombre
