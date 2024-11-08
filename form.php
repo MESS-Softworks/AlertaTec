@@ -6,15 +6,32 @@ require './includes/encryption.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capturar datos del formulario
     $tipoReporte = $_POST['tipoReporte'];
-    $nombreR = $_POST['nombreR'] ?? null; // 
-    $correoR = $_POST['correoR'] ?? null; // Es opcional si es anonimo
-    $numTelR = $_POST['numTelR'] ?? null; //
-    $relUniR = $_POST['relUniR'] ?? null; //Hay que modificar
+    $nombreD = $_POST['nombreD'] ?? null; // 
+    $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
+    $numTelD = $_POST['numTelD'] ?? null; //
+    $tipoDenunciante = $_POST['tipoDenunciante'];
+    $relAfectado = $_POST['relacion_afectada'] ?? NULL;
+    $relUniD = $_POST['relacion_universidad']; //Hay que modificar
+    $departamentoD = NULL;
+    $semestreD = NULL;
+    if($relUniD == "Otro"){
+        $relUniD = $_POST['relacion_otro'];
+    }else{
+        if($relUniD == "Alumno"){
+            $departamentoD = ['carrera'];
+            $semestreD = ['semestre'];
+        }else if($relUniD == "Docente"){
+            $departamentoD = ['departamento_docente'];
+        }else if($relUniD == "Personal administrativo"){
+            $departamentoD = ['departamento_admin'];
+        }
+    }
+
     $tipoD = $_POST['tipoD'];
     $fechaHecho = $_POST['fechaHecho'];
     $lugarHecho = $_POST['lugarHecho'];
     $detallesLugar = $_POST['detallesLugar'] ?? null; //Opcional 
-    $descripcionR = $_POST['descripcionR'] ?? null; //Este no esta en el formulariooooo!!!
+    $descripcionR = $_POST['descripcionR'] ?? null; 
     $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
     //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
     $prioridad = 1;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
@@ -24,13 +41,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     //Encriptamos la información sensible
-    $nombreR = encryptData($nombreR);
-    $correoR = encryptData($correoR);
-    $numTelR = encryptData($numTelR);
+    $nombreD = encryptData($nombreD);
+    $correoD = encryptData($correoD);
+    $numTelD = encryptData($numTelD);
+
+    //Insertamos al denunciante
+    $stmtDen = $conexion->prepare("INSERT INTO DENUNCIANTE (nombreD, correoD, numTelD, relUniD, tipoD, departamentoD, semestreD) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmtDen->bind_param("ss", $nombreD, $correoD, $numTelD, $relUniD, $tipoDenunciante, $departamentoD, $semestreD);
+    if ($stmtDen->execute()){
+        $idDenunciante = $stmtDen->insert_id;
+        if($tipoDenunciante == "Testigo"){
+            $stmtDenTes = $conexion->prepare("INSERT INTO DENUNCIANTE_TESTIGO (idD, relAfectado) VALUES (?, ?)");
+            $stmtDenTes->bind_param($idDenunciante, $relAfectado);
+            $stmtDenTes->execute();
+        }
+    }
+
 
     // Insertar datos del reporte en la tabla REPORTE
-    $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreR, correoR, numTelR, relUniR, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreR, $correoR, $numTelR, $relUniR, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
+    $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreD, correoD, numTelD, relUniD, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreD, $correoD, $numTelD, $relUniD, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
 
     if ($stmt->execute()) {
         $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
@@ -192,14 +222,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="anonimo_no">No</label><br><br>
 
                 <div id="no_anonimo_datos" style="display:none;">
-                    <label for="nombreR">Nombre completo:</label>
-                    <input type="text" id="nombreR" name="nombreR"><br>
+                    <label for="nombreD">Nombre completo:</label>
+                    <input type="text" id="nombreD" name="nombreD"><br>
 
-                    <label for="correoR">Correo Electrónico (preferentemente institucional):</label>
-                    <input type="email" id="correoR" name="correoR"><br>
+                    <label for="correoD">Correo Electrónico (preferentemente institucional):</label>
+                    <input type="email" id="correoD" name="correoD"><br>
 
-                    <label for="numTelR">Número telefónico (opcional):</label>
-                    <input type="tel" id="numTelR" name="numTelR"><br>
+                    <label for="numTelD">Número telefónico (opcional):</label>
+                    <input type="tel" id="numTelD" name="numTelD"><br>
 
                     <p><strong>Aviso legal:</strong><br>
                     Al realizar una denuncia sin anonimidad autorizas que tu información sea compartida con las autoridades competentes dentro de la institución para que se tomen las medidas necesarias.<br><br></p>
@@ -213,9 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="seccion" id="seccion2">
             <h2>Sección 2: Datos del denunciante</h2>
             <label>2. ¿Eres la persona afectada o un testigo?</label><br>
-            <input class="radio" type="radio" id="afectada" name="rol" value="Persona afectada">
+            <input class="radio" type="radio" id="afectada" name="tipoDenunciante" value="Persona afectada">
                 <label for="afectada">Persona afectada</label><br><br>
-                <input class="radio" type="radio" id="testigo" name="rol" value="Testigo">
+                <input class="radio" type="radio" id="testigo" name="tipoDenunciante" value="Testigo">
                 <label for="testigo">Testigo</label><br><br>
 
                 <div id="testigo_relacion" style="display:none;">
@@ -363,7 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h2>Sección 5: Finalizar denuncia</h2>
             <label>11. ¿Deseas recibir actualizaciones sobre el estado de la denuncia?</label><br>
             <input class="radio" type="radio" id="actualizaciones_correo" name="actualizaciones" value="Correo">
-            <label for="actualizaciones_correo">Sí, por correoR electrónico</label><br><br>
+            <label for="actualizaciones_correo">Sí, por correoD electrónico</label><br><br>
             <input class="radio" type="radio" id="actualizaciones_telefono" name="actualizaciones" value="Teléfono">
             <label for="actualizaciones_telefono">Sí, por teléfono</label><br><br>
             <input class="radio" type="radio" id="no_actualizaciones" name="actualizaciones" value="No">
@@ -474,7 +504,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
 
         //Mostrar u ocultar campos si la persona afectada es testigo
-        document.getElementsByName('rol').forEach(function(radio) {
+        document.getElementsByName('tipoDenunciante').forEach(function(radio) {
             radio.addEventListener('change', function() {
                 const testigoRelacion = document.getElementById('testigo_relacion');
                 if (this.value === "Testigo") {
@@ -547,10 +577,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             if (tipoReporte.value === "No") {
-                const nombre = document.getElementById('nombreR').value.trim();
-                const correoR = document.getElementById('correoR').value.trim();
+                const nombre = document.getElementById('nombreD').value.trim();
+                const correoD = document.getElementById('correoD').value.trim();
         
-                if (!nombre || !correoR) {
+                if (!nombre || !correoD) {
                     alert('Por favor llena los campos de nombre y correo para continuar.');
                     return;
                 }
@@ -561,7 +591,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         //Validación de respuestas Sección 2
         function validarSeccion2() {
-            const rol = document.querySelector('input[name="rol"]:checked');
+            const rol = document.querySelector('input[name="tipoDenunciante"]:checked');
             const relacionUniversidad = document.querySelector('input[name="relacion_universidad"]:checked');
 
             if (!rol) {
