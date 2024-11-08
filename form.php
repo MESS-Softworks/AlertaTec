@@ -18,12 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $relUniD = $_POST['relacion_otro'];
     }else{
         if($relUniD == "Alumno"){
-            $departamentoD = ['carrera'];
-            $semestreD = ['semestre'];
+            $departamentoD = $_POST['carrera'];
+            $semestreD = $_POST['semestre'];
         }else if($relUniD == "Docente"){
-            $departamentoD = ['departamento_docente'];
+            $departamentoD = $_POST['departamento_docente'];
         }else if($relUniD == "Personal administrativo"){
-            $departamentoD = ['departamento_admin'];
+            $departamentoD = $_POST['departamento_admin'];
         }
     }
 
@@ -47,20 +47,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //Insertamos al denunciante
     $stmtDen = $conexion->prepare("INSERT INTO DENUNCIANTE (nombreD, correoD, numTelD, relUniD, tipoD, departamentoD, semestreD) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmtDen->bind_param("ss", $nombreD, $correoD, $numTelD, $relUniD, $tipoDenunciante, $departamentoD, $semestreD);
+    $stmtDen->bind_param("sssssss", $nombreD, $correoD, $numTelD, $relUniD, $tipoDenunciante, $departamentoD, $semestreD);
     if ($stmtDen->execute()){
         $idDenunciante = $stmtDen->insert_id;
         if($tipoDenunciante == "Testigo"){
             $stmtDenTes = $conexion->prepare("INSERT INTO DENUNCIANTE_TESTIGO (idD, relAfectado) VALUES (?, ?)");
-            $stmtDenTes->bind_param($idDenunciante, $relAfectado);
+            $stmtDenTes->bind_param("is",$idDenunciante, $relAfectado);
             $stmtDenTes->execute();
         }
     }
 
 
     // Insertar datos del reporte en la tabla REPORTE
-    $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreD, correoD, numTelD, relUniD, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreD, $correoD, $numTelD, $relUniD, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
+    $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, idD, tipoReporte, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssssi", $idDenunciante, $tipoReporte, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
 
     if ($stmt->execute()) {
         $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
