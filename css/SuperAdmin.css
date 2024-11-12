@@ -1,0 +1,169 @@
+:root{
+    --Azul-pastel:  #B0C1D9;
+    --Gris-Azulado-Oscuro: #3B4B59;
+    --Azul-Grisaceo: #8EA8BF;
+    --Beige-Suave: #D9BFA9;
+    --Negro: #0D0D0D;
+    --Beige-Gris: #f6f4f3;
+    --Blanco: #ffffff;
+}
+
+.Fondo{
+    min-width: 320px; 
+    height: 100vh;
+    background-color: var(--Beige-Gris);
+    padding: 5px;
+}
+
+.huella{
+    display: grid;
+    height: 100%;
+    margin-right: 0%;
+    margin-top: 2%;
+    padding: 0;
+    grid-template-columns: 1fr 1fr; /* Puedes ajustar según el contenido */
+}
+
+.texto, .texto1, .texto2{
+    margin: 2% auto;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+}
+
+.texto{
+    margin-top: 0%;
+    margin-bottom: 0%;
+    margin-left: 5%;
+    margin-right: 0%;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+    font-size: 200%;
+}
+
+.texto1{
+    margin-bottom: 0%;
+    margin-top: 0px;
+    margin-left: 0%;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+    font-size: 200%;
+}
+
+.texto2{
+    margin-bottom: 0%;
+    margin-top: 0px;
+    margin-left: 0%;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+    font-size: 120%;
+}
+
+.imagen{
+    width: 25%;
+    border: 2px;
+    margin: 0 auto;
+    margin-left: 70%;
+}
+
+.imagen2{
+    width: 40%;
+    margin-left: 0%; 
+    margin-top: 2.5%;
+    border: 2px;
+}
+
+.img2{
+    margin-left: 10%;
+}
+
+.Admin{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.formulario {
+    display: grid;
+    grid-template-rows: 1fr; 
+    gap: 15px;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    background: #e0e0e0;
+    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    border-radius: 20px;
+    max-width: 500px;
+    margin: 10%;
+    text-align: center;
+}
+
+.imagenU{
+    width: 35%;
+    margin: 0 auto;
+    padding-top: 0%;
+    padding-bottom: 2.5%;
+}
+
+.etiqueta {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    }
+
+#correoE, #passw {
+        width: 70%; 
+        margin: 0 auto;
+        padding-left: 10%;
+        padding-right: 10%;
+}
+
+input[type="email"], input[type="password"] {
+    width: 70%; 
+    padding: 5px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border: 1px solid var(--Gris-Azulado-Oscuro);
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin: 0 auto; 
+    display: block;
+}
+
+input[type="submit"], input[type="reset"]{
+    width: 30%; 
+    padding: 5px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin: 0 auto; 
+    display: block;
+}
+
+.bot{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.formD{
+    display: grid;
+    gap: 1px;
+}
+
+.boton{
+    background-color: var(--Gris-Azulado-Oscuro);
+    color: var(--Blanco);
+    font-size: 200%;
+    padding: 5px 10px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 50px;
+    transition: transform 0.3s ease-in-out;
+    display: block;
+}
+
+.boton:hover{
+    background-color: var(--Azul-Grisaceo);
+}
+
+.boton:active{
+    transform: scale(0.9);
+}
+

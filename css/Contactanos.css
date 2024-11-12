@@ -85,6 +85,7 @@
 .contenedor2{
     display: grid;
     grid-template-rows: 1fr 0.1fr;
+    
 }
 
 #info{
@@ -132,7 +133,7 @@
     display: grid;
     width: 100%;
     margin: 0;
-    grid-template-columns: 1fr; /* Ajusta el número de columnas según el contenido */
+    grid-template-rows: 0.4fr 0.2fr 0.3fr; /* Ajusta el número de columnas según el contenido */
 }
 
 .textII{
@@ -180,16 +181,16 @@
 }
 
 .imagen3{
-    width: 40%;
+    width: 60%;
     margin: 10% auto;
     padding-left: 25%;
-    /* box-shadow: 1px 1px 30px var(--Gris-Azulado-Oscuro); */
+    filter: 1px 1px 30px var(--Gris-Azulado-Oscuro);
 }
 
 .imagen4{
-    width: 60%;
+    width: 50%;
     margin: 0 auto;
-    /* padding-left: 30%; */
+    padding: 0% 25% 0% 25%;
 }
 
 .inf2{
@@ -200,6 +201,8 @@
     margin-left: 10%;
     margin-right: 10%;
     text-align: justify;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
 
 .div2{
@@ -222,8 +225,8 @@
     font-size: medium;
     font-family: 'Open Sans', sans-serif;
     padding: 14px 50px;
-    /* margin-left: 25%; */
-    margin-top: 10%;
+    margin-left: 39%;
+    margin-top: 2.5%;
     margin-bottom: 10%;
     /* margin: 0 auto; */
     border: none;
@@ -294,18 +297,83 @@
 
 .correo{
     width: 30%;
-    margin-left: 50%;
-    margin-bottom: 5%;
+    padding-left: 65%;
+    padding-right: 5%;
 }
 
 .tel{
     width: 30%;
-    margin-left: 0%;
-    margin-bottom: 5%;
+    padding-left: 20%;
+    padding-right: 5%;
+}
+
+.titulo{
+    text-align: center;
 }
 
 .bt, .img{
     margin: 0 auto;
+}
+
+@media screen and (max-width: 1500px) {
+
+    #info{
+        grid-template-columns: 0.7fr 1.1fr 1.1fr 1.2fr;
+    }
+
+    .menu{
+        font-size: 140%;
+        padding: 0px 15px;
+    }
+
+    .boton{
+        margin: 0 auto;
+        margin: 5% 28% 0% 28%;
+    }
+
+    .imagen3{
+        width: 60%;
+        margin: 15% auto 0%;
+        padding: 0% 0% 0% 20%;
+    }
+
+    .imagen4{
+        width: 60%;
+        padding: 0% 20% 0% 20%;
+    }
+
+    .correo{
+        padding-left: 60%;
+        padding-right: 5%;
+    }
+
+    .tel{
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .titulo{
+        text-align: center;
+    }
+
+    .inf2{
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .menu{
+        font-size: 130%;
+        padding: 0px 15px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .menu{
+        font-size: 125%;
+        padding: 0px 9px;
+    }
 }
 
 
@@ -330,13 +398,24 @@
         padding-left: 15%;
         }
 
+    .imagen3{
+        padding: 10% 20% 10% 20%;
+    }
+
+    .imagen4{
+        margin: 0 auto;
+        padding: 0% 30% 0% 30%;
+        width: 40%;
+        
+    }
+
     .texto, .texto1, .texto2, .preg {
         font-size: 160%;
     }
 
     .boton {
-        margin-left: 25%;
-        margin-top: 2.5%;
+        margin-left: 0%;
+        margin-top: 25%;
     }
 
     #info {
@@ -345,16 +424,39 @@
     }
 
     .menu{
+        font-size: 150%;
         padding: 0px 30px;
         display: grid;
         grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr;
-        border-radius: 5px;
-        
+        border-radius: 5px;   
     }
 
     #logo{
         text-align: center;
         margin: 0 auto;
+    }
+
+    .textI{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .divR{
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .correo{
+        width: 40%;
+        padding-top: 20%;
+        padding-left: 50%;
+        padding-right: 25%;
+    }
+
+    .tel{
+        width: 40%;
+        padding-top: 20%;
     }
 
 }
@@ -382,6 +484,13 @@
         padding-top: 5%;
         }
 
+    .imagen4{
+            margin: 0 auto;
+            padding: 0% 25% 0% 25%;
+            width: 50%;
+            
+    }
+
     .texto, .texto1, .texto2, .preg {
         font-size: 150%;
         margin: 0 auto;
@@ -389,7 +498,7 @@
 
     .boton {
         padding: 12px 40px;
-        margin-left: 20%;
+        margin-left: 0%;
         margin-top: 5%;
     }
 
@@ -400,6 +509,7 @@
     }
 
     .menu{
+        font-size: 125%;
         padding: 0px 30px;
         display: grid;
         grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr;
@@ -455,12 +565,15 @@
     #logo {
         width: 50%;
         margin-left: 20px;
-    }
 
-    #logo{
         text-align: center;
         margin: 0 auto;
     }
+
+    /* #logo{
+        text-align: center;
+        margin: 0 auto;
+    } */
 
     .imagen, .imagen2 {
         width: 100%;
@@ -476,8 +589,17 @@
 
     .imagen3{
         width: 70%;
+        padding-top: 0%;
         padding-left: 15%;
+        padding-right: 15%;
 
+    }
+
+    .imagen4{
+        margin: 0 auto;
+        padding: 0% 25% 0% 25%;
+        width: 50%;
+        
     }
 
     .texto, .texto1, .preg {
@@ -496,7 +618,7 @@
 
     .boton {
         padding: 10px 30px;
-        margin-left: 20%;
+        margin-left: 0%;
         margin-right: 10%;
         margin-top: 10%;
     }

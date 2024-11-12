@@ -33,6 +33,7 @@
     width: 100%;
     margin: 0 auto;
     padding-left: 15%;
+    position: relative;
 }
 
 .frases{
@@ -40,7 +41,7 @@
     font-family: 'Open Sans', sans-serif;
     color: var(--Gris-Azulado-Oscuro);
     font-size: clamp(3rem, 5vw, 5rem); /* Adaptativo al tamaño de pantalla */
-    margin-top: 25%;
+    margin-top: 10%;
 }
 
 .boton{
@@ -127,6 +128,29 @@
     font-size: 200%;
 }
 
+.imagenU{
+    width: 45%;
+}
+
+.us{
+   padding-top: 5%;
+   padding-left: 80%;
+     
+}
+
+@media screen and (max-width: 1000px){
+    
+    .imagenU{
+        width: 50%;
+    }
+    
+    .us{
+       padding-top: 5%;
+       padding-left: 80%;
+         
+    }
+}
+
 /* Estilos para pantallas medianas */
 @media screen and (max-width: 768px){
     .contenedor {
@@ -151,6 +175,7 @@
         font-size: 120%; /* Ajustar el tamaño de la fuente */
         padding: 15px 50px; /* Reducir padding */
         margin: 0 auto;
+        margin-bottom: 10%;
     }
 
     #logo {
@@ -186,10 +211,25 @@
         text-align: center;
         font-size: 1.2rem;
     }
+
+    .imagenU{
+        width: 15%;
+    }
+    
+    .us{
+       padding-top: 5%;
+       padding-left: 0%;
+         
+    }
+
+    .contenedor{
+        gap: 5px;
+    }
 }
 
 /* Estilos para pantallas pequeñas */
 @media screen and (max-width: 480px){
+
     .contenedor {
         grid-template-columns: 1fr;
     }
@@ -237,5 +277,14 @@
         margin: 0 auto;
     }
 
+    .imagenU{
+        width: 15%;
+    }
+    
+    .us{
+       padding-top: 5%;
+       padding-left: 0%;
+         
+    }
 
 }
