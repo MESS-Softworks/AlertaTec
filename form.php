@@ -1,16 +1,18 @@
 <?php
 require './includes/database.php';
 require './includes/encryption.php';
+require './includes/Correo.php';
 
 // Verificar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capturar datos del formulario
     $tipoReporte = $_POST['tipoReporte'];
     $nombreD = $_POST['nombreD'] ?? null; // 
+    $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
     if($tipoReporte == "Sí"){
         $correoD = $_POST['correoDA'] ?? null;
     }
-    $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
+    
     $numTelD = $_POST['numTelD'] ?? null; //
     $tipoDenunciante = $_POST['tipoDenunciante'];
     $relAfectado = $_POST['relacion_afectada'] ?? NULL;
@@ -164,6 +166,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }else{
             echo "No entro";
         }
+
+        $correo = new Correo();
+
+        $destinatario = decryptData($correoD);
+        $titulo = 'Gracias por tu denuncia!!';
+        $mensaje = 'Tu reporte fue recibido, en este momento se encuentra en espera, te recordamos revisar el protocolo para conocer el proceso que llevará tu proceso, cuando avance en el proceso recibiras un nuevo correo avisandote a este mismo correo. Gracias Y recuerda que ¡Juntos somos mas fuertes!';
+
+        $correo->enviarCorreo($destinatario, $titulo, $mensaje);
 
     } else {
         echo "Error al registrar el reporte: " . $stmt->error;
