@@ -28,21 +28,39 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombreAdmin = $_POST['correoE'];
     $contraseñaAdmin = $_POST['passw'];
+    $role = $_POST['role'];
 
-    // Consultar en la base de datos si el usuario existe
-    $stmt = $conexion->prepare("SELECT * FROM ADMINISTRADOR WHERE nombreAdmin = :nombreAdmin");
-    $stmt->bindParam(':nombreAdmin', $nombreAdmin);
+    // Determinar la tabla y la página de redirección según el rol
+    if ($role === "admin") {
+        $table = "ADMINISTRADOR";
+        $nameColumn = "nombreAdmin";
+        $passwordColumn = "contraseñaAdmin";
+        $redirectPage = "pagina_admin.php";
+    } else {
+        $table = "SUPERADMINISTRADOR";
+        $nameColumn = "nombreSAdmin";
+        $passwordColumn = "contraseñaSAdmin";
+        $redirectPage = "pagina_superadmin.php";
+    }
+
+    // Consulta preparada para buscar el usuario en la tabla adecuada
+    $stmt = $conexion->prepare("SELECT * FROM $table WHERE $nameColumn = :nombre");
+    $stmt->bindParam(':nombre', $nombreAdmin);
     $stmt->execute();
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Verificar que el usuario exista y que la contraseña sea correcta
-    if ($admin && $admin['contraseñaAdmin'] === $contraseñaAdmin) {
+    if ($user && $user[$passwordColumn] === $contraseñaAdmin) {
+        // Inicio de sesión exitoso, guardamos los datos en la sesión
         $_SESSION['usuario'] = $nombreAdmin;
-        header("Location: Form.php");
+        $_SESSION['role'] = $role;
+        header("Location: $redirectPage");
         exit();
     } else {
+        // Usuario o contraseña incorrectos
         $error = "Usuario o contraseña incorrectos";
     }
+
 }
 ?>
 
@@ -67,11 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <img src="img/HuellaSin.png" class="imagen2" alt="Logo secundario">
                 </div>
             </div>
-            <script>
-                function regresar() {
-                    window.location.href = "index.html";
-                }
-            </script>
+            
             <div>
                 <button onclick="regresar()" class="boton"> < </button>
             </div>
@@ -81,14 +95,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form class="formD" method="post" action="LoginPrueba.php">
                 <img src="img/Usuario.png" class="imagenU"><br>
                 <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+                <input type="hidden" id="role" name="role" value="">
                 <label for="correoE" class="etiqueta">Administrador:</label>
                 <input type="text" id="correoE" name="correoE" required><br>
                 <label for="passw" class="etiqueta">Contraseña:</label>
                 <input type="password" id="passw" name="passw" required><br>
-                <input type="submit" value="Iniciar sesión" class="boton"><br>
+                <input type="submit" onclick="setRole('admin')" value="Iniciar sesión como Administrador" class="boton"><br> 
+                <input type="submit" onclick="setRole('superadmin')" value="Iniciar sesión como SuperAdministrador" class="boton"><br> 
                 <input type="reset" value="Reset" class="boton">
             </form>
         </div>
     </div>
+
+    <script>
+        function regresar() {
+            window.location.href = "index.html";
+        }
+        
+        // Función para establecer el rol y enviar el formulario
+        function setRole(role) {
+            document.getElementById('role').value = role;
+        }
+    </script>
 </body>
 </html>
