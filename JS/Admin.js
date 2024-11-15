@@ -33,9 +33,6 @@ function actualizarReportes(tipoDenuncia) {
     xhttp.send();
 }
 
-// Ejecuta actualizarTabla cuando la página termine de cargarse
-window.onload = actualizarReportes('');
-
 
 
 

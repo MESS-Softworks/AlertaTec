@@ -1,4 +1,21 @@
 <?php
+    session_start(); // Inicia la sesión
+
+    // Si el usuario hace clic en el botón de cerrar sesión, se destruye la sesión
+    if (isset($_POST['logout'])) {
+        session_unset(); // Elimina todas las variables de sesión
+        session_destroy(); // Destruye la sesión
+        header("Location: login.php"); // Redirige al login
+        exit();
+    }
+
+    // Verifica si el usuario ha iniciado sesión y si tiene el rol adecuado
+    if (!isset($_SESSION['usuario']) || $_SESSION['role'] !== 'admin') {
+        // Si no está logueado o el rol no es 'admin', redirige al login
+        header("Location: Login.php"); // O redirige a login.html
+        exit();
+    }
+    
     require './includes/funcionesAdmin.php';
 
     $consulta = obtener_reportes();
@@ -30,7 +47,10 @@
         <button onclick="actualizarReportes('Hostigamiento laboral o académico')" class="btnMenu">Hostigamiento</button>
         <button onclick="actualizarReportes('otros')" class="btnMenu">Otros</button>
     </div>
-        <button class="logout-btn">Cerrar Sesión</button>
+    <form method="POST">
+        <button type="submit" name="logout" class="logout-btn">Cerrar sesión</button>
+    </form>
+        <!-- <button type="button" onclick="" class="logout-btn">Cerrar Sesión</button> -->
     </div>
 
     <span class="openbtn" onclick="openNav()">☰</span>

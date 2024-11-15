@@ -13,7 +13,7 @@ echo "<table class='report-table'>";
 echo "<thead>
         <tr>
             <th class='Cab'>ID</th>
-            <th class='Cab'>Denuncias</th>
+            <th class='Cab'>Denuncia</th>
             <th class='Cab'>Acciones</th>
         </tr>
       </thead>
