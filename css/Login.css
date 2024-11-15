@@ -49,15 +49,15 @@ body {
 }
 
 .imagen2 {
-    width: 60%;
-    margin-top: 20px;
+    width: 80%;
+    margin-top: 10px;
 }
 
 .imagenU{
     width: 35%;
     margin: 0 auto;
     padding-top: 0%;
-    padding-bottom: 10%;
+    padding-bottom: 0%;
 }
 
 
@@ -81,6 +81,13 @@ body {
     margin-top: 10px;
 }
 
+.TxI{
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Gris-Azulado-Oscuro);
+    margin-top: 0%;
+}
+
+
 .formulario {
     display: grid;
     grid-template-rows: 1fr; 
@@ -100,17 +107,17 @@ body {
     text-align: center;
     font-family: 'Open Sans', sans-serif;
     font-size: 1rem;
-}
+    }
 
-#correoE, #passw {
-    width: 70%; 
-    margin: 0 auto;
-    padding-left: 10%;
-    padding-right: 10%;
-}
+    #correoE, #passw {
+        width: 70%; 
+        margin: 0 auto;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
 
-input[type="text"], input[type="password"], input[type="submit"], input[type="reset"]{
-    width: 70%; 
+    input[type="text"], input[type="password"], input[type="submit"], input[type="reset"] {
+        width: 70%; 
     padding: 10px;
     margin-bottom: 15px;
     font-size: 1rem;
@@ -119,19 +126,7 @@ input[type="text"], input[type="password"], input[type="submit"], input[type="re
     box-sizing: border-box;
     margin: 0 auto; 
     display: block;
-}
-
-.botonIS{
-    width: 70%; 
-    padding: 10px;
-    margin-bottom: 15px;
-    font-size: 1rem;
-    border: 1px solid var(--Gris-Azulado-Oscuro);
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin: 0 auto; 
-    display: block;
-}
+    }
 
 .formD{
     display: grid;
@@ -170,10 +165,14 @@ input[type="text"], input[type="password"], input[type="submit"], input[type="re
     }
 
     .imagen, .imagen2 {
-        width: 45%;
+        width: 42%;
         margin: 0 auto;
-        padding-top: 2.5%;
         padding-bottom: 0%;
+    }
+
+    .imagen2{
+        padding-left: 0%;
+        padding-right: 0%;
     }
 
     .formulario {
@@ -183,7 +182,7 @@ input[type="text"], input[type="password"], input[type="submit"], input[type="re
         align-items: center;
     }
 
-    input[type="text"], input[type="password"] {
+    input[type="email"], input[type="password"] {
         font-size: 0.9rem;
         padding: 8px;
     }
@@ -202,17 +201,25 @@ input[type="text"], input[type="password"], input[type="submit"], input[type="re
     }
 
     .texto {
-        font-size: 2rem;
+        font-size:150%; /* Ajustar el tamaño del texto */
+        text-align: center;
+        margin: 0%;
         padding-top: 0%;
     }
 
-    .texto1 {
-        font-size: 2rem;
+    .texto1{
+        font-size: 150%;
+        text-align: center;
+        padding-top: 0%;
+        margin-top: 0%;
+    
     }
 
-    .texto2 {
-        font-size: 1.2rem;
+    .texto2{
+        text-align: center;
+        font-size: 150%;
     }
+    
     .boton{
         align-items: center;
     }
@@ -228,20 +235,20 @@ input[type="text"], input[type="password"], input[type="submit"], input[type="re
     }
 
     .imagen, .imagen2 {
-        width: 30%; 
+        width: 50%; 
     }
 
     .formulario {
         max-width: 100%;
     }
 
-    input[type="text"], input[type="password"] {
+    input[type="email"], input[type="password"] {
         font-size: 0.9rem;
         padding: 8px;
     }
 
     input[type="submit"], input[type="reset"] {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         padding: 8px;
         width: 60%;
     }
@@ -253,16 +260,13 @@ input[type="text"], input[type="password"], input[type="submit"], input[type="re
         padding-right: 10%;
     }
 
-    .texto {
-        font-size: 1.8rem;
+    .texto, .texto1, .texto2 {
+        font-size: 120%;
     }
 
-    .texto1 {
-        font-size: 1.8rem;
+    .texto2{
+        margin: 0 auto;
+        text-align: center;
     }
 
-    .texto2 {
-        font-size: 1rem;
-        
-    }
-}
+  }
