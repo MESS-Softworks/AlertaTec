@@ -49,15 +49,15 @@ body {
 }
 
 .imagen2 {
-    width: 60%;
-    margin-top: 20px;
+    width: 80%;
+    margin-top: 10px;
 }
 
 .imagenU{
     width: 35%;
     margin: 0 auto;
     padding-top: 0%;
-    padding-bottom: 10%;
+    padding-bottom: 0%;
 }
 
 
@@ -79,6 +79,12 @@ body {
 .texto2 {
     font-size: 1.5rem;
     margin-top: 10px;
+}
+
+.TxI{
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Gris-Azulado-Oscuro);
+    margin-top: 0%;
 }
 
 
@@ -110,7 +116,7 @@ body {
         padding-right: 10%;
     }
 
-    input[type="email"], input[type="password"], input[type="submit"], input[type="reset"] {
+    input[type="text"], input[type="password"], input[type="submit"], input[type="reset"] {
         width: 70%; 
     padding: 10px;
     margin-bottom: 15px;
@@ -159,10 +165,14 @@ body {
     }
 
     .imagen, .imagen2 {
-        width: 45%;
+        width: 42%;
         margin: 0 auto;
-        padding-top: 2.5%;
         padding-bottom: 0%;
+    }
+
+    .imagen2{
+        padding-left: 0%;
+        padding-right: 0%;
     }
 
     .formulario {
@@ -191,17 +201,25 @@ body {
     }
 
     .texto {
-        font-size: 2rem;
+        font-size:150%; /* Ajustar el tamaño del texto */
+        text-align: center;
+        margin: 0%;
         padding-top: 0%;
     }
 
-    .texto1 {
-        font-size: 2rem;
+    .texto1{
+        font-size: 150%;
+        text-align: center;
+        padding-top: 0%;
+        margin-top: 0%;
+    
     }
 
-    .texto2 {
-        font-size: 1.2rem;
+    .texto2{
+        text-align: center;
+        font-size: 150%;
     }
+    
     .boton{
         align-items: center;
     }
@@ -217,7 +235,7 @@ body {
     }
 
     .imagen, .imagen2 {
-        width: 30%; 
+        width: 50%; 
     }
 
     .formulario {
@@ -230,7 +248,7 @@ body {
     }
 
     input[type="submit"], input[type="reset"] {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         padding: 8px;
         width: 60%;
     }
@@ -242,16 +260,13 @@ body {
         padding-right: 10%;
     }
 
-    .texto {
-        font-size: 1.8rem;
+    .texto, .texto1, .texto2 {
+        font-size: 120%;
     }
 
-    .texto1 {
-        font-size: 1.8rem;
+    .texto2{
+        margin: 0 auto;
+        text-align: center;
     }
 
-    .texto2 {
-        font-size: 1rem;
-        
-    }
-}
+  }

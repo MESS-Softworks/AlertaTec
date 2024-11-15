@@ -61,7 +61,7 @@
     margin-right: 0%;
     font-family: 'Open Sans', sans-serif;
     color: var(--Negro);
-    font-size: 200%;
+    font-size: 180%;
 }
 
 .texto1{
@@ -70,7 +70,7 @@
     margin-left: 0%;
     font-family: 'Open Sans', sans-serif;
     color: var(--Negro);
-    font-size: 200%;
+    font-size: 180%;
 }
 
 .texto2{
@@ -220,6 +220,8 @@
 }
 
 .boton{
+    display: grid;
+    justify-content: center;
     background-color: var(--Gris-Azulado-Oscuro);
     color: var(--Blanco);
     font-size: medium;
@@ -251,21 +253,8 @@
     
 }
 
-/* .boton{
-    background-color: var(--Gris-Azulado-Oscuro);
-    color: var(--Blanco);
-    font-size: 100%;
-    font-family: 'Open Sans', sans-serif;
-    padding: 20px 50px;
-    margin-left: 30%;
-    margin-right: 40%;
-    border: none;
-    border-radius: 5px;
-    transition: transform 0.3s ease-in-out;
-} */
-
 .boton2{
-    display: flex;
+    display: grid;
     background-color: var(--Gris-Azulado-Oscuro);
     color: var(--Blanco);
     font-size: medium;
@@ -276,6 +265,7 @@
     border: none;
     border-radius: 5px;
     transition: transform 0.3s ease-in-out;
+    justify-content: center;
 }
 
 .boton:hover, boton2:hover{
@@ -292,20 +282,21 @@
 
 .redes{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    justify-items: center;
 }
 
 .correo{
-    width: 30%;
-    padding-left: 65%;
-    padding-right: 5%;
-}
+    width: 10%;
 
+}
+/* 
 .tel{
     width: 30%;
     padding-left: 20%;
     padding-right: 5%;
-}
+} */
 
 .titulo{
     text-align: center;
@@ -314,6 +305,7 @@
 .bt, .img{
     margin: 0 auto;
 }
+
 
 @media screen and (max-width: 1500px) {
 
@@ -327,29 +319,19 @@
     }
 
     .boton{
-        margin: 0 auto;
-        margin: 5% 28% 0% 28%;
+        margin: 5% auto;
+       
     }
 
     .imagen3{
         width: 60%;
         margin: 15% auto 0%;
-        padding: 0% 0% 0% 20%;
+        padding: 0% 0% 0% 18%;
     }
 
     .imagen4{
         width: 60%;
         padding: 0% 20% 0% 20%;
-    }
-
-    .correo{
-        padding-left: 60%;
-        padding-right: 5%;
-    }
-
-    .tel{
-        padding-left: 5%;
-        padding-right: 5%;
     }
 
     .titulo{
@@ -360,6 +342,21 @@
         margin-top: 5%;
         margin-bottom: 5%;
     }
+
+    
+}
+
+@media screen and (max-width: 1500px) {
+
+    #info{
+        grid-template-columns: 0.7fr 1.1fr 1.1fr 1.2fr;
+    }
+
+    .menu{
+        font-size: 140%;
+        padding: 0px 15px;
+    }
+
 }
 
 @media screen and (max-width: 1150px) {
@@ -387,20 +384,28 @@
         grid-template-columns: 1fr;
     }
 
-    .imagen, .imagen2, .imagen3 {
+    .imagen, .imagen2{
         width: 60%;
         margin: 0 auto;
         padding-top: 5%;
     }
 
-    .imagen2{
-        padding-bottom: 10%;
-        padding-left: 15%;
-        }
+    .imagen{
+        padding-left: 30%;
+    }
 
     .imagen3{
-        padding: 10% 20% 10% 20%;
+        width: 50%;
+        padding-top: 0%;
+        margin: 0 auto;
     }
+
+    .imagen2{
+        padding-bottom: 10%;
+        padding-right: 20%;
+    }
+
+   
 
     .imagen4{
         margin: 0 auto;
@@ -409,8 +414,13 @@
         
     }
 
-    .texto, .texto1, .texto2, .preg {
-        font-size: 160%;
+    .texto, .texto1{
+        font-size: 180%;
+    }
+
+    .texto2{
+        font-size: 120%;
+        margin-right: 15%;
     }
 
     .boton {
@@ -424,7 +434,7 @@
     }
 
     .menu{
-        font-size: 150%;
+        font-size: 125%;
         padding: 0px 30px;
         display: grid;
         grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr;
@@ -432,7 +442,6 @@
     }
 
     #logo{
-        text-align: center;
         margin: 0 auto;
     }
 
@@ -448,10 +457,8 @@
     }
 
     .correo{
-        width: 40%;
-        padding-top: 20%;
-        padding-left: 50%;
-        padding-right: 25%;
+        width: 20%;
+        
     }
 
     .tel{
@@ -477,12 +484,17 @@
         margin: 0 auto;
     }
 
+    .imagen{
+        padding-left: 0%;
+    }
+
     .imagen2{
-        width: 70%;
+        width: 55%;
         padding-bottom: 10%;
         padding-left: 0%;
         padding-top: 5%;
-        }
+        padding-right: 0%;
+    }
 
     .imagen4{
             margin: 0 auto;
@@ -491,9 +503,15 @@
             
     }
 
-    .texto, .texto1, .texto2, .preg {
+    .texto, .texto1, .preg {
         font-size: 150%;
         margin: 0 auto;
+    }
+
+    .texto2{
+        font-size: 120%;
+        margin-right: 15%;
+        margin-left: 15%;
     }
 
     .boton {
@@ -583,7 +601,6 @@
     .imagen2{
     width: 70%;
     padding-bottom: 10%;
-    padding-left: 17.5%;
     padding-top: 5%;
     }
 
@@ -612,9 +629,10 @@
     }
 
     .texto2{
-        font-size: 120%;
+        font-size: 100%;
         text-align: center;
     }
+W
 
     .boton {
         padding: 10px 30px;
@@ -650,13 +668,13 @@
         margin: 0 auto;
     }
 
-    .huella{
+    .menu{
         display: grid;
-        height: 100%;
+        grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr;
+        border-radius: 5px;
         margin: 0 auto;
-        padding: 0;
-        grid-template-columns: 1fr; /* Puedes ajustar según el contenido */
-    }    
+        font-size: 140%;
+    }  
 
     .cont{
         margin: 0 auto;

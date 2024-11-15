@@ -95,7 +95,7 @@
     margin-right: 0%;
     font-family: 'Open Sans', sans-serif;
     color: var(--Negro);
-    font-size: 200%;
+    font-size: 180%;
 }
 
 .texto1{
@@ -104,7 +104,7 @@
     margin-left: 0%;
     font-family: 'Open Sans', sans-serif;
     color: var(--Negro);
-    font-size: 200%;
+    font-size: 180%;
 }
 
 .texto2{
@@ -186,7 +186,7 @@
 
 .textII{
     display: grid;
-    grid-template-rows: 0.8fr 1fr;
+    grid-template-rows: 0.8fr;
 }
 
 .div1{
@@ -264,25 +264,35 @@
         grid-template-columns: 1fr;
     }
 
-    .imagen, .imagen2, .imagen3 {
+    .imagen, .imagen2{
         width: 60%;
         margin: 0 auto;
         padding-top: 5%;
     }
 
-    .imagen2{
-        padding-bottom: 10%;
-        padding-left: 15%;
+    .imagen{
+        padding-left: 30%;
     }
 
     .imagen3{
-        width: 40%;
+        width: 50%;
         padding-top: 0%;
+        margin: 0 auto;
     }
 
-    .texto, .texto1, .texto2, .preg {
-        font-size: 160%;
-    }
+    .imagen2{
+        padding-bottom: 10%;
+        padding-right: 20%;
+        }
+
+        .texto, .texto1{
+            font-size: 180%;
+        }
+    
+        .texto2{
+            font-size: 120%;
+            margin-right: 15%;
+        }
 
     .boton {
         margin-left: 40%;
@@ -301,7 +311,6 @@
     }
 
     #logo{
-        text-align: center;
         margin: 0 auto;
     }
 
@@ -331,25 +340,37 @@
         margin: 0 auto;
     }
 
+    .imagen{
+        padding-left: 0%;
+    }
+
     .imagen2{
-        width: 70%;
+        width: 55%;
         padding-bottom: 10%;
         padding-left: 0%;
         padding-top: 5%;
-        }
+        padding-right: 0%;
+    }
 
     .imagen3{
         width: 50%;
     }
 
-    .texto, .texto1, .texto2, .preg {
+    .texto, .texto1, .preg {
         font-size: 150%;
         margin: 0 auto;
+    }
+
+    .texto2{
+        font-size: 120%;
+        margin-right: 15%;
+        margin-left: 15%;
     }
 
     .boton {
         padding: 12px 40px;
         margin-left: 40%;
+        margin-bottom: 10%;
     }
 
     #info {
@@ -413,7 +434,6 @@
     .imagen2{
         width: 70%;
         padding-bottom: 10%;
-        padding-left: 17.5%;
         padding-top: 5%;
     }
 
@@ -421,23 +441,20 @@
         width: 50%;
     }
 
-    .texto, .texto1, .texto2, .preg {
+    .texto, .texto1, .preg {
         font-size: 120%;
         text-align: center;
     }
 
     .texto{
         padding-top: 10%;
-   }
-
-   .texto2{
-    font-size: 120%;
-    text-align: center;
     }
 
-    .text{
-font-size: 140%;
+    .texto2{
+        font-size: 100%;
+        text-align: center;
     }
+
 
     .boton {
         padding: 10px 30px;
@@ -459,7 +476,7 @@ font-size: 140%;
         grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr;
         border-radius: 5px;
         margin: 0 auto;
-        font-size: 150%;
+        font-size: 140%;
     }
 
     #logo{

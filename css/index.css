@@ -129,7 +129,7 @@
 }
 
 .imagenU{
-    width: 45%;
+    width: 55%;
 }
 
 .us{
@@ -138,7 +138,68 @@
      
 }
 
+@media screen and (max-width: 1200px){
+    .texto, .texto1, .texto2{
+        font-size: 180%;
+    }
+
+    .texto{
+        margin-top: 40%;
+    }
+
+    .imagen{
+        margin-top: 25%;
+    }
+
+    .frases{
+        margin-top: 20%;
+    }
+
+    .imagenU{
+        width: 60%;
+    }
+}
+
 @media screen and (max-width: 1000px){
+
+    .imagen, .imagen2{
+        width: 60%;
+        margin: 0 auto;
+        padding-top: 5%;
+    }
+
+    .imagen2{
+        width: 60%;
+        padding-bottom: 10%;
+        padding-left: 20%;
+        padding-right: 20%;
+        }
+
+    .texto, .texto1, .texto2{
+        font-size: 150%;
+    }
+
+    .texto{
+        margin-top: 0%;
+    }
+
+    #logo{
+        grid-template-columns: 1fr;
+        text-align: center;
+        margin: 0 auto;
+        gap: 0px;
+    }
+
+    .frases{
+        margin-top: 30%;
+    }
+
+    .imagenU{
+        width: 60%;
+    }
+}
+
+/* @media screen and (max-width: 1000px){
     
     .imagenU{
         width: 50%;
@@ -149,7 +210,7 @@
        padding-left: 80%;
          
     }
-}
+} */
 
 /* Estilos para pantallas medianas */
 @media screen and (max-width: 768px){
@@ -192,15 +253,20 @@
         padding-bottom: 0%;
     }
 
+    .imagen2{
+        padding-left: 0%;
+        padding-right: 0%;
+    }
+
     .texto {
-        font-size: 2rem; /* Ajustar el tamaño del texto */
+        font-size:150%; /* Ajustar el tamaño del texto */
         text-align: center;
         margin: 0%;
         padding-top: 0%;
     }
 
     .texto1{
-        font-size: 2rem;
+        font-size: 150%;
         text-align: center;
         padding-top: 0%;
         margin-top: 0%;
@@ -209,7 +275,7 @@
 
     .texto2{
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 150%;
     }
 
     .imagenU{
