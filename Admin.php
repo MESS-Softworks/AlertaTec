@@ -1,3 +1,9 @@
+<?php
+    require './includes/funcionesAdmin.php';
+
+    $consulta = obtener_reportes_por_tipo('Agresión verbal');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,9 +64,10 @@
             </thead>
         
             <tbody>
+            <?php while($reportes = mysqli_fetch_assoc($consulta)){?>
                 <tr>
-                    <td></td>
-                    <td></td>
+                    <td><?php echo $reportes['idReporte']?></td>
+                    <td><!-- Aca va lo del link hacia el PDF --></td>
                     <td>
                         <div class="contBtn">
                             <button class="action-btn" onclick="confirmAction()"><img src="img/Aceptar.png" alt="" class="imgB"></button>
@@ -68,6 +75,21 @@
                         </div>
                     </td>
                 </tr>
+            <?php   } ?>
+
+
+
+                <tr>
+                    <td><!-- Aca va lo de ID --> </td>
+                    <td><!-- Aca va lo del link hacia el PDF --></td>
+                    <td>
+                        <div class="contBtn">
+                            <button class="action-btn" onclick="confirmAction()"><img src="img/Aceptar.png" alt="" class="imgB"></button>
+                            <button class="action-btn" onclick="deleteAction()"><img src="img/Rechazar.png" alt="" class="imgB"></button>
+                        </div>
+                    </td>
+                </tr>
+
                 <tr>
                     <td></td>
                     <td></td>

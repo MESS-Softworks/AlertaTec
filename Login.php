@@ -35,12 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $table = "ADMINISTRADOR";
         $nameColumn = "nombreAdmin";
         $passwordColumn = "contraseñaAdmin";
-        $redirectPage = "pagina_admin.php";
+        $redirectPage = "Admin.";
     } else {
         $table = "SUPERADMINISTRADOR";
         $nameColumn = "nombreSAdmin";
         $passwordColumn = "contraseñaSAdmin";
-        $redirectPage = "pagina_superadmin.php";
+        $redirectPage = "SuperAdministrador.php";
     }
 
     // Consulta preparada para buscar el usuario en la tabla adecuada
@@ -77,41 +77,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="contenedor">
         <div class="row">
             <div class="logos">
-                <img src="img/Huella3.png" class="imagen" alt="Logo principal">
-                <div class="logos1">
+            <img src="img/Huella3.png" class="imagen" alt="Logo principal">
+                <div class="inf">
                     <h1 class="texto">ALERTA</h1>
                     <h1 class="texto1">TEC</h1>
                     <h2 class="texto2">“Habla, nosotros te respaldamos”</h2>
-                    <img src="img/HuellaSin.png" class="imagen2" alt="Logo secundario">
+                    <img src="img/HuellaSin.png " class="imagen2" alt="Logo secundario">
                 </div>
             </div>
-            
             <div>
                 <button onclick="regresar()" class="boton"> < </button>
             </div>
         </div>
 
         <div class="formulario">
-            <form class="formD" method="post" action="LoginPrueba.php">
+            <form class="formD" method="post" action="Login.php">  
                 <img src="img/Usuario.png" class="imagenU"><br>
+                <h2 class="TxI">Iniciar Sesion</h2>
                 <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
                 <input type="hidden" id="role" name="role" value="">
-                <label for="user_name" class="etiqueta">Administrador:</label>
+                <label for="user_name" class="etiqueta">Usuario:</label>
                 <input type="text" id="user_name" name="user_name" required><br>
                 <label for="passw" class="etiqueta">Contraseña:</label>
                 <input type="password" id="passw" name="passw" required><br>
-                <input type="submit" onclick="setRole('admin')" value="Iniciar sesión como Administrador" class="boton"><br> 
-                <input type="submit" onclick="setRole('superadmin')" value="Iniciar sesión como SuperAdministrador" class="boton"><br> 
-                <input type="reset" value="Reset" class="boton">
+                <input type="submit" onclick="setRole('admin')" value="Administrador" class="boton"><br> 
+                <input type="submit" onclick="setRole('superadmin')" value="SuperAdministrador" class="boton"><br> 
+                <!-- <input type="reset" value="Reset" class="boton"> -->
             </form>
         </div>
     </div>
 
     <script>
-        function regresar() {
-            window.location.href = "index.html";
+        function regresar(){
+            window.location.href = "index.html"
         }
-        
         // Función para establecer el rol y enviar el formulario
         function setRole(role) {
             document.getElementById('role').value = role;
