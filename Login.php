@@ -34,12 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($role === "admin") {
         $table = "ADMINISTRADOR";
         $nameColumn = "nombreAdmin";
-        $passwordColumn = "contraseñaAdmin";
+        $passwordColumn = "contraAdmin";
         $redirectPage = "PruebaAdmin.php";
     } else {
         $table = "SUPERADMINISTRADOR";
         $nameColumn = "nombreSAdmin";
-        $passwordColumn = "contraseñaSAdmin";
+        $passwordColumn = "contraSAdmin";
         $redirectPage = "SuperAdministrador.php";
     }
 

@@ -1,3 +1,92 @@
+<?php
+    session_start(); // Inicia la sesión
+
+    // Si el usuario hace clic en el botón de cerrar sesión, se destruye la sesión
+    if (isset($_POST['logout'])) {
+        session_unset(); // Elimina todas las variables de sesión
+        session_destroy(); // Destruye la sesión
+        header("Location: login.php"); // Redirige al login
+        exit();
+    }
+
+    // Verifica si el usuario ha iniciado sesión y si tiene el rol adecuado
+    if (!isset($_SESSION['usuario']) || $_SESSION['role'] !== 'superadmin') {
+        // Si no está logueado o el rol no es 'superadmin', redirige al login
+        header("Location: Login.php"); // O redirige a login.html
+        exit();
+    }
+    
+    require './includes/conexion.php';
+    require './includes/encryption.php';
+    
+    // try {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $action = $_POST['action'] ?? ''; // Determina si es alta, baja o modificación
+            echo $action;
+            $user_name = $_POST['user_name'] ?? ''; // Nombre de usuario
+            $passw = $_POST['passw'] ?? ''; // Contraseña (si aplica)
+            $role = $_POST['role'] ?? ''; // Rol: admin o superadmin
+            echo $role;
+            // Determinar la tabla a usar según el rol
+            $table = ($role === 'admin') ? 'ADMINISTRADOR' : 'SUPERADMINISTRADOR';
+            $nameColumn = ($role === 'admin') ? 'nombreAdmin' : 'nombreSAdmin';
+            $passwordColumn = ($role === 'admin') ? 'contraAdmin' : 'contraSAdmin';
+    
+            // Realizar operaciones CRUD según el caso
+            switch ($action) {
+                case 'alta':
+                    $stmt = $conexion->prepare("INSERT INTO $table ($nameColumn, $passwordColumn) VALUES (:nombre, :contra)");
+                    $stmt->bindParam(':nombre', $user_name);
+                    $stmt->bindParam(':contra', $passw);
+                    $stmt->execute();
+                    if($role == 'admin  '){
+                        echo "Administrador añadido exitosamente.";
+                    }else{
+                        echo "SuperAdministrador añadido exitosamente.";
+                    }
+                    break;
+                    
+    
+                case 'modificar':
+                    $stmt = $conexion->prepare("UPDATE $table SET $passwordColumn = :contra WHERE $nameColumn = :nombre");
+                    $stmt->bindParam(':nombre', $user_name);
+                    $stmt->bindParam(':contra', $passw);
+                    $stmt->execute();
+                    echo "Usuario modificado exitosamente.";
+    
+                case 'baja':
+                    $stmt = $conexion->prepare("DELETE FROM $table WHERE $nameColumn = :nombre");
+                    $stmt->bindParam(':nombre', $user_name);
+                    $stmt->execute();
+                    echo "Usuario eliminado exitosamente.";
+
+                default:
+                    echo "Operación no válida.";
+            }
+        }
+    // } catch (PDOException $e) {
+    //     // Manejo de errores
+    //     switch ($e->getCode()) {
+    //         case 23000:
+    //             echo "Error: Violación de restricción UNIQUE o clave foránea.";
+    //             break;
+    //         case 42000:
+    //             echo "Error: Sintaxis SQL inválida.";
+    //             break;
+    //         case 2002:
+    //             echo "Error: No se pudo conectar a la base de datos.";
+    //             break;
+    //         case 1049:
+    //             echo "Error: La base de datos especificada no existe.";
+    //             break;
+    //         default:
+    //             echo "Error inesperado: " . $e->getMessage();
+    //     }
+    // }
+    
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +104,14 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <h2>Usuario</h2>
         <div class="botones">
-            <button onclick="cambiarTituloA('TT','Administrador')" class="btnMenu">Administrador</button>
-            <button onclick="cambiarTituloA('TT','SuperAdministrador')" class="btnMenu">SuperAdministrador</button>
+            <button onclick="actualizarTabla('Administrador')" class="btnMenu">Administrador</button>
+            <button onclick="actualizarTabla('SuperAdministrador')" class="btnMenu">SuperAdministrador</button>
         </div>
-            <button class="logout-btn">Cerrar Sesión</button>
-        </div>
+
+        <form method="POST">
+            <button type="submit" name="logout" class="logout-btn">Cerrar sesión</button>
+        </form>
+    </div>
     
         <span class="openbtn" onclick="openNav()">☰</span>
     
@@ -40,75 +132,127 @@
     </header>
 
     <div>
-        <h1 id="TT" class="tituloT">Usuario</h1>
+        <h1 id="TT" class="tituloT">Administrador</h1>
     </div>
-<div class="segundo">
-    <div class="Admin">
-        <div class="formulario">
-            <form class="formD">  
-                <img src="img/Usuario.png" class="imagenU"><br>
-                <label for="user_name" class="etiqueta">Usuario:</label>
-                <input type="email" id="correoE" name="user_name" required><br>
-                <label for="user_name" class="etiqueta">Contraseña:</label>
-                <input type="password" id="passw" name="passw" required><br>
-                <input type="submit" value="Alta" class="boton"><br>
-                <input type="reset" value="Reset" class="boton">
-            </form>
-        </div>
-        <div class="formulario">
-            <form class="formD">  
-                <img src="img/Usuario.png" class="imagenU"><br>
-                <label for="user_name" class="etiqueta">Usuario:</label>
-                <input type="email" id="correoE" name="user_name" required><br>
-                <label for="user_name" class="etiqueta">Contraseña:</label>
-                <input type="password" id="passw" name="passw" required><br>
-                <input type="submit" value="Baja" class="boton"><br>
-                <input type="reset" value="Reset" class="boton">
-            </form>
-        </div>
-        <div class="formulario">
-            <form class="formD">  
-                <img src="img/Usuario.png" class="imagenU"><br>
-                <label for="user_name" class="etiqueta">Usuario:</label>
-                <input type="email" id="correoE" name="user_name" required><br>
-                <label for="user_name" class="etiqueta">Contraseña:</label>
-                <input type="password" id="passw" name="passw" required><br>
-                <input type="submit" value="Modificar" class="boton"><br>
-                <input type="reset" value="Reset" class="boton">
-            </form>
+<div class="segundo"> 
+    <div class="seccion active" id="seccion1">
+        <div class="Admin">
+            <div class="formulario">
+                <form method="POST" class="formD">  
+                    <input type="hidden" name="action" value="alta">
+                    <input type="hidden" name="role" value="admin">
+                    <img src="img/Usuario.png" class="imagenU"><br>
+                    <label for="user_name" class="etiqueta">Nombre de Usuario:</label>
+                    <input type="text" id="correoE" name="user_name" required><br>
+                    <label for="user_name" class="etiqueta">Contraseña:</label>
+                    <input type="password" id="passw" name="passw" required><br>
+                    <input type="submit" value="Alta" class="boton"><br>
+                    <input type="reset" value="Reset" class="boton">
+                </form>
+            </div>
+            <div class="formulario">
+                <form method="POST" class="formD">  
+                    <input type="hidden" name="action" value="baja">
+                    <input type="hidden" name="role" value="admin">
+                    <img src="img/Usuario.png" class="imagenU"><br>
+                    <label for="user_name" class="etiqueta">Nombre de Usuario:</label>
+                    <input type="text" id="correoE" name="user_name" required><br>
+                    <input type="submit" value="Baja" class="boton"><br>
+                    <input type="reset" value="Reset" class="boton">
+                </form>
+            </div>
+            <div class="formulario">
+                <form method="POST" class="formD">  
+                    <input type="hidden" name="action" value="modificar">
+                    <input type="hidden" name="role" value="admin">
+                    <img src="img/Usuario.png" class="imagenU"><br>
+                    <label for="user_name" class="etiqueta">Nombre de Usuario:</label>
+                    <input type="text" id="correoE" name="user_name" required><br>
+                    <label for="user_name" class="etiqueta">Contraseña:</label>
+                    <input type="password" id="passw" name="passw" required><br>
+                    <input type="submit" value="Modificar" class="boton"><br>
+                    <input type="reset" value="Reset" class="boton">
+                </form>
+            </div>
         </div>
     </div>
 
-    <div class="tabla"> 
-        <table class="report-table">
-            
-            <thead>
-                <tr>
-                    <th class="Cab">Nombre</th>
-                    <th class="Cab">Contraseña</th>
-                </tr>
-            </thead>
-        
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    
-                </tr>
-            </tbody>
-        </table>
+    <div class="seccion" id="seccion2">
+        <div class="Admin">
+            <div class="formulario">
+                <form method="POST" class="formD">  
+                    <input type="hidden" name="action" value="alta">
+                    <input type="hidden" name="role" value="superadmin">
+                    <img src="img/Usuario.png" class="imagenU"><br>
+                    <label for="user_name" class="etiqueta">Nombre de Usuario:</label>
+                    <input type="text" id="correoE" name="user_name" required><br>
+                    <label for="user_name" class="etiqueta">Contraseña:</label>
+                    <input type="password" id="passw" name="passw" required><br>
+                    <input type="submit" value="Alta" class="boton"><br>
+                    <input type="reset" value="Reset" class="boton">
+                </form>
+            </div>
+            <div class="formulario">
+                <form method="POST" class="formD">  
+                    <input type="hidden" name="action" value="baja">
+                    <input type="hidden" name="role" value="superadmin">
+                    <img src="img/Usuario.png" class="imagenU"><br>
+                    <label for="user_name" class="etiqueta">Nombre de Usuario:</label>
+                    <input type="text" id="correoE" name="user_name" required><br>
+                    <input type="submit" value="Baja" class="boton"><br>
+                    <input type="reset" value="Reset" class="boton">
+                </form>
+            </div>
+            <div class="formulario">
+                <form method="POST" class="formD">  
+                    <input type="hidden" name="action" value="modificar">
+                    <input type="hidden" name="role" value="superadmin">
+                    <img src="img/Usuario.png" class="imagenU"><br>
+                    <label for="user_name" class="etiqueta">Nombre de Usuario:</label>
+                    <input type="text" id="correoE" name="user_name" required><br>
+                    <label for="user_name" class="etiqueta">Contraseña:</label>
+                    <input type="password" id="passw" name="passw" required><br>
+                    <input type="submit" value="Modificar" class="boton"><br>
+                    <input type="reset" value="Reset" class="boton">
+                </form>
+            </div>
+        </div>
     </div>
+    <div class="tabla" id="tabla"> 
+            <!-- <table class="report-table">
+                
+                <thead>
+                    <tr>
+                        <th class="Cab">Nombre</th>
+                        <th class="Cab">Contraseña</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        
+                    </tr>
+                </tbody>
+            </table> -->
+        </div>
 </div>
 </div>
+
+<script>
+    // Ejecuta actualizarTabla cuando la página termine de cargarse
+    window.onload = actualizarTabla('Administrador');
+</script>
 </body>
 </html>

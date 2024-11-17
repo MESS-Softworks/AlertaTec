@@ -48,6 +48,27 @@ function obtener_reportes_por_tipo($tipoDenuncia) {
     }
 }
 
+function obtener_admins($tipoAdmin){
+    try {
+        require 'database.php';
+        
+        if ($tipoAdmin === 'Administrador') {
+            // Consulta para reportes que no coincidan con los tipos especificados
+            $sql = "SELECT * FROM ADMINISTRADOR";
+        } else {
+            // Consulta para reportes que coincidan con el tipo de denuncia específico
+            $sql = "SELECT * FROM SUPERADMINISTRADOR";
+        }
+
+        // Realizar la consulta
+        $admins = mysqli_query($conexion, $sql);
+        return $admins;
+
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+}
+
 
 // function obtener_reportes_agresion_verbal() {
 //     try {
