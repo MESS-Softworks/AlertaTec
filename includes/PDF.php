@@ -66,7 +66,7 @@ function Header() {
     $this->SetFont('Times', 'B', 30);
     $this->setXY(60, 15);
     $this->Cell(100, 30, 'Reporte de Denuncia', 0, 0, 'C', 0);
-    $this->Image('../img/huella3.png', 165, 10, 35); 
+    $this->Image('./img/Huella3.png', 165, 10, 35); 
     $this->Ln(h: 40);
 }
 
@@ -295,7 +295,7 @@ if (!empty($data['nombresAgresores'])) {
 
 
 
-$pdf->Output();
+$pdf->Output('F', "./reportes/$idReporte.pdf");
 
 }
 

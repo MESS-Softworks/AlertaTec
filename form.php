@@ -1,7 +1,7 @@
 <?php
 require './includes/database.php';
-require './includes/encryption.php';
 require './includes/Correo.php';
+require './includes/PDF.php';
 
 // Verificar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -174,6 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mensaje = 'Tu reporte fue recibido, en este momento se encuentra en espera, te recordamos revisar el protocolo para conocer el proceso que llevará tu proceso, cuando avance en el proceso recibiras un nuevo correo avisandote a este mismo correo. Gracias Y recuerda que ¡Juntos somos mas fuertes!';
 
         $correo->enviarCorreo($destinatario, $titulo, $mensaje);
+
+        generarReportePDF($idReporte);
 
     } else {
         echo "Error al registrar el reporte: " . $stmt->error;
