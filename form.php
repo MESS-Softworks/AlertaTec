@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $prioridad = 3;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
     $evi = $_POST['evidencia'];
     $numTestigos = $_POST['num_testigos'];
+    $bandC = $_POST['actualizaciones'];
+    $bandP = $_POST['psicologico'];
 
     if($evi = "Sí"){
         $prioridad += 5;
@@ -167,13 +169,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo "No entro";
         }
 
+        if($bandC == "Sí"){
         $correo = new Correo();
 
         $destinatario = decryptData($correoD);
-        $titulo = 'Gracias por tu denuncia!!';
-        $mensaje = 'Tu reporte fue recibido, en este momento se encuentra en espera, te recordamos revisar el protocolo para conocer el proceso que llevará tu proceso, cuando avance en el proceso recibiras un nuevo correo avisandote a este mismo correo. Gracias Y recuerda que ¡Juntos somos mas fuertes!';
+        $titulo = "Confirmación de Recepción de Tu reporte - $idReporte";
+        $mensaje = "Estimado/a Denunciante,\n
+        Gracias por confiar en nuestra plataforma para reportar tu caso. Este correo es para confirmarte que hemos recibido correctamente tu denuncia con el número de caso $idReporte.\n
+        Queremos reiterarte que tu reporte será tratado con la máxima confidencialidad y que nuestro equipo se encargará de analizarlo de manera justa y profesional. En esta etapa inicial, nuestro equipo está revisando los detalles proporcionados para evaluar las medidas necesarias y los próximos pasos a seguir.\n\n
+        ¿Qué puedes esperar ahora?\n
+        •	Evaluación inicial: Uno de nuestros especialistas revisará tu caso para determinar las acciones inmediatas necesarias, si aplican.\n
+        •	Seguimiento: Te mantendremos informado/a sobre el progreso del caso según el canal de comunicación que elegiste al momento del registro.\n
+        •	Apoyo: Si necesitas asistencia adicional, puedes comunicarte con nuestro equipo al correo alertateclag@gmail.com /n/n";
+
+        if($bandP == "Sí"){
+            $mensaje += "Apoyo Psicológico.\n
+            Hemos registrado que solicitaste asistencia psicológica. Nuestro equipo especializado se pondrá en contacto contigo en las próximas [X horas/días] para coordinar el apoyo que necesites. Si tienes alguna preferencia respecto al horario o el medio de contacto, por favor háznoslo saber respondiendo a este correo.\n";
+        }
+
+        $mensaje = $mensaje."Estamos aquí para apoyarte en este proceso y asegurar que se respete tu integridad y bienestar en todo momento.\n/n
+        Habla, nosotros te respaldamos.\n\n
+        Atentamente,\n
+        Equipo AlertaTec\n
+        Instituto Tecnológico de la Laguna\n
+        alertateclag@gmail.com | [Teléfono] | [Página Web, si aplica]";
 
         $correo->enviarCorreo($destinatario, $titulo, $mensaje);
+        }
 
         generarReportePDF($idReporte);
 

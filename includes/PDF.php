@@ -295,7 +295,7 @@ if (!empty($data['nombresAgresores'])) {
 
 
 
-$pdf->Output('F', "./reportes/$idReporte.pdf");
+$pdf->Output('F', "./reportes/Reporte_$idReporte.pdf");
 
 }
 

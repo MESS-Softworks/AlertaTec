@@ -54,6 +54,21 @@ function actualizarTabla(tipoAdmin){
     xhttp.send();
 }
 
+function actualizarEvidencias(idReporte) {
+    cambiarTituloA('TE', `Reporte #${idReporte}` || 'Todas');
+    
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Actualiza la sección de la tabla con los resultados
+            document.getElementById("tablaEvidencias").innerHTML = this.responseText;
+        }
+    };
+    // Enviar el tipo de denuncia como parámetro en la URL
+    xhttp.open("GET", "./includes/obtenerEvidencias.php?idReporte=" + encodeURIComponent(idReporte), true);
+    xhttp.send();
+}
+
 function mostrarSeccion(seccionId) {
     const secciones = document.querySelectorAll('.seccion');
     secciones.forEach(seccion => seccion.classList.remove('active'));

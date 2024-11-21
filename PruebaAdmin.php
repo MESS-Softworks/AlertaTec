@@ -76,6 +76,14 @@
         <div id="tablaReportes">
                     <!-- Aquí se cargará la tabla de reportes -->
         </div>
+
+        <div>
+            <h1 id="TE" class="tituloT"></h1>
+        </div>
+
+        <div id ="tablaEvidencias">
+
+        </div>
         
     </div>
 

@@ -1,0 +1,9 @@
+# Bloquear acceso directo a esta carpeta
+<FilesMatch ".*">
+    Require all denied
+</FilesMatch>
+
+# Permitir acceso solo desde scripts PHP internos
+<FilesMatch "\.(php|html)$">
+    Require all granted
+</FilesMatch>
