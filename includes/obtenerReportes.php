@@ -15,7 +15,7 @@ function evidencia($idReporte){
     $conEvi = obtener_Evidencias($idReporte);
     
     if($conEvi != NULL){
-        return "<button class='action-btn' onclick='actualizarEvidencias(".$idReporte.")'><img src='img/Aceptar.png' alt='' class='imgB'></button>";
+        return "<button class='action-btn' onclick='actualizarEvidencias(".$idReporte.")'><img src='img/carpeta.png' alt='' class='imgB'></button>";
     }else{
         return "No hay evidencias que mostrar.";
     }

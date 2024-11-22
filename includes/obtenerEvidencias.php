@@ -26,14 +26,8 @@ while ($evi= mysqli_fetch_assoc($consulta)) {
     echo "<td>".$evi['descripcionE']."</td>";
     echo "<td>
             <div class='contBtn'>
-                <a href='./includes/verEvidencia.php?carpeta=evidencias&sub=".$evi['idReporte']."&archivo=".$evi['nombreE']."' target='_blank'><img src='img/Aceptar.png' alt='' class='imgB'></a></td>
+                <a href='./includes/verEvidencia.php?carpeta=evidencias&sub=".$evi['idReporte']."&archivo=".$evi['nombreE']."' target='_blank'><img src='img/vista.png' alt='' class='imgB'></a></td>
             </div>";
-    echo "<td>
-        <div class='contBtn'>
-            <button class='action-btn' onclick='confirmAction()'><img src='img/Aceptar.png' alt='' class='imgB'></button>
-            <button class='action-btn' onclick='deleteAction()'><img src='img/Rechazar.png' alt='' class='imgB'></button>
-        </div>
-    </td>";
     echo "</tr>";            
 }
 echo "</tbody>
