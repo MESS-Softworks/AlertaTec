@@ -11,7 +11,7 @@
 .Fondo{
     min-width: 320px; /* Limita el tamaño mínimo de la pantalla */
     height: 100vh;
-    background-image: url(img/Diseño.png);
+    background-image: url('../img/Diseño.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

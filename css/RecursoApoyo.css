@@ -252,7 +252,7 @@
 }
 
 .contR .detalle-recurso {
-    background-color: var(--Beige-Suave);
+    background-color: var(--Beige-Gris);
     border: 1px solid var(--Gris-Azulado-Oscuro);
     border-radius: 5px;
     margin: 10px 0;
@@ -277,12 +277,12 @@
 }
 
 .contR .enlace-recurso {
-    color: var(--Gris-Azulado-Oscuro);
+    color: var(--Azul-Grisaceo);
     text-decoration: none;
 }
 
 .contR .enlace-recurso:hover {
-    color: var(--Azul-Grisaceo);
+    color: var(--Gris-Azulado-Oscuro);
     text-decoration: underline;
 }
 

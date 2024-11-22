@@ -11,7 +11,7 @@
 body {
     min-width: 320px; 
     height: 100vh;
-    background-image: url(img/Diseño.png);
+    background-image: url('../img/Diseño.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

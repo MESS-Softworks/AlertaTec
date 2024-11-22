@@ -86,20 +86,19 @@ $pdf->SetFont('Times','',12);
 
 
 /******************  INFORMACIÓN DEL REPORTE  *****************************/
-$pdf->SetFillColor(0,0,0);
+$pdf->SetFillColor(59,75,89);
 $pdf->SetTextColor(255,255,255);
 $pdf->SetFont('Times', 'B', 16);
 $pdf->Cell(0, 10, 'Folio # ' . $data['idReporte'], 1, 1, 'C',1);
 
-$pdf->SetFillColor(22,153,223);
+$pdf->SetFillColor(142,168,191);
 $pdf->SetFont('Times', 'B', 14);
+$pdf->SetTextColor(0,0,0);
 $pdf->Cell(90, 10, 'Fecha del Reporte', 1, 0, 'C',1);
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->SetTextColor(0,0,0);
 $pdf->MultiCell(0, 10, $data['fechaReporte'], 1, 'C');
 
-$pdf->SetFillColor(22,153,223);
-$pdf->SetTextColor(255,255,255);
+$pdf->SetFillColor(142,168,191);
 $pdf->SetFont('Times', 'B', 14);
 $pdf->Cell(0, 10, 'Tipo de Denuncia', 1, 1, 'C',1);
 $pdf->SetTextColor(0,0,0);
@@ -112,7 +111,7 @@ $pdf->Ln(h: 15);
 
 
 /******************  INFORMACIÓN DEL DENUNCIANTE  *****************************/
-$pdf->SetFillColor(0,0,0);
+$pdf->SetFillColor(59,75,89);
 $pdf->SetTextColor(255,255,255);
 $pdf->SetFont('Times', 'B', 16);
 $pdf->Cell(0, 10, utf8_decode('Información del Denunciante'), 1, 1,'C',1);
@@ -120,14 +119,14 @@ $pdf->SetFont('Times', '', 12);
 
 if ($data['tipoReporte'] != 'Sí') { 
     
-    $pdf->SetFillColor(22,153,223);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,b: 0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(0, 10, 'Nombre', 1, 1, 'C',1);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->SetTextColor(0,0,b: 0);
     $pdf->MultiCell(0, 10, utf8_decode(decryptData($data['nombreD'])), 1, 'C');
 
-    $pdf->SetFillColor(22,153,223);
+    $pdf->SetFillColor(142,168,191);
     $pdf->SetTextColor(255,255,255);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(0, 10, 'Correo', 1, 1, 'C',1);
@@ -135,25 +134,23 @@ if ($data['tipoReporte'] != 'Sí') {
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->MultiCell(0, 10, utf8_decode(decryptData($data['correoD'])), 1, 'C');
 
-    $pdf->SetFillColor(22,153,223);
-    $pdf->SetTextColor(255,255,255);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(90, 10, utf8_decode('Teléfono'), 1, 0, 'C',1);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->SetTextColor(0,0,b: 0);
     $pdf->MultiCell(0, 10, utf8_decode(decryptData($data['numTelD'])), 1, 'C');
     
 }
-$pdf->SetFillColor(22,153,223);
-$pdf->SetTextColor(255,255,255);
+$pdf->SetFillColor(142,168,191);
+$pdf->SetTextColor(0,0,b: 0);
 $pdf->SetFont('Times', 'B', 14);
 $pdf->Cell(90, 10, utf8_decode('Relación con la Universidad'), 1, 0, 'C',1);
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->SetTextColor(0,0,b: 0);
 $pdf->MultiCell(0, 10, utf8_decode($data['relUniD']), 1, 'C');
 
-$pdf->SetFillColor(22,153,223);
-$pdf->SetTextColor(255,255,255);
+$pdf->SetFillColor(142,168,191);
+$pdf->SetTextColor(0,0,b: 0);
 $pdf->SetFont('Times', 'B', 14);
 $pdf->Cell(90, 10, 'Tipo de Denunciante', 1, 0, 'C',1);
 $pdf->SetFont('Arial', 'B', 12);
@@ -162,8 +159,8 @@ $pdf->MultiCell(0, 10, utf8_decode($data['tipoD']), 1, 'C');
 
 if ($data['tipoD'] == 'Testigo') {
 
-    $pdf->SetFillColor(22,153,223);
-    $pdf->SetTextColor(255,255,255);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,b: 0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(0, 10, utf8_decode('Relación con la Persona Afectada'), 1, 1, 'C', 1);
     $pdf->SetTextColor(0,0,b: 0);
@@ -172,8 +169,8 @@ if ($data['tipoD'] == 'Testigo') {
 
 }
 
-$pdf->SetFillColor(22,153,223);
-$pdf->SetTextColor(255,255,255);
+$pdf->SetFillColor(142,168,191);
+$pdf->SetTextColor(0,0,b: 0);
 $pdf->SetFont('Times', 'B', 14);
 $pdf->Cell(0, 10, 'Departamento', 1, 1, 'C',1);
 $pdf->SetFont('Arial', 'B', 12);
@@ -182,8 +179,8 @@ $pdf->MultiCell(0, 10, utf8_decode($data['departamentoD']), 1, 'C');
 
 if ($data['relUniD'] == 'Alumno') {
 
-    $pdf->SetFillColor(22,153,223);
-    $pdf->SetTextColor(255,255,255);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,b: 0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(90, 10, 'Semestre', 1, 0, 'C', 1);
     $pdf->SetFont('Arial', 'B', 12);
@@ -197,57 +194,53 @@ if ($data['relUniD'] == 'Alumno') {
 
 /******************  INFORMACIÓN DEL HECHO  *****************************/
 $pdf->AddPage();
-$pdf->SetFillColor(0,0,0);
+$pdf->SetFillColor(59,75,89);
 $pdf->SetTextColor(255,255,255);
 $pdf->SetFont('Times', 'B', 16);
 
 $pdf->Cell(0, 10, utf8_decode('Información del Hecho'), 1, 1, 'C',1);
 $pdf->SetFont('Times', 'B', 14);
-$pdf->SetFillColor(22,153,223);
+$pdf->SetFillColor(142,168,191);
+$pdf->SetTextColor(0,0,0);
 $pdf->Cell(90, 10, 'Fecha del Hecho', 1, 0, 'C',1);
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->SetTextColor(0,0,b: 0);
 $pdf->MultiCell(0, 10, $data['fechaHecho'], 1, 'C');
 
 if ($data['lugarHecho'] == 'Dentro de la institución') {
-    $pdf->SetFillColor(22,153,223);
-    $pdf->SetTextColor(255,255,255);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,b: 0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(90, 10, 'Lugar del Hecho', 1, 0, 'C',1);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->SetTextColor(0,0,b: 0);
     $pdf->MultiCell(0, 10, utf8_decode($data['lugarHecho']), 1, 'C');
 
-    $pdf->SetFillColor(22,153,223);
-    $pdf->SetTextColor(255,255,255);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,b: 0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(0, 10, 'Detalles del Lugar', 1, 1, 'C',1);
     $pdf->SetFont('Arial', '', 10);
-    $pdf->SetTextColor(0,0,b: 0);
     $pdf->MultiCell(0, 10, utf8_decode($data['detallesLugar']), 1, 'L');
 
 } else {
 
-    $pdf->SetFillColor(22,153,223);
-    $pdf->SetTextColor(255,255,255);
+    $pdf->SetFillColor(142,168,191);
+    $pdf->SetTextColor(0,0,b: 0);
     $pdf->SetFont('Times', 'B', 14);
     $pdf->Cell(90, 10, 'Lugar del Hecho', 1, 0, 'C',1);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->SetTextColor(0,0,b: 0);
     $pdf->MultiCell(0, 10, utf8_decode($data['lugarHecho']), 1, 'C');
 
 }
-$pdf->SetFillColor(22,153,223);
-$pdf->SetTextColor(255,255,255);
+$pdf->SetFillColor(142,168,191);
+$pdf->SetTextColor(0,g: 0,b: 0);
 $pdf->SetFont('Times', 'B', 14);
 $pdf->Cell(0, 10, utf8_decode('Descripción'), '1', 1, 'C',1);
 $pdf->SetFont('Arial', '', 10);
-$pdf->SetTextColor(0,g: 0,b: 0);
 $pdf->MultiCell(0, 10, utf8_decode($data['descripcionR']), '1','L');
 
 /**************************************************************************/
 
-$pdf->SetFillColor(0,0,0);
+$pdf->SetFillColor(59,75,89);
 $pdf->SetTextColor(255,255,255);
 $pdf->SetFont('Times', 'B', 16);
 $pdf->Cell(0, 10, utf8_decode('Testigos'), 1, 1,'C',1);
@@ -257,12 +250,11 @@ if (!empty($data['nombresTestigos'])) {
     $nombresTestigos = array_map('trim', explode(",", $data['nombresTestigos']));
 
     foreach ($nombresTestigos as $index => $nombre) {
-        $pdf->SetFillColor(22, 153, 223);
-        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFillColor(142,168,191);
+        $pdf->SetTextColor(0,0,0);
         $pdf->SetFont('Times', 'B', 14);
         $pdf->Cell(90, 10, 'Nombre del Testigo', 1, 0, 'C', 1);
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetTextColor(0, 0, 0);
         $pdf->MultiCell(0, 10, utf8_decode($nombre), 1, 'C');
         
     }
@@ -271,7 +263,7 @@ if (!empty($data['nombresTestigos'])) {
 }
 
 
-$pdf->SetFillColor(0,0,0);
+$pdf->SetFillColor(59,75,89);
 $pdf->SetTextColor(255,255,255);
 $pdf->SetFont('Times', 'B', 16);
 $pdf->Cell(0, 10, utf8_decode('Agresores'), 1, 1,'C',1);
@@ -280,8 +272,8 @@ if (!empty($data['nombresAgresores'])) {
     $nombresAgresores = array_map('trim', explode(",", $data['nombresAgresores']));
 
     foreach ($nombresAgresores as $index => $nombre) {
-        $pdf->SetFillColor(22, 153, 223);
-        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFillColor(142,168,191);
+        $pdf->SetTextColor(0,0,0);
         $pdf->SetFont('Times', 'B', 14);
         $pdf->Cell(90, 10, 'Nombre del Agresor', 1, 0, 'C', 1);
         $pdf->SetFont('Arial', 'B', 12);
