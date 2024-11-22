@@ -3,208 +3,242 @@ require './includes/database.php';
 require './includes/Correo.php';
 require './includes/PDF.php';
 
+session_start();
+
+if (isset($_GET['action']) && $_GET['action'] === 'finish') {
+    session_unset();
+    session_destroy();
+    header("Location: Inicio.html");
+    exit;
+}
+
+
 // Verificar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Capturar datos del formulario
-    $tipoReporte = $_POST['tipoReporte'];
-    $nombreD = $_POST['nombreD'] ?? null; // 
-    $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
-    if($tipoReporte == "Sí"){
-        $correoD = $_POST['correoDA'] ?? null;
-    }
-    
-    $numTelD = $_POST['numTelD'] ?? null; //
-    $tipoDenunciante = $_POST['tipoDenunciante'];
-    $relAfectado = $_POST['relacion_afectada'] ?? NULL;
-    $relUniD = $_POST['relacion_universidad']; //Hay que modificar
-    $departamentoD = NULL;
-    $semestreD = NULL;
-    if($relUniD == "Otro"){
-        $relUniD = $_POST['relacion_otro'];
-    }else{
-        if($relUniD == "Alumno"){
-            $departamentoD = $_POST['carrera'];
-            $semestreD = $_POST['semestre'];
-        }else if($relUniD == "Docente"){
-            $departamentoD = $_POST['departamento_docente'];
-        }else if($relUniD == "Personal administrativo"){
-            $departamentoD = $_POST['departamento_admin'];
+    if (!isset($_SESSION['form_submitted'])) {
+        $_SESSION['form_submitted'] = true;
+
+        // Capturar datos del formulario
+        $tipoReporte = $_POST['tipoReporte'];
+        $nombreD = $_POST['nombreD'] ?? null; // 
+        $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
+        if($tipoReporte == "Sí"){
+            $correoD = $_POST['correoDA'] ?? null;
         }
-    }
-
-    $tipoD = $_POST['tipoD'];
-    $fechaHecho = $_POST['fechaHecho'];
-    $lugarHecho = $_POST['lugarHecho'];
-    $detallesLugar = $_POST['detallesLugar'] ?? null; //Opcional 
-    $descripcionR = $_POST['descripcionR'] ?? null; 
-    $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
-    //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
-    $prioridad = 3;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
-    $evi = $_POST['evidencia'];
-    $numTestigos = $_POST['num_testigos'];
-    $bandC = $_POST['actualizaciones'];
-    $bandP = $_POST['psicologico'];
-
-    if($evi = "Sí"){
-        $prioridad += 5;
-    }
-    if($tipoReporte == "No"){ //Reporte anonimo
-        $prioridad += 4;
-    }
-    if($numTestigos != "0"){
-        $prioridad += 3;
-    }
-
-    //Encriptamos la información sensible
-    $nombreD = encryptData($nombreD);
-    $correoD = encryptData($correoD);
-    $numTelD = encryptData($numTelD);
-
-    //Insertamos al denunciante
-    $stmtDen = $conexion->prepare("INSERT INTO DENUNCIANTE (nombreD, correoD, numTelD, relUniD, tipoD, departamentoD, semestreD) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmtDen->bind_param("sssssss", $nombreD, $correoD, $numTelD, $relUniD, $tipoDenunciante, $departamentoD, $semestreD);
-    if ($stmtDen->execute()){
-        $idDenunciante = $stmtDen->insert_id;
-        if($tipoDenunciante == "Testigo"){
-            $stmtDenTes = $conexion->prepare("INSERT INTO DENUNCIANTE_TESTIGO (idD, relAfectado) VALUES (?, ?)");
-            $stmtDenTes->bind_param("is",$idDenunciante, $relAfectado);
-            $stmtDenTes->execute();
-        }
-    }
-
-
-    // Insertar datos del reporte en la tabla REPORTE
-    $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, idD, tipoReporte, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssi", $idDenunciante, $tipoReporte, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
-
-    if ($stmt->execute()) {
-        $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
-        echo "Reporte registrado con éxito. ID: " . $idReporte;
-
-        // Primero, verifica si se seleccionó algún número de testigos
-        if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
-            // Recorre cada número de testigo y guarda los datos en la base de datos
-            for ($i = 1; $i <= $numTestigos; $i++) {
-                // Obtiene el rol del testigo y el nombre
-                $rolT = $_POST["testigo_rol_{$i}"];
-                $nombreT = $_POST["nombre_testigo_{$i}"];
-                
-                // Si el rol es "Otro", obtiene la especificación adicional
-                if ($rolT == "Otro") {
-                    $rolT = $_POST["testigo_otro_especificar_{$i}"];
-                }
-
-                // Inserta el testigo en la base de datos
-                $stmtTestigo = $conexion->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
-                $stmtTestigo->bind_param("ss", $nombreT, $rolT);
-
-                if ($stmtTestigo->execute()) {
-                    $idTestigo = $stmtTestigo->insert_id;
-
-                    // Inserta la relación entre el reporte y el testigo
-                    $stmtReporteTestigo = $conexion->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
-                    $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
-                    $stmtReporteTestigo->execute();
-                }
+        
+        $numTelD = $_POST['numTelD'] ?? null; //
+        $tipoDenunciante = $_POST['tipoDenunciante'];
+        $relAfectado = $_POST['relacion_afectada'] ?? NULL;
+        $relUniD = $_POST['relacion_universidad']; //Hay que modificar
+        $departamentoD = NULL;
+        $semestreD = NULL;
+        if($relUniD == "Otro"){
+            $relUniD = $_POST['relacion_otro'];
+        }else{
+            if($relUniD == "Alumno"){
+                $departamentoD = $_POST['carrera'];
+                $semestreD = $_POST['semestre'];
+            }else if($relUniD == "Docente"){
+                $departamentoD = $_POST['departamento_docente'];
+            }else if($relUniD == "Personal administrativo"){
+                $departamentoD = $_POST['departamento_admin'];
             }
         }
 
-        // Primero, verifica si se seleccionó algún número de testigos
-        if (isset($_POST['num_agresores']) && $_POST['num_agresores'] > 0) {
-            $numAgresores = $_POST['num_agresores'];
-            
-            // Recorre cada número de testigo y guarda los datos en la base de datos
-            for ($i = 1; $i <= $numAgresores; $i++) {
-                // Obtiene el rol del testigo y el nombre
-                $rolA = $_POST["agresor_rol_{$i}"];
-                $nombreA = $_POST["nombre_agresor_{$i}"];
-                
-                // Si el rol es "Otro", obtiene la especificación adicional
-                if ($rolA == "Otro") {
-                    $rolA = $_POST["agresor_otro_especificar_{$i}"];
-                }
+        $tipoD = $_POST['tipoD'];
+        $fechaHecho = $_POST['fechaHecho'];
+        $lugarHecho = $_POST['lugarHecho'];
+        $detallesLugar = $_POST['detallesLugar'] ?? null; //Opcional 
+        $descripcionR = $_POST['descripcionR'] ?? null; 
+        $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
+        //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
+        $prioridad = 3;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
+        $evi = $_POST['evidencia'];
+        $numTestigos = $_POST['num_testigos'];
+        $bandC = $_POST['actualizaciones'];
+        $bandP = $_POST['psicologico'];
 
-                // Inserta el testigo en la base de datos
-                $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
-                $stmtAgresor->bind_param("ss", $nombreA, $rolA);
+        if($evi = "Sí"){
+            $prioridad += 5;
+        }
+        if($tipoReporte == "No"){ //Reporte anonimo
+            $prioridad += 4;
+        }
+        if($numTestigos != "0"){
+            $prioridad += 3;
+        }
 
-                if ($stmtAgresor->execute()) {
-                    $idAgresor = $stmtAgresor->insert_id;
+        //Encriptamos la información sensible
+        $nombreD = encryptData($nombreD);
+        $correoD = encryptData($correoD);
+        $numTelD = encryptData($numTelD);
 
-                    // Inserta la relación entre el reporte y el testigo
-                    $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
-                    $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
-                    $stmtReporteAgresor->execute();
-                }
+        //Insertamos al denunciante
+        $stmtDen = $conexion->prepare("INSERT INTO DENUNCIANTE (nombreD, correoD, numTelD, relUniD, tipoD, departamentoD, semestreD) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmtDen->bind_param("sssssss", $nombreD, $correoD, $numTelD, $relUniD, $tipoDenunciante, $departamentoD, $semestreD);
+        if ($stmtDen->execute()){
+            $idDenunciante = $stmtDen->insert_id;
+            if($tipoDenunciante == "Testigo"){
+                $stmtDenTes = $conexion->prepare("INSERT INTO DENUNCIANTE_TESTIGO (idD, relAfectado) VALUES (?, ?)");
+                $stmtDenTes->bind_param("is",$idDenunciante, $relAfectado);
+                $stmtDenTes->execute();
             }
         }
 
-        // Insertar evidencias si se proporcionaron
-        if (isset($_FILES['evidencias'])) {
-            $rutaEvidencia = 'evidencias/'.$idReporte;
-            if (!is_dir($rutaEvidencia)) {
-                mkdir($rutaEvidencia, 0777, true); // 0777 da permisos completos, y true crea directorios recursivamente
-            }
 
-            foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
-                $nombreEvidencia = $_FILES['evidencias']['name'][$index];
-                $rutaEvidencia = 'evidencias/'.$idReporte.'/'.basename($nombreEvidencia);
+        // Insertar datos del reporte en la tabla REPORTE
+        $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, idD, tipoReporte, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssi", $idDenunciante, $tipoReporte, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
 
-                
+        if ($stmt->execute()) {
+            $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
+            echo "Reporte registrado con éxito. ID: " . $idReporte;
 
-                if (move_uploaded_file($tmpName, $rutaEvidencia)) {
-                    //Insertar registro en la tabla evidencias
-                    $stmtEvidencia = $conexion->prepare("INSERT INTO EVIDENCIAS (nombreE, rutaArchivoE, descripcionE) VALUES (?, ?, ?)");
-                    $descripcionE = $_POST['descripcionE']; // Suponiendo que existe un array con las descripciones
-                    $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
-                    if ($stmtEvidencia->execute()) {
-                        $idEvidencia = $stmtEvidencia->insert_id;
-                        $stmtReporteEvidencia = $conexion->prepare("INSERT INTO REPORTE_EVIDENCIAS (idReporte, idE) VALUES (?, ?)");
-                        $stmtReporteEvidencia->bind_param("ii", $idReporte, $idEvidencia);
-                        $stmtReporteEvidencia->execute();
+            // Primero, verifica si se seleccionó algún número de testigos
+            if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
+                // Recorre cada número de testigo y guarda los datos en la base de datos
+                for ($i = 1; $i <= $numTestigos; $i++) {
+                    // Obtiene el rol del testigo y el nombre
+                    $rolT = $_POST["testigo_rol_{$i}"];
+                    $nombreT = $_POST["nombre_testigo_{$i}"];
+                    
+                    // Si el rol es "Otro", obtiene la especificación adicional
+                    if ($rolT == "Otro") {
+                        $rolT = $_POST["testigo_otro_especificar_{$i}"];
+                    }
+
+                    // Inserta el testigo en la base de datos
+                    $stmtTestigo = $conexion->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
+                    $stmtTestigo->bind_param("ss", $nombreT, $rolT);
+
+                    if ($stmtTestigo->execute()) {
+                        $idTestigo = $stmtTestigo->insert_id;
+
+                        // Inserta la relación entre el reporte y el testigo
+                        $stmtReporteTestigo = $conexion->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
+                        $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
+                        $stmtReporteTestigo->execute();
                     }
                 }
             }
-        }else{
-            echo "No entro";
+
+            // Primero, verifica si se seleccionó algún número de testigos
+            if (isset($_POST['num_agresores']) && $_POST['num_agresores'] > 0) {
+                $numAgresores = $_POST['num_agresores'];
+                
+                // Recorre cada número de testigo y guarda los datos en la base de datos
+                for ($i = 1; $i <= $numAgresores; $i++) {
+                    // Obtiene el rol del testigo y el nombre
+                    $rolA = $_POST["agresor_rol_{$i}"];
+                    $nombreA = $_POST["nombre_agresor_{$i}"];
+                    
+                    // Si el rol es "Otro", obtiene la especificación adicional
+                    if ($rolA == "Otro") {
+                        $rolA = $_POST["agresor_otro_especificar_{$i}"];
+                    }
+
+                    // Inserta el testigo en la base de datos
+                    $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
+                    $stmtAgresor->bind_param("ss", $nombreA, $rolA);
+
+                    if ($stmtAgresor->execute()) {
+                        $idAgresor = $stmtAgresor->insert_id;
+
+                        // Inserta la relación entre el reporte y el testigo
+                        $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
+                        $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
+                        $stmtReporteAgresor->execute();
+                    }
+                }
+            }
+
+            // Insertar evidencias si se proporcionaron
+            if (isset($_FILES['evidencias'])) {
+                $rutaEvidencia = 'evidencias/'.$idReporte;
+                if (!is_dir($rutaEvidencia)) {
+                    mkdir($rutaEvidencia, 0777, true); // 0777 da permisos completos, y true crea directorios recursivamente
+                }
+
+                foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
+                    $nombreEvidencia = $_FILES['evidencias']['name'][$index];
+                    $rutaEvidencia = 'evidencias/'.$idReporte.'/'.basename($nombreEvidencia);
+
+                    
+
+                    if (move_uploaded_file($tmpName, $rutaEvidencia)) {
+                        //Insertar registro en la tabla evidencias
+                        $stmtEvidencia = $conexion->prepare("INSERT INTO EVIDENCIAS (nombreE, rutaArchivoE, descripcionE) VALUES (?, ?, ?)");
+                        $descripcionE = $_POST['descripcionE']; // Suponiendo que existe un array con las descripciones
+                        $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
+                        if ($stmtEvidencia->execute()) {
+                            $idEvidencia = $stmtEvidencia->insert_id;
+                            $stmtReporteEvidencia = $conexion->prepare("INSERT INTO REPORTE_EVIDENCIAS (idReporte, idE) VALUES (?, ?)");
+                            $stmtReporteEvidencia->bind_param("ii", $idReporte, $idEvidencia);
+                            $stmtReporteEvidencia->execute();
+                        }
+                    }
+                }
+            }else{
+                echo "No entro";
+            }
+
+            if ($bandC == "Sí") {
+                $correo = new Correo();
+            
+                $destinatario = decryptData($correoD);
+                $titulo = "Confirmación de Recepción de Tu reporte - $idReporte";
+            
+                $mensaje = "
+                    <html>
+                    <head>
+                        <title>Confirmación de Recepción de Tu Caso</title>
+                    </head>
+                    <body>
+                        <p>Estimado/a <strong>Denunciante</strong>,</p>
+                        <p>Gracias por confiar en nuestra plataforma para reportar tu caso. Este correo es para confirmarte que hemos recibido correctamente tu denuncia con el número de caso <strong>$idReporte</strong>.</p>
+                        <p>Queremos reiterarte que tu reporte será tratado con la máxima confidencialidad y que nuestro equipo se encargará de analizarlo de manera justa y profesional. En esta etapa inicial, nuestro equipo está revisando los detalles proporcionados para evaluar las medidas necesarias y los próximos pasos a seguir.</p>
+                        <h3>¿Qué puedes esperar ahora?</h3>
+                        <ul>
+                            <li><strong>Evaluación inicial:</strong> Uno de nuestros especialistas revisará tu caso para determinar las acciones inmediatas necesarias, si aplican.</li>
+                            <li><strong>Seguimiento:</strong> Te mantendremos informado/a sobre el progreso del caso según el canal de comunicación que elegiste al momento del registro.</li>
+                            <li><strong>Apoyo:</strong> Si necesitas asistencia adicional, puedes comunicarte con nuestro equipo al correo <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a>.</li>
+                        </ul>";
+            
+                if ($bandP == "Sí") {
+                    $mensaje .= "
+                        <h3>Apoyo Psicológico</h3>
+                        <p>Hemos registrado que solicitaste asistencia psicológica. Nuestro equipo especializado se pondrá en contacto contigo en las próximas [X horas/días] para coordinar el apoyo que necesites. Si tienes alguna preferencia respecto al horario o el medio de contacto, por favor háznoslo saber respondiendo a este correo.</p>";
+                }
+            
+                $mensaje .= "
+                        <p>Estamos aquí para apoyarte en este proceso y asegurar que se respete tu integridad y bienestar en todo momento.</p>
+                        <p><strong>Habla, nosotros te respaldamos.</strong></p>
+                        <p>Atentamente,</p>
+                        <p><strong>Equipo AlertaTec<br>
+                        Instituto Tecnológico de la Laguna</strong><br>
+                        <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a> | [Teléfono] | [Página Web, si aplica]</p>
+                    </body>
+                    </html>";
+            
+                $correo->enviarCorreo($destinatario, $titulo, $mensaje);
+            }
+            
+
+            generarReportePDF($idReporte);
+
+        } else {
+            echo "Error al registrar el reporte: " . $stmt->error;
         }
 
-        if($bandC == "Sí"){
-        $correo = new Correo();
-
-        $destinatario = decryptData($correoD);
-        $titulo = "Confirmación de Recepción de Tu reporte - $idReporte";
-        $mensaje = "Estimado/a Denunciante,\n
-        Gracias por confiar en nuestra plataforma para reportar tu caso. Este correo es para confirmarte que hemos recibido correctamente tu denuncia con el número de caso $idReporte.\n
-        Queremos reiterarte que tu reporte será tratado con la máxima confidencialidad y que nuestro equipo se encargará de analizarlo de manera justa y profesional. En esta etapa inicial, nuestro equipo está revisando los detalles proporcionados para evaluar las medidas necesarias y los próximos pasos a seguir.\n\n
-        ¿Qué puedes esperar ahora?\n
-        •	Evaluación inicial: Uno de nuestros especialistas revisará tu caso para determinar las acciones inmediatas necesarias, si aplican.\n
-        •	Seguimiento: Te mantendremos informado/a sobre el progreso del caso según el canal de comunicación que elegiste al momento del registro.\n
-        •	Apoyo: Si necesitas asistencia adicional, puedes comunicarte con nuestro equipo al correo alertateclag@gmail.com /n/n";
-
-        if($bandP == "Sí"){
-            $mensaje = $mensaje." Apoyo Psicológico.\n
-            Hemos registrado que solicitaste asistencia psicológica. Nuestro equipo especializado se pondrá en contacto contigo en las próximas [X horas/días] para coordinar el apoyo que necesites. Si tienes alguna preferencia respecto al horario o el medio de contacto, por favor háznoslo saber respondiendo a este correo.\n";
-        }
-
-        $mensaje = $mensaje."Estamos aquí para apoyarte en este proceso y asegurar que se respete tu integridad y bienestar en todo momento.\n/n
-        Habla, nosotros te respaldamos.\n\n
-        Atentamente,\n
-        Equipo AlertaTec\n
-        Instituto Tecnológico de la Laguna\n
-        alertateclag@gmail.com | [Teléfono] | [Página Web, si aplica]";
-
-        $correo->enviarCorreo($destinatario, $titulo, $mensaje);
-        }
-
-        generarReportePDF($idReporte);
-
+        $stmt->close();
+        $conexion->close();
+        $Envio = true;
     } else {
-        echo "Error al registrar el reporte: " . $stmt->error;
+        $Envio = true;
     }
-
-    $stmt->close();
-    $conexion->close();
+    
+}else{
+    $Envio = false;
 }
 ?>
 
@@ -453,27 +487,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="button" class="button" onclick="validarSeccion5()">Enviar denuncia</button>
         </div>
 
-        <!-- Esta se supone que va a ser la seccion6 todavia no es lo que 
-         va a llevar solo es una prueba, solo ayudame a que se vea despues
-         que envies la denuncia :))-->
-        <div class="seccion" id="seccion6">
-            <h1>¡Gracias por tu valentía!</h1>
-            <p>Tu denuncia se ha recibido correctamente. Estamos aquí para apoyarte.</p>
-        
-            <h2>Frases de apoyo</h2>
-            <p>"Tu voz importa, y tu bienestar es nuestra prioridad."</p>
-            <p>"Hablar es el primer paso hacia el cambio. No estás solo/a."</p>
-        
-            <h2>¿Necesitas más ayuda?</h2>
-            <ul>
-                <li>Contacta al departamento de apoyo psicológico.</li>
-                <li>Revisa nuestras <a href="/faq">Preguntas Frecuentes</a>.</li>
-                <li>Comunícate con nosotros a través de nuestro correo alertateclag@gmail.com</li>
-            </ul>   
+        <div class="seccion sombraII" id="seccion6">
+            <h1 class="seccion-titulo">¡Gracias por tu valentía!</h1>
+            <p class="seccion-parrafo">Tu denuncia se ha recibido correctamente. Estamos aquí para apoyarte.</p>
+            <p class="seccion-cita">"Hablar es el primer paso hacia el cambio. No estás solo/a."</p>
+            <h2 class="seccion-subtitulo">¿Necesitas más ayuda?</h2>
+            <ul class="seccion-lista">
+                <li class="seccion-item">Contacta al departamento de apoyo psicológico.</li>
+                <li class="seccion-item">Comunícate con nosotros a través de nuestro correo alertateclag@gmail.com</li>
+            </ul>
+            <button type="button" class="boton" onclick="redirigirP()">Terminar</button>
         </div>
     </form>
 
     <script>
+
+        function redirigirP() {
+            window.location.href = "form.php?action=finish";
+        }
         // Función para mostrar la siguiente sección
         function mostrarSeccion(seccionId) {
             const secciones = document.querySelectorAll('.seccion');
@@ -842,7 +873,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return;
             }
 
-            alert('Formulario enviado exitosamente.');
+            //alert('Formulario enviado exitosamente.');
             document.getElementById('tipoD').value = ObtenerCheckbox();
             document.getElementById('formulario').submit();
         }
@@ -862,6 +893,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return valores.join(', ');
             
         }
+
+        <?php
+            if($Envio){
+                echo "window.onload = mostrarSeccion('seccion6');";
+            }
+        ?>
         
     </script>
 </body>

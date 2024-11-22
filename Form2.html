@@ -1,193 +1,192 @@
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Formulario de Denuncia</title>
-        <link rel="stylesheet" href="css/form.css">
-        <script src="JS/Admin.js"></script>
-        <link rel="icon" href="img/Huella3.png">
-    </head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Denuncia</title>
+    <link rel="stylesheet" href="css/form.css">
+    <link rel="icon" href="img/Huella3.png">
+</head>
 
-    <body>
+<body>
 
-        <!-- <span class="openbtn" onclick="openNav()">☰</span> -->
+    <!-- <span class="openbtn" onclick="openNav()">☰</span> -->
 
-        <a href="Formulario.html" class="openbtn">
-            <img src="img/Regresar.png" class="BA">
-        </a>
+    <a href="Formulario.html" class="openbtn">
+        <img src="img/Regresar.png" class="BA">
+    </a>
 
 
-        <div id="main">
-            <div class="huella">
-                    <img src="img/Huella3.png" class="imagen">
-                <div class="inf">
-                    <div class="tl">
-                        <h1 class="texto">ALERTA</h1>
-                        <h1 class="texto1">TEC</h1>
-                        <h2 class="texto2">“Habla, nosotros te respaldamos”</h2>
-                        <img src="img/HuellaSin.png" class="imagen2">
-                    </div>
+    <div id="main">
+        <div class="huella">
+                <img src="img/Huella3.png" class="imagen">
+            <div class="inf">
+                <div class="tl">
+                    <h1 class="texto">ALERTA</h1>
+                    <h1 class="texto1">TEC</h1>
+                    <h2 class="texto2">“Habla, nosotros te respaldamos”</h2>
+                    <img src="img/HuellaSin.png" class="imagen2">
                 </div>
             </div>
+        </div>
 
-        <h1 class="TT">Formulario de Denuncia</h1>
+    <h1 class="TT">Formulario de Denuncia</h1>
 
-        <!-- Formulario dividido por secciones -->
-        <form id="formulario" method="POST" enctype="multipart/form-data">
+    <!-- Formulario dividido por secciones -->
+    <form id="formulario" method="POST" enctype="multipart/form-data">
 
-            <!-- Sección 1: Tipo de denuncia -->
-            <div class="seccion active sombraII" id="seccion1">
-                
-                <h2 class="td">Sección 1: Tipo de denuncia</h2>
-                <label>1. ¿Desearías realizar una denuncia anónima?</label><br>
+        <!-- Sección 1: Tipo de denuncia -->
+        <div class="seccion active sombraII" id="seccion1">
+            
+            <h2 class="td">Sección 1: Tipo de denuncia</h2>
+            <label>1. ¿Desearías realizar una denuncia anónima?</label><br>
 
-                <input class="radio" type="radio" id="anonimo_si" name="tipoReporte" value="Sí">
-                <label for="anonimo_si">Sí</label><br><br>    
+            <input class="radio" type="radio" id="anonimo_si" name="tipoReporte" value="Sí">
+            <label for="anonimo_si">Sí</label><br><br>    
 
-                <input class="radio" type="radio"  id="anonimo_no" name="tipoReporte" value="No">
-                <label for="anonimo_no">No</label><br><br>
+            <input class="radio" type="radio"  id="anonimo_no" name="tipoReporte" value="No">
+            <label for="anonimo_no">No</label><br><br>
 
-                    <div id="no_anonimo_datos" style="display:none;">
-                        <label for="nombreD">Nombre completo:</label>
-                        <input type="text" id="nombreD" name="nombreD"><br>
+                <div id="no_anonimo_datos" style="display:none;">
+                    <label for="nombreD">Nombre completo:</label>
+                    <input type="text" id="nombreD" name="nombreD"><br>
 
-                        <label for="correoD">Correo Electrónico (preferentemente institucional):</label>
-                        <input type="email" id="correoD" name="correoD"><br>
+                    <label for="correoD">Correo Electrónico (preferentemente institucional):</label>
+                    <input type="email" id="correoD" name="correoD"><br>
 
-                        <label for="numTelD">Número telefónico (opcional):</label>
-                        <input type="tel" id="numTelD" name="numTelD"><br>
+                    <label for="numTelD">Número telefónico (opcional):</label>
+                    <input type="tel" id="numTelD" name="numTelD"><br>
 
-                        <p><strong>Aviso legal:</strong><br>
-                        Al realizar una denuncia sin anonimidad autorizas que tu información sea compartida con las autoridades competentes dentro de la institución para que se tomen las medidas necesarias.<br><br></p>
-                    </div>
+                    <p><strong>Aviso legal:</strong><br>
+                    Al realizar una denuncia sin anonimidad autorizas que tu información sea compartida con las autoridades competentes dentro de la institución para que se tomen las medidas necesarias.<br><br></p>
+                </div>
 
-                <!-- Botón para pasar a la siguiente sección -->
-                <button type="button" class="button" onclick="validarSeccion1()">Siguiente</button>
-            </div>
+            <!-- Botón para pasar a la siguiente sección -->
+            <button type="button" class="button" onclick="validarSeccion1()">Siguiente</button>
+        </div>
 
-            <!-- Sección 2: Datos del denunciante -->
-            <div class="seccion sombraII" id="seccion2">
-                <h2>Sección 2: Datos del denunciante</h2>
-                <label>2. ¿Eres la persona afectada o un testigo?</label><br>
-                <input class="radio" type="radio" id="afectada" name="tipoDenunciante" value="Persona afectada">
-                    <label for="afectada">Persona afectada</label><br><br>
-                    <input class="radio" type="radio" id="testigo" name="tipoDenunciante" value="Testigo">
-                    <label for="testigo">Testigo</label><br><br>
+        <!-- Sección 2: Datos del denunciante -->
+        <div class="seccion sombraII" id="seccion2">
+            <h2>Sección 2: Datos del denunciante</h2>
+            <label>2. ¿Eres la persona afectada o un testigo?</label><br>
+            <input class="radio" type="radio" id="afectada" name="tipoDenunciante" value="Persona afectada">
+                <label for="afectada">Persona afectada</label><br><br>
+                <input class="radio" type="radio" id="testigo" name="tipoDenunciante" value="Testigo">
+                <label for="testigo">Testigo</label><br><br>
 
-                    <div id="testigo_relacion" style="display:none;">
-                        <label for="relacion_afectada">¿Cuál es tu relación con la persona afectada?</label>
-                        <input type="text" id="relacion_afectada" name="relacion_afectada"><br>
-                    </div>
+                <div id="testigo_relacion" style="display:none;">
+                    <label for="relacion_afectada">¿Cuál es tu relación con la persona afectada?</label>
+                    <input type="text" id="relacion_afectada" name="relacion_afectada"><br>
+                </div>
 
-                <label>3. ¿Cuál es tu relación con la universidad?</label><br>
-                <input class="radio" type="radio" id="alumno" name="relacion_universidad" value="Alumno">
-                <label for="alumno">Alumno</label><br><br>
-                    <div id="alumno_datos" style="display:none;">
-                        <label for="carrera">¿A qué carrera perteneces?</label>
-                        <input type="text" id="carrera" name="carrera"><br>
+            <label>3. ¿Cuál es tu relación con la universidad?</label><br>
+            <input class="radio" type="radio" id="alumno" name="relacion_universidad" value="Alumno">
+            <label for="alumno">Alumno</label><br><br>
+                <div id="alumno_datos" style="display:none;">
+                    <label for="carrera">¿A qué carrera perteneces?</label>
+                    <input type="text" id="carrera" name="carrera"><br>
 
-                        <label for="semestre">¿En qué semestre te encuentras actualmente?</label>
-                        <select id="semestre" name="semestre">
-                            <option value="1">1º Semestre</option>
-                            <option value="2">2º Semestre</option>
-                            <option value="3">3º Semestre</option>
-                            <option value="4">4º Semestre</option>
-                            <option value="5">5º Semestre</option>
-                            <option value="6">6º Semestre</option>
-                            <option value="7">7º Semestre</option>
-                            <option value="8">8º Semestre</option>
-                            <option value="9">9º Semestre</option>
-                            <option value="10">10º Semestre o más</option>
-                        </select><br>
-                    </div>
+                    <label for="semestre">¿En qué semestre te encuentras actualmente?</label>
+                    <select id="semestre" name="semestre">
+                        <option value="1">1º Semestre</option>
+                        <option value="2">2º Semestre</option>
+                        <option value="3">3º Semestre</option>
+                        <option value="4">4º Semestre</option>
+                        <option value="5">5º Semestre</option>
+                        <option value="6">6º Semestre</option>
+                        <option value="7">7º Semestre</option>
+                        <option value="8">8º Semestre</option>
+                        <option value="9">9º Semestre</option>
+                        <option value="10">10º Semestre o más</option>
+                    </select><br>
+                </div>
 
-                <input class="radio" type="radio" id="docente" name="relacion_universidad" value="Docente">
-                <label for="docente">Docente</label><br><br>
-                    <div id="docente_datos" style="display:none;">
-                        <label for="departamento_docente">¿A qué departamento pertenece?</label>
-                        <input type="text" id="departamento_docente" name="departamento_docente"><br>
-                    </div>
+            <input class="radio" type="radio" id="docente" name="relacion_universidad" value="Docente">
+            <label for="docente">Docente</label><br><br>
+                <div id="docente_datos" style="display:none;">
+                    <label for="departamento_docente">¿A qué departamento pertenece?</label>
+                    <input type="text" id="departamento_docente" name="departamento_docente"><br>
+                </div>
 
-                <input class="radio" type="radio" id="administrativo" name="relacion_universidad" value="Personal administrativo">
-                <label for="administrativo">Personal administrativo</label><br><br>
-                    <div id="administrativo_datos" style="display:none;">
-                        <label for="departamento_admin">¿A qué departamento pertenece?</label>
-                        <input type="text" id="departamento_admin" name="departamento_admin"><br>
-                    </div>
+            <input class="radio" type="radio" id="administrativo" name="relacion_universidad" value="Personal administrativo">
+            <label for="administrativo">Personal administrativo</label><br><br>
+                <div id="administrativo_datos" style="display:none;">
+                    <label for="departamento_admin">¿A qué departamento pertenece?</label>
+                    <input type="text" id="departamento_admin" name="departamento_admin"><br>
+                </div>
 
-                <input class="radio" type="radio" id="otro" name="relacion_universidad" value="Otro">
-                <label for="otro">Otro</label><br><br>
-                    <div id="otro_datos" style="display:none;">
-                        <label for="relacion_otro">Especificar:</label>
-                        <input type="text" id="relacion_otro" name="relacion_otro"><br>
-                    </div>
+            <input class="radio" type="radio" id="otro" name="relacion_universidad" value="Otro">
+            <label for="otro">Otro</label><br><br>
+                <div id="otro_datos" style="display:none;">
+                    <label for="relacion_otro">Especificar:</label>
+                    <input type="text" id="relacion_otro" name="relacion_otro"><br>
+                </div>
 
-                <!-- Botón para pasar a la siguiente sección -->
-                <button type="button" class="button" onclick="regresarSeccion('seccion1')">Atrás</button>
-                <button type="button" class="button" onclick="validarSeccion2()">Siguiente</button>
-            </div>
+            <!-- Botón para pasar a la siguiente sección -->
+            <button type="button" class="button" onclick="regresarSeccion('seccion1')">Atrás</button>
+            <button type="button" class="button" onclick="validarSeccion2()">Siguiente</button>
+        </div>
 
-            <!-- Sección 3: Detalles de la denuncia -->
-            <div class="seccion" id="seccion3">
-                <h2>Sección 3: Detalles de la denuncia</h2>
-                <label>4. ¿Qué tipo de agresión estás denunciando? (Puedes seleccionar más de una opción)</label><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión verbal"> Agresión verbal (insultos, amenazas, comentarios ofensivos)<br><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión física"> Agresión física (golpes, empujones, etc.)<br><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión sexual"> Agresión sexual (violación, contacto sexual no deseado)<br><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Acoso"> Acoso (persecución, vigilancia)<br><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Discriminación"> Discriminación (género, raza, etc.)<br><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Ciberacoso"> Ciberacoso<br><br>
-                <input class="radio" type="checkbox" name="tipoDenuncia" value="Hostigamiento laboral o académico"> Hostigamiento laboral o académico<br><br>
-                <input class="radio" type="checkbox" id="Otro" value="Otro"> Otro (especificar):<br><br>
-                <input type="text" name="agresion_otro" id="agresion_otro"><br>
-                <input type="hidden" name="tipoD" id="tipoD" value= "">
+        <!-- Sección 3: Detalles de la denuncia -->
+        <div class="seccion sombraII" id="seccion3">
+            <h2>Sección 3: Detalles de la denuncia</h2>
+            <label>4. ¿Qué tipo de agresión estás denunciando? (Puedes seleccionar más de una opción)</label><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión verbal"> Agresión verbal (insultos, amenazas, comentarios ofensivos)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión física"> Agresión física (golpes, empujones, etc.)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Agresión sexual"> Agresión sexual (violación, contacto sexual no deseado)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Acoso"> Acoso (persecución, vigilancia)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Discriminación"> Discriminación (género, raza, etc.)<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Ciberacoso"> Ciberacoso<br><br>
+            <input class="radio" type="checkbox" name="tipoDenuncia" value="Hostigamiento laboral o académico"> Hostigamiento laboral o académico<br><br>
+            <input class="radio" type="checkbox" id="Otro" value="Otro"> Otro (especificar):<br><br>
+            <input type="text" name="agresion_otro" id="agresion_otro"><br>
+            <input type="hidden" name="tipoD" id="tipoD" value= "">
 
-                <label for="fechaHecho">5. ¿Cuándo ocurrió el incidente?</label>
-                <input type="date" id="fechaHecho" name="fechaHecho"><br>
+            <label for="fechaHecho">5. ¿Cuándo ocurrió el incidente?</label>
+            <input type="date" id="fechaHecho" name="fechaHecho"><br>
 
-                <label>6. ¿Dónde ocurrió el incidente?</label><br>
-                <input class="radio" type="radio" id="dentro" name="lugarHecho" value="Dentro de la institución">
-                <label for="dentro">Dentro de la institución</label><br><br>
-                    <div id="lugar_dentro" style="display:none;">
-                        <label for="detallesLugar">Describir el lugar (aula, edificio, áreas comunes, etc.):</label>
-                        <input type="text" id="detallesLugar" name="detallesLugar"><br>
-                    </div>
+            <label>6. ¿Dónde ocurrió el incidente?</label><br>
+            <input class="radio" type="radio" id="dentro" name="lugarHecho" value="Dentro de la institución">
+            <label for="dentro">Dentro de la institución</label><br><br>
+                <div id="lugar_dentro" style="display:none;">
+                    <label for="detallesLugar">Describir el lugar (aula, edificio, áreas comunes, etc.):</label>
+                    <input type="text" id="detallesLugar" name="detallesLugar"><br>
+                </div>
 
-                <input class="radio" type="radio" id="fuera" name="lugarHecho" value="Fuera de la institución">
-                <label for="fuera">Fuera de la institución</label><br><br>
+            <input class="radio" type="radio" id="fuera" name="lugarHecho" value="Fuera de la institución">
+            <label for="fuera">Fuera de la institución</label><br><br>
 
-                <label for="num_agresores">7. Indica el número de agresores involucrados.</label>
-                <select id="num_agresores" name="num_agresores" onchange="generarCamposAgresores()">
-                    <option value="0">ninguno</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6 o más</option>
-                </select><br>
-                    <!-- Aquí se generarán las preguntas 7.1 y 7.2 -->
-                    <div id="campos_agresores"></div>
+            <label for="num_agresores">7. Indica el número de agresores involucrados.</label>
+            <select id="num_agresores" name="num_agresores" onchange="generarCamposAgresores()">
+                <option value="0">ninguno</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6 o más</option>
+            </select><br>
+                <!-- Aquí se generarán las preguntas 7.1 y 7.2 -->
+                <div id="campos_agresores"></div>
 
 
-                <!-- Pregunta 8 -->
-                <label for="descripcionR">8. Proporciona una descripción del hecho</label>
-                <input type="text" id="descripcionR" name="descripcionR"><br>
-                
-                <!-- Botón para pasar a la siguiente sección -->
-                <button type="button" class="button" onclick="regresarSeccion('seccion2')">Atrás</button>
-                <button type="button" class="button" onclick="validarSeccion3()">Siguiente</button>
-            </div>
+            <!-- Pregunta 8 -->
+            <label for="descripcionR">8. Proporciona una descripción del hecho</label>
+            <input type="text" id="descripcionR" name="descripcionR"><br>
+            
+            <!-- Botón para pasar a la siguiente sección -->
+            <button type="button" class="button" onclick="regresarSeccion('seccion2')">Atrás</button>
+            <button type="button" class="button" onclick="validarSeccion3()">Siguiente</button>
+        </div>
 
-            <!-- Sección 4: Evidencias -->
-            <div class="seccion" id="seccion4">
-                <h2>Sección 4: Evidencias</h2>
-                <label>9. ¿Cuentas con algún tipo de evidencia?</label><br>
-                <input class="radio" type="radio" id="evidencia_si" name="evidencia" value="Sí">
-                <label for="evidencia_si">Sí</label><br><br>
+        <!-- Sección 4: Evidencias -->
+        <div class="seccion sombraII" id="seccion4">
+            <h2>Sección 4: Evidencias</h2>
+            <label>9. ¿Cuentas con algún tipo de evidencia?</label><br>
+            <input class="radio" type="radio" id="evidencia_si" name="evidencia" value="Sí">
+            <label for="evidencia_si">Sí</label><br><br>
 
-                <input class="radio" type="radio" id="evidencia_no" name="evidencia" value="No">
+            <input class="radio" type="radio" id="evidencia_no" name="evidencia" value="No">
             <label for="evidencia_no">No</label><br><br>
                 <div id="adjunto_evidencias" style="display:none;">
                     <label for="evidencias">Adjunta las evidencias:</label>
@@ -216,7 +215,7 @@
         </div>
 
         <!-- Sección 5: Finalizar denuncia -->
-        <div class="seccion" id="seccion5">
+        <div class="seccion sombraII" id="seccion5">
             <h2>Sección 5: Finalizar denuncia</h2>
             <label>11. ¿Deseas recibir actualizaciones sobre el estado de la denuncia?</label><br>
             <input class="radio" type="radio" id="actualizaciones_correo" name="actualizaciones" value="Sí">
@@ -242,27 +241,27 @@
             <button type="button" class="button" onclick="validarSeccion5()">Enviar denuncia</button>
         </div>
 
-        <!-- Esta se supone que va a ser la seccion6 todavia no es lo que 
-         va a llevar solo es una prueba, solo ayudame a que se vea despues
-         que envies la denuncia :))-->
-        <div class="seccion" id="seccion6">
-            <h1>¡Gracias por tu valentía!</h1>
-            <p>Tu denuncia se ha recibido correctamente. Estamos aquí para apoyarte.</p>
-        
-            <h2>Frases de apoyo</h2>
-            <p>"Tu voz importa, y tu bienestar es nuestra prioridad."</p>
-            <p>"Hablar es el primer paso hacia el cambio. No estás solo/a."</p>
-        
-            <h2>¿Necesitas más ayuda?</h2>
-            <ul>
-                <li>Contacta al departamento de apoyo psicológico.</li>
-                <li>Revisa nuestras <a href="/faq">Preguntas Frecuentes</a>.</li>
-                <li>Comunícate con nosotros a través de nuestro correo alertateclag@gmail.com</li>
-            </ul>   
+       
+        <div class="seccion sombraII" id="seccion6">
+            <h1 class="seccion-titulo">¡Gracias por tu valentía!</h1>
+            <p class="seccion-parrafo">Tu denuncia se ha recibido correctamente. Estamos aquí para apoyarte.</p>
+            <p class="seccion-cita">"Hablar es el primer paso hacia el cambio. No estás solo/a."</p>
+            <h2 class="seccion-subtitulo">¿Necesitas más ayuda?</h2>
+            <ul class="seccion-lista">
+                <li class="seccion-item">Contacta al departamento de apoyo psicológico.</li>
+                <li class="seccion-item">Comunícate con nosotros a través de nuestro correo alertateclag@gmail.com</li>
+            </ul>
+            <button type="button" class="boton" onclick="redirigirP()">Terminar</button>
         </div>
+        
     </form>
 
     <script>
+         function redirigirP() {
+            
+            window.location.href = "Inicio.html";
+        }
+
         // Función para mostrar la siguiente sección
         function mostrarSeccion(seccionId) {
             const secciones = document.querySelectorAll('.seccion');
@@ -564,7 +563,6 @@
     mostrarSeccion('seccion4');
 }
 
-
         //Validar sección 4
         function validarSeccion4() {
             const evidencia = document.querySelector('input[name="evidencia"]:checked');
@@ -632,8 +630,8 @@
             }
 
             alert('Formulario enviado exitosamente.');
-            document.getElementById('tipoD').value = ObtenerCheckbox();
-            document.getElementById('formulario').submit();
+            // document.getElementById('tipoD').value = ObtenerCheckbox();
+            // document.getElementById('formulario').submit();
 
             mostrarSeccion('seccion6');
             

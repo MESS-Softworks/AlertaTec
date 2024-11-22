@@ -36,8 +36,11 @@ class Correo {
             $this->mail->clearAddresses(); // Limpiar direcciones anteriores
             $this->mail->addAddress($destinatario); 
             $this->mail->isHTML(true);    
+            $this->mail->CharSet = 'UTF-8';
             $this->mail->Subject = $titulo;
             $this->mail->Body    = $mensaje;
+
+            $this->mail->AltBody = strip_tags($mensaje); 
 
             $this->mail->send();
             echo 'Correo enviado';
