@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         •	Apoyo: Si necesitas asistencia adicional, puedes comunicarte con nuestro equipo al correo alertateclag@gmail.com /n/n";
 
         if($bandP == "Sí"){
-            $mensaje += "Apoyo Psicológico.\n
+            $mensaje = $mensaje." Apoyo Psicológico.\n
             Hemos registrado que solicitaste asistencia psicológica. Nuestro equipo especializado se pondrá en contacto contigo en las próximas [X horas/días] para coordinar el apoyo que necesites. Si tienes alguna preferencia respecto al horario o el medio de contacto, por favor háznoslo saber respondiendo a este correo.\n";
         }
 

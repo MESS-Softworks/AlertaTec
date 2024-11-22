@@ -19,7 +19,7 @@
     require './includes/conexion.php';
     require './includes/encryption.php';
     
-    // try {
+    try {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $action = $_POST['action'] ?? ''; // Determina si es alta, baja o modificación
             echo $action;
@@ -31,6 +31,7 @@
             $table = ($role === 'admin') ? 'ADMINISTRADOR' : 'SUPERADMINISTRADOR';
             $nameColumn = ($role === 'admin') ? 'nombreAdmin' : 'nombreSAdmin';
             $passwordColumn = ($role === 'admin') ? 'contraAdmin' : 'contraSAdmin';
+            $rolePag = ($role === 'admin') ? 'Administrador' : 'SuperAdministrador';
     
             // Realizar operaciones CRUD según el caso
             switch ($action) {
@@ -39,10 +40,10 @@
                     $stmt->bindParam(':nombre', $user_name);
                     $stmt->bindParam(':contra', $passw);
                     $stmt->execute();
-                    if($role == 'admin  '){
-                        echo "Administrador añadido exitosamente.";
+                    if($role == 'admin'){
+                        $MenConf = "Administrador añadido exitosamente.";
                     }else{
-                        echo "SuperAdministrador añadido exitosamente.";
+                        $MenConf = "SuperAdministrador añadido exitosamente.";
                     }
                     break;
                     
@@ -52,37 +53,48 @@
                     $stmt->bindParam(':nombre', $user_name);
                     $stmt->bindParam(':contra', $passw);
                     $stmt->execute();
-                    echo "Usuario modificado exitosamente.";
+                    if($role == 'admin'){
+                        $MenConf = "Administrador modificado exitosamente.";
+                    }else{
+                        $MenConf = "SuperAdministrador modificado exitosamente.";
+                    }
+                    break;
     
                 case 'baja':
                     $stmt = $conexion->prepare("DELETE FROM $table WHERE $nameColumn = :nombre");
                     $stmt->bindParam(':nombre', $user_name);
                     $stmt->execute();
-                    echo "Usuario eliminado exitosamente.";
+                    if($role == 'admin  '){
+                        $MenConf = "Administrador eliminado exitosamente.";
+                    }else{
+                        $MenConf = "SuperAdministrador eliminado exitosamente.";
+                    }
+                    
+                    break;
 
                 default:
-                    echo "Operación no válida.";
+                    $error = "Operación no válida.";
             }
         }
-    // } catch (PDOException $e) {
-    //     // Manejo de errores
-    //     switch ($e->getCode()) {
-    //         case 23000:
-    //             echo "Error: Violación de restricción UNIQUE o clave foránea.";
-    //             break;
-    //         case 42000:
-    //             echo "Error: Sintaxis SQL inválida.";
-    //             break;
-    //         case 2002:
-    //             echo "Error: No se pudo conectar a la base de datos.";
-    //             break;
-    //         case 1049:
-    //             echo "Error: La base de datos especificada no existe.";
-    //             break;
-    //         default:
-    //             echo "Error inesperado: " . $e->getMessage();
-    //     }
-    // }
+    } catch (PDOException $e) {
+        // Manejo de errores
+        switch ($e->getCode()) {
+            case 23000:
+                $error = "Error: Violación de restricción UNIQUE o clave foránea.";
+                break;
+            case 42000:
+                $error = "Error: Sintaxis SQL inválida.";
+                break;
+            case 2002:
+                $error = "Error: No se pudo conectar a la base de datos.";
+                break;
+            case 1049:
+                $error = "Error: La base de datos especificada no existe.";
+                break;
+            default:
+                $error = "Error inesperado: " . $e->getMessage();
+        }
+    }
     
 ?>
 
@@ -133,6 +145,8 @@
 
     <div>
         <h1 id="TT" class="tituloT">Administrador</h1>
+        <?php if (isset($error)) echo "<p style='color:red; text-align: center;'>$error</p>"; ?>
+        <?php if (isset($MenConf)) echo "<p style='color:green; text-align: center;;'>$MenConf</p>"; ?>
     </div>
 <div class="segundo"> 
     <div class="seccion active" id="seccion1">
@@ -252,7 +266,7 @@
 
 <script>
     // Ejecuta actualizarTabla cuando la página termine de cargarse
-    window.onload = actualizarTabla('Administrador');
+    window.onload = actualizarTabla(<?php echo "'$rolePag'"?>);
 </script>
 </body>
 </html>
