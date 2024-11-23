@@ -22,11 +22,10 @@
     try {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $action = $_POST['action'] ?? ''; // Determina si es alta, baja o modificación
-            echo $action;
             $user_name = $_POST['user_name'] ?? ''; // Nombre de usuario
             $passw = $_POST['passw'] ?? ''; // Contraseña (si aplica)
+            $passw = encryptData($passw);
             $role = $_POST['role'] ?? ''; // Rol: admin o superadmin
-            echo $role;
             // Determinar la tabla a usar según el rol
             $table = ($role === 'admin') ? 'ADMINISTRADOR' : 'SUPERADMINISTRADOR';
             $nameColumn = ($role === 'admin') ? 'nombreAdmin' : 'nombreSAdmin';

@@ -48,9 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':nombre', $nombreAdmin);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($user != false){
+    $passW = $user[$passwordColumn];
 
+    //echo $passW;
+    $passW = decryptData($passW);
+    }
+    
     // Verificar que el usuario exista y que la contraseña sea correcta
-    if ($user && $user[$passwordColumn] === $contraseñaAdmin) {
+    if ($user && $passW === $contraseñaAdmin) {
         // Inicio de sesión exitoso, guardamos los datos en la sesión
         $_SESSION['usuario'] = $nombreAdmin;
         $_SESSION['role'] = $role;
