@@ -1,7 +1,24 @@
 <?php
+    session_start(); // Inicia la sesión
+
+    // Si el usuario hace clic en el botón de cerrar sesión, se destruye la sesión
+    if (isset($_POST['logout'])) {
+        session_unset(); // Elimina todas las variables de sesión
+        session_destroy(); // Destruye la sesión
+        header("Location: login.php"); // Redirige al login
+        exit();
+    }
+
+    // Verifica si el usuario ha iniciado sesión y si tiene el rol adecuado
+    if (!isset($_SESSION['usuario']) || $_SESSION['role'] !== 'admin') {
+        // Si no está logueado o el rol no es 'admin', redirige al login
+        header("Location: Login.php"); // O redirige a login.html
+        exit();
+    }
+    
     require './includes/funcionesAdmin.php';
 
-    $consulta = obtener_reportes_por_tipo('Agresión verbal');
+    $consulta = obtener_reportes();
 ?>
 
 <!DOCTYPE html>
@@ -20,17 +37,20 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <h2>Agresiones</h2>
     <div class="botones">
-        <button onclick="cambiarTituloA('TA','Agresiones')" class="btnMenu">Todas</button>
-        <button onclick="cambiarTituloA('TA','Agresiones verbales', 'TA')" class="btnMenu">Verbal</button>
-        <button onclick="cambiarTituloA('TA','Agresiones físicas', 'TA')" class="btnMenu">Física</button>
-        <button onclick="cambiarTituloA('TA','Agresiones sexuales', 'TA')" class="btnMenu">Sexual</button>
-        <button onclick="cambiarTituloA('TA','Acoso', 'TA')" class="btnMenu">Acoso</button>
-        <button onclick="cambiarTituloA('TA','Discriminación','TA')" class="btnMenu">Discriminación</button>
-        <button onclick="cambiarTituloA('TA','Ciberacoso', 'TA')" class="btnMenu">Ciberacoso</button>
-        <button onclick="cambiarTituloA('TA','Hostigamiento', 'TA')" class="btnMenu">Hostigamiento</button>
-        <button onclick="cambiarTituloA('TA','Otros','TA')" class="btnMenu">Otros</button>
+        <button onclick="actualizarReportes('')" class="btnMenu">Todas</button>
+        <button onclick="actualizarReportes('Agresión verbal')" class="btnMenu">Verbal</button>
+        <button onclick="actualizarReportes('Agresión física')" class="btnMenu">Física</button>
+        <button onclick="actualizarReportes('Agresión sexual')" class="btnMenu">Sexual</button>
+        <button onclick="actualizarReportes('Acoso')" class="btnMenu">Acoso</button>
+        <button onclick="actualizarReportes('Discriminación')" class="btnMenu">Discriminación</button>
+        <button onclick="actualizarReportes('Ciberacoso')" class="btnMenu">Ciberacoso</button>
+        <button onclick="actualizarReportes('Hostigamiento laboral o académico')" class="btnMenu">Hostigamiento</button>
+        <button onclick="actualizarReportes('otros')" class="btnMenu">Otros</button>
     </div>
-        <button class="logout-btn">Cerrar Sesión</button>
+    <form method="POST">
+        <button type="submit" name="logout" class="logout-btn">Cerrar sesión</button>
+    </form>
+        <!-- <button type="button" onclick="" class="logout-btn">Cerrar Sesión</button> -->
     </div>
 
     <span class="openbtn" onclick="openNav()">☰</span>
@@ -52,66 +72,24 @@
         <div>
             <h1 id="TA" class="tituloT">Agresión</h1>
         </div>
-        <!-- Tabla de denuncias -->
-        <table class="report-table">
-            
-            <thead>
-                <tr>
-                    <th class="Cab">ID</th>
-                    <th class="Cab">Denuncias</th>
-                    <th class="Cab">Acciones</th>
-                </tr>
-            </thead>
+
+        <div id="tablaReportes">
+                    <!-- Aquí se cargará la tabla de reportes -->
+        </div>
+
+        <div>
+            <h1 id="TE" class="tituloT"></h1>
+        </div>
+
+        <div id ="tablaEvidencias">
+
+        </div>
         
-            <tbody>
-            <?php while($reportes = mysqli_fetch_assoc($consulta)){?>
-                <tr>
-                    <td><?php echo $reportes['idReporte']?></td>
-                    <td><!-- Aca va lo del link hacia el PDF --></td>
-                    <td>
-                        <div class="contBtn">
-                            <button class="action-btn" onclick="confirmAction()"><img src="img/Aceptar.png" alt="" class="imgB"></button>
-                            <button class="action-btn" onclick="deleteAction()"><img src="img/Rechazar.png" alt="" class="imgB"></button>
-                        </div>
-                    </td>
-                </tr>
-            <?php   } ?>
-
-
-
-                <tr>
-                    <td><!-- Aca va lo de ID --> </td>
-                    <td><!-- Aca va lo del link hacia el PDF --></td>
-                    <td>
-                        <div class="contBtn">
-                            <button class="action-btn" onclick="confirmAction()"><img src="img/Aceptar.png" alt="" class="imgB"></button>
-                            <button class="action-btn" onclick="deleteAction()"><img src="img/Rechazar.png" alt="" class="imgB"></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <div class="contBtn">
-                            <button class="action-btn" onclick="confirmAction()"><img src="img/Aceptar.png" alt="" class="imgB"></button>
-                            <button class="action-btn" onclick="deleteAction()"><img src="img/Rechazar.png" alt="" class="imgB"></button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <div class="contBtn">
-                            <button class="action-btn" onclick="confirmAction()"><img src="img/Aceptar.png" alt="" class="imgB"></button>
-                            <button class="action-btn" onclick="deleteAction()"><img src="img/Rechazar.png" alt="" class="imgB"></button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
+
+    <script>
+        // Ejecuta actualizarTabla cuando la página termine de cargarse
+        window.onload = actualizarReportes('');
+    </script>
 </body>
 </html>

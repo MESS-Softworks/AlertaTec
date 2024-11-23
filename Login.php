@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $table = "ADMINISTRADOR";
         $nameColumn = "nombreAdmin";
         $passwordColumn = "contraAdmin";
-        $redirectPage = "PruebaAdmin.php";
+        $redirectPage = "Admin.php";
     } else {
         $table = "SUPERADMINISTRADOR";
         $nameColumn = "nombreSAdmin";
