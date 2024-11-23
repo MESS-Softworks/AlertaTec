@@ -288,7 +288,40 @@ test('LoginAdminContraseñaInvalida', async ({ page }) => {
   await page.getByRole('button', { name: 'Administrador', exact: true }).click();
   });
 
+//Log In
+//SUPER-ADMINISTRADOR 
+test('LoginSuperAdmin', async ({ page }) => {
+  await page.goto('http://localhost/alertatec/');
+  await page.getByRole('link').click();
+  await page.getByLabel('Usuario:').click();
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('S');
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('Super');
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('SuperA');
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('SuperAdmin');
+  await page.getByLabel('Contraseña:').fill('superadmin1');
+  await page.getByRole('button', { name: 'SuperAdministrador' }).click();
+  await page.getByText('☰').click();
+  await page.getByRole('button', { name: 'Cerrar sesión' }).click();
+  });
 
-
-
+  test('LoginSuperAdminContraseñaInvalida', async ({ page }) => {
+  await page.goto('http://localhost/alertatec/');
+  await page.getByRole('link').click();
+  await page.getByLabel('Usuario:').click();
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('S');
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('Super');
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('SuperA');
+  await page.getByLabel('Usuario:').press('CapsLock');
+  await page.getByLabel('Usuario:').fill('SuperAdmin');
+  await page.getByLabel('Contraseña:').click();
+  await page.getByLabel('Contraseña:').fill('contrasena');
+  await page.getByRole('button', { name: 'SuperAdministrador' }).click();
+    });
 
