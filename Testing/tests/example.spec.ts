@@ -288,7 +288,6 @@ test('LoginAdminContraseñaInvalida', async ({ page }) => {
   await page.getByRole('button', { name: 'Administrador', exact: true }).click();
   });
 
-//Log In
 //SUPER-ADMINISTRADOR 
 test('LoginSuperAdmin', async ({ page }) => {
   await page.goto('http://localhost/alertatec/');
