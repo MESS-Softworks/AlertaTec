@@ -52,28 +52,66 @@
                     $stmt->bindParam(':nombre', $user_name);
                     $stmt->bindParam(':contra', $passw);
                     $stmt->execute();
-                    if($role == 'admin'){
-                        $MenConf = "Administrador modificado exitosamente.";
-                    }else{
-                        $MenConf = "SuperAdministrador modificado exitosamente.";
+                    if ($stmt->rowCount() > 0) {
+                        // Si se afectaron registros
+                        if ($role == 'admin') {
+                            $MenConf = "Administrador modificado exitosamente.";
+                        } else {
+                            $MenConf = "SuperAdministrador modificado exitosamente.";
+                        }
+                    } else {
+                        if ($role == 'admin') {
+                            $error = "No se encontró un Administrador con ese nombre para actualizar.";
+                        } else {
+                            $error = "No se encontró un SuperAdministrador con ese nombre para actualizar.";
+                        }
+                        // Si no se afectaron registros
+                        
                     }
+
                     break;
     
                 case 'baja':
-                    $stmt = $conexion->prepare("DELETE FROM $table WHERE $nameColumn = :nombre");
-                    $stmt->bindParam(':nombre', $user_name);
-                    $stmt->execute();
-                    if($role == 'admin  '){
-                        $MenConf = "Administrador eliminado exitosamente.";
+                    if ($role == 'superadmin') {
+                        $query = $conexion->prepare("SELECT COUNT(*) FROM SUPERADMINISTRADOR");
+                        $query->execute();
+                        $count = $query->fetchColumn();
                     }else{
-                        $MenConf = "SuperAdministrador eliminado exitosamente.";
+                        $count = 2;
                     }
+                    
+                        if ($count <= 1) {
+                            // Si solo queda un registro, no permitir eliminar
+                            $error = "No se puede eliminar el último SuperAdministrador.";
+                        } else {
+                    
+                            $stmt = $conexion->prepare("DELETE FROM $table WHERE $nameColumn = :nombre");
+                            $stmt->bindParam(':nombre', $user_name);
+                            $stmt->execute();
+                            if ($stmt->rowCount() > 0) {
+                                // Si se afectaron registros
+                                if ($role == 'admin') {
+                                    $MenConf = "Administrador eliminado exitosamente.";
+                                } else {
+                                    $MenConf = "SuperAdministrador eliminado exitosamente.";
+                                }
+                            } else {
+                                if ($role == 'admin') {
+                                    $error = "No se encontró un Administrador con ese nombre para eliminar.";
+                                } else {
+                                    $error = "No se encontró un SuperAdministrador con ese nombre para eliminar.";
+                                }
+                            }
+                        }
+                    
                     
                     break;
 
                 default:
                     $error = "Operación no válida.";
             }
+        }else{
+            $rolePag = 'Administrador';
         }
     } catch (PDOException $e) {
         // Manejo de errores

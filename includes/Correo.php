@@ -49,9 +49,7 @@ class Correo {
         }
     }
 
-    function correoAceptar($idReporte, $correoD){
-        $correo = new Correo();
-
+    public function correoAceptar($idReporte, $correoD){
         $destinatario = decryptData($correoD);
         $titulo = "Confirmación de Recepción de Tu reporte - $idReporte";
         $mensaje = "Estimado/a Denunciante,\n

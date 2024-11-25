@@ -20,7 +20,7 @@ function accionesReportes(idReporte, accion){
 }
 
 function aceptarReporte(idReporte, tipoDenuncia) {
-    window.location.href = "./includes/PDFHandler.php?accion=descargar&archivo=Reporte_"+idReporte+".pdf";
+    window.location.href = "./includes/zipHandler.php?idReporte="+idReporte+"&archivo=Reporte_"+idReporte+".pdf";
     accionesReportes(idReporte, 'aceptar');
     alert("Denuncia confirmada.");
     actualizarReportes(tipoDenuncia || '');

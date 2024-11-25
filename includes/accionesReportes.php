@@ -8,11 +8,13 @@ $idReporte = isset($_GET['idReporte']) ? $_GET['idReporte'] : '';
 $accion = isset($_GET['accion']) ? $_GET['accion'] : '';
 $correoD = obtenerCorreo($idReporte); 
 
+$correo = new Correo();
+
 switch($accion){
     case 'aceptar':
         echo "<p style='text-align: center;'>".aceptarReporte($idReporte)."</p>";
         if($correoD != NULL){
-            //correoAceptar($idReporte, $correoD);
+            //$correo->correoAceptar($idReporte, $correoD);
         }
         break;
     case 'papelera':

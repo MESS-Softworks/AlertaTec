@@ -182,8 +182,6 @@ function borrarDefReporte($idReporte){
         require 'database.php';
         
         $stmt = $conexion->prepare("DELETE FROM REPORTE WHERE idReporte = $idReporte") ;
-        // $stmt->bindParam('estado', $user_name);
-        // $stmt->bindParam('idReporte', $passw);
         if ($stmt->execute()){
             
             return "Reporte #".$idReporte." eliminado definitivamente";
