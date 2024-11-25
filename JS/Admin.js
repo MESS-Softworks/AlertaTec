@@ -6,12 +6,47 @@ function closeNav() {
     document.getElementById("sidebar").style.width = "0";
 }
 
-function confirmAction() {
-    alert("Denuncia confirmada.");
+function accionesReportes(idReporte, accion){
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Actualiza la sección de la tabla con los resultados
+            document.getElementById("Mensaje").innerHTML = this.responseText;
+        }
+    };
+    // Enviar el tipo de denuncia como parámetro en la URL
+    xhttp.open("GET", "./includes/accionesReportes.php?idReporte="+encodeURIComponent(idReporte)+"&accion="+ encodeURIComponent(accion), true);
+    xhttp.send();
 }
 
-function deleteAction() {
-    alert("Denuncia eliminada.");
+function aceptarReporte(idReporte, tipoDenuncia) {
+    window.location.href = "./includes/PDFHandler.php?accion=descargar&archivo=Reporte_"+idReporte+".pdf";
+    accionesReportes(idReporte, 'aceptar');
+    alert("Denuncia confirmada.");
+    actualizarReportes(tipoDenuncia || '');
+    
+}
+
+function papeleraReporte(idReporte, tipoDenuncia) {
+    accionesReportes(idReporte, 'papelera');
+    alert("Denuncia enviada a papelera");
+    actualizarReportes(tipoDenuncia || '');
+    
+}
+
+function restaurarReporte(idReporte){
+    accionesReportes(idReporte, 'restaurar');
+    alert("Denuncia Restaurada");
+    mostrarPapelera();
+    
+}
+
+function borrarDefReporte(idReporte){
+    window.location.href = "./includes/PDFHandler.php?accion=eliminar&archivo=Reporte_"+idReporte+".pdf";
+    accionesReportes(idReporte, 'borrarDef');
+    alert("Denuncia Borrada Definitivmente");
+    mostrarPapelera();
+    
 }
 
 function cambiarTituloA(idE,nuevoTitulo) {
@@ -30,6 +65,21 @@ function actualizarReportes(tipoDenuncia) {
     };
     // Enviar el tipo de denuncia como parámetro en la URL
     xhttp.open("GET", "./includes/obtenerReportes.php?tipoDenuncia=" + encodeURIComponent(tipoDenuncia), true);
+    xhttp.send();
+}
+
+function mostrarPapelera() {
+    cambiarTituloA('TA', 'Papelera de reportes');
+    
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Actualiza la sección de la tabla con los resultados
+            document.getElementById("tablaReportes").innerHTML = this.responseText;
+        }
+    };
+    // Enviar el tipo de denuncia como parámetro en la URL
+    xhttp.open("GET", "./includes/obtenerPapelera.php", true);
     xhttp.send();
 }
 

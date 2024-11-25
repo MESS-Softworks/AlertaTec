@@ -33,11 +33,29 @@ function obtener_reportes_por_tipo($tipoDenuncia) {
                     AND tipoDenuncia NOT LIKE '%Acoso%' 
                     AND tipoDenuncia NOT LIKE '%Discriminación%' 
                     AND tipoDenuncia NOT LIKE '%Ciberacoso%' 
-                    AND tipoDenuncia NOT LIKE '%Hostigamiento laboral o académico%' ORDER BY prioridad DESC";
+                    AND tipoDenuncia NOT LIKE '%Hostigamiento laboral o académico%' AND estadoDenuncia = 'Pendiente' ORDER BY prioridad DESC ";
         } else {
             // Consulta para reportes que coincidan con el tipo de denuncia específico
-            $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%$tipoDenuncia%' ORDER BY prioridad DESC";
+            $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%$tipoDenuncia%' AND estadoDenuncia = 'Pendiente' ORDER BY prioridad DESC
+                    ";
         }
+
+        // Realizar la consulta
+        $reportes = mysqli_query($conexion, $sql);
+        return $reportes;
+
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+}
+
+function obtenerPapelera() {
+    try {
+        require 'database.php';
+        
+       
+        $sql = "SELECT * FROM REPORTE WHERE estadoDenuncia = 'Papelera'";
+        
 
         // Realizar la consulta
         $reportes = mysqli_query($conexion, $sql);
@@ -72,14 +90,6 @@ function obtener_admins($tipoAdmin){
 function obtener_evidencias($idReporte){
     try {
         require 'database.php';
-        
-        // if ($tipoAdmin === 'Administrador') {
-        //     // Consulta para reportes que no coincidan con los tipos especificados
-        //     $sql = "SELECT * FROM ADMINISTRADOR";
-        // } else {
-        //     // Consulta para reportes que coincidan con el tipo de denuncia específico
-        //     $sql = "SELECT * FROM SUPERADMINISTRADOR";
-        // }
 
         $sql = "SELECT 
                     E.idE AS idE,
@@ -110,102 +120,109 @@ function obtener_evidencias($idReporte){
     }
 }
 
+function aceptarReporte($idReporte){
+    try {
+        require 'database.php';
+        
+        $stmt = $conexion->prepare("UPDATE REPORTE SET estadoDenuncia = 'En Progreso' WHERE idReporte = $idReporte") ;
+        // $stmt->bindParam('estado', $user_name);
+        // $stmt->bindParam('idReporte', $passw);
+        if ($stmt->execute()){
+            
+            return "Reporte #".$idReporte." Aceptado con Exito";
+        }else{
+            return "Error: No se pudo enviar a la papelera el reporte";
+        }
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+                    
+}
 
-// function obtener_reportes_agresion_verbal() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Agresión verbal%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+function papeleraReporte($idReporte){
+    try {
+        require 'database.php';
+        
+        $stmt = $conexion->prepare("UPDATE REPORTE SET estadoDenuncia = 'Papelera' WHERE idReporte = $idReporte") ;
+        // $stmt->bindParam('estado', $user_name);
+        // $stmt->bindParam('idReporte', $passw);
+        if ($stmt->execute()){
+            
+            return "Reporte #".$idReporte." enviado a la papelera";
+        }else{
+            return "Error: No se pudo enviar a la papelera el reporte";
+        }
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+                    
+}
 
-// function obtener_reportes_agresion_fisica() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Agresión física%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+function restaurarReporte($idReporte){
+    try {
+        require 'database.php';
+        
+        $stmt = $conexion->prepare("UPDATE REPORTE SET estadoDenuncia = 'Pendiente' WHERE idReporte = $idReporte") ;
+        // $stmt->bindParam('estado', $user_name);
+        // $stmt->bindParam('idReporte', $passw);
+        if ($stmt->execute()){
+            
+            return "Reporte #".$idReporte." restaurado.";
+        }else{
+            return "Error: No se pudo enviar a la papelera el reporte";
+        }
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+                    
+}
 
-// function obtener_reportes_agresion_sexual() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Agresión sexual%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+function borrarDefReporte($idReporte){
+    try {
+        require 'database.php';
+        
+        $stmt = $conexion->prepare("DELETE FROM REPORTE WHERE idReporte = $idReporte") ;
+        // $stmt->bindParam('estado', $user_name);
+        // $stmt->bindParam('idReporte', $passw);
+        if ($stmt->execute()){
+            
+            return "Reporte #".$idReporte." eliminado definitivamente";
+        }else{
+            return "Error: No se pudo eliminar.";
+        }
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+}
 
-// function obtener_reportes_acoso() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Acoso%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+function obtenerCorreo($idReporte){
+    try {
+        require 'database.php';
 
-// function obtener_reportes_discriminacion() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Discriminación%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+        $sql = "SELECT 
+                    DENUNCIANTE.correoD AS correoD
+                FROM 
+                    DENUNCIANTE
+                JOIN 
+                    REPORTE ON DENUNCIANTE.idD = REPORTE.idD
+                WHERE 
+                    REPORTE.idReporte = '$idReporte';";
 
-// function obtener_reportes_ciberacoso() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Ciberacoso%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+        // Realizar la consulta
+        $correo = mysqli_query($conexion, $sql);
 
-// function obtener_reportes_hostigamiento_laboral() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE WHERE tipoDenuncia LIKE '%Hostigamiento laboral o académico%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
+        if (mysqli_num_rows($correo) > 0) {
+            // Hay coincidencias
+            return $correo;
+        } else {
+            // No hay coincidencias
+            return null; // O algún otro valor para indicar que no hay resultados
+        }
 
-// function obtener_reportes_otros() {
-//     try {
-//         require 'database.php';
-//         $sql = "SELECT * FROM REPORTE 
-//                 WHERE tipoDenuncia NOT LIKE '%Agresión verbal%' 
-//                 AND tipoDenuncia NOT LIKE '%Agresión física%' 
-//                 AND tipoDenuncia NOT LIKE '%Agresión sexual%' 
-//                 AND tipoDenuncia NOT LIKE '%Acoso%' 
-//                 AND tipoDenuncia NOT LIKE '%Discriminación%' 
-//                 AND tipoDenuncia NOT LIKE '%Ciberacoso%' 
-//                 AND tipoDenuncia NOT LIKE '%Hostigamiento laboral o académico%'";
-//         $reportes = mysqli_query($conexion, $sql);
-//         return $reportes;
-//     } catch (\Throwable $th) {
-//         var_dump($th);
-//     }
-// }
-
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+}
 
 
 

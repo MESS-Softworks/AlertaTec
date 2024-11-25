@@ -25,7 +25,7 @@ function evidencia($idReporte){
 $tipoDenuncia = isset($_GET['tipoDenuncia']) ? $_GET['tipoDenuncia'] : '';
 
 // Llamar a la función para obtener los reportes
-$consulta = obtener_reportes_por_tipo($tipoDenuncia);
+$consulta = obtenerPapelera();
 
 
 echo "<!-- Tabla de denuncias -->";
@@ -53,8 +53,8 @@ while ($reporte = mysqli_fetch_assoc($consulta)) {
           </td>";
     echo "<td>
         <div class='contBtn'>
-            <button class='action-btn' onclick='aceptarReporte(".$reporte['idReporte'].", ".$tipoDenuncia.")'><img src='img/Aceptar.png' alt='' class='imgB'></button>
-            <button class='action-btn' onclick='papeleraReporte(".$reporte['idReporte'].", ".$tipoDenuncia.")'><img src='img/Rechazar.png' alt='' class='imgB'></button>
+            <button class='action-btn' onclick='restaurarReporte(".$reporte['idReporte'].")'><img src='img/Aceptar.png' alt='' class='imgB'></button>
+            <button class='action-btn' onclick='borrarDefReporte(".$reporte['idReporte'].")'><img src='img/Rechazar.png' alt='' class='imgB'></button>
         </div>
     </td>";
     echo "</tr>";            

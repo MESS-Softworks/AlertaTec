@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($stmt->execute()) {
             $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
-            echo "Reporte registrado con éxito. ID: " . $idReporte;
+            //echo "Reporte registrado con éxito. ID: " . $idReporte;
 
             // Primero, verifica si se seleccionó algún número de testigos
             if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
@@ -178,8 +178,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                     }
                 }
-            }else{
-                echo "No entro";
             }
 
             if ($bandC == "Sí") {

@@ -26,9 +26,12 @@ while ($evi= mysqli_fetch_assoc($consulta)) {
     echo "<td>".$evi['descripcionE']."</td>";
     echo "<td>
             <div class='contBtn'>
-                <a href='./includes/verEvidencia.php?carpeta=evidencias&sub=".$evi['idReporte']."&archivo=".$evi['nombreE']."' target='_blank'><img src='img/vista.png' alt='' class='imgB'></a></td>
-            </div>";
+                <a href='./includes/verEvidencia.php?carpeta=evidencias&sub=".$evi['idReporte']."&archivo=".$evi['nombreE']."' target='_blank'><img src='img/vista.png' alt='' class='imgB'></a>
+            </div>
+         </td>";
+            
     echo "</tr>";            
 }
 echo "</tbody>
     </table>";
+?>

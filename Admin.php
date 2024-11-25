@@ -37,15 +37,21 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <h2>Agresiones</h2>
     <div class="botones">
-        <button onclick="actualizarReportes('')" class="btnMenu">Todas</button>
-        <button onclick="actualizarReportes('Agresión verbal')" class="btnMenu">Verbal</button>
-        <button onclick="actualizarReportes('Agresión física')" class="btnMenu">Física</button>
-        <button onclick="actualizarReportes('Agresión sexual')" class="btnMenu">Sexual</button>
-        <button onclick="actualizarReportes('Acoso')" class="btnMenu">Acoso</button>
-        <button onclick="actualizarReportes('Discriminación')" class="btnMenu">Discriminación</button>
-        <button onclick="actualizarReportes('Ciberacoso')" class="btnMenu">Ciberacoso</button>
-        <button onclick="actualizarReportes('Hostigamiento laboral o académico')" class="btnMenu">Hostigamiento</button>
-        <button onclick="actualizarReportes('otros')" class="btnMenu">Otros</button>
+        <details class="detalle-recurso"> 
+            <summary class="resumen-recurso">Tipos:</summary>   
+            <button onclick="actualizarReportes('')" class="btnMenu">Todas</button>
+            <button onclick="actualizarReportes('Agresión verbal')" class="btnMenu">Verbal</button>
+            <button onclick="actualizarReportes('Agresión física')" class="btnMenu">Física</button>
+            <button onclick="actualizarReportes('Agresión sexual')" class="btnMenu">Sexual</button>
+            <button onclick="actualizarReportes('Acoso')" class="btnMenu">Acoso</button>
+            <button onclick="actualizarReportes('Discriminación')" class="btnMenu">Discriminación</button>
+            <button onclick="actualizarReportes('Ciberacoso')" class="btnMenu">Ciberacoso</button>
+            <button onclick="actualizarReportes('Hostigamiento laboral o académico')" class="btnMenu">Hostigamiento</button>
+            <button onclick="actualizarReportes('otros')" class="btnMenu">Otros</button>
+        </details>
+        <br>
+        <button onclick="mostrarPapelera()" class="btnMenu">Papelera</button>
+
     </div>
     <form method="POST">
         <button type="submit" name="logout" class="logout-btn">Cerrar sesión</button>
@@ -67,6 +73,10 @@
                     <img src="img/HuellaSin.png" class="imagen2">
                 </div>
             </div>
+        </div>
+
+        <div id="Mensaje">
+
         </div>
 
         <div>

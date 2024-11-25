@@ -49,7 +49,7 @@ class Correo {
         }
     }
 
-    public function correoAT($idReporte, $bandP){
+    function correoAceptar($idReporte, $correoD){
         $correo = new Correo();
 
         $destinatario = decryptData($correoD);
@@ -78,4 +78,6 @@ class Correo {
 
         
     }
+
+
 }
