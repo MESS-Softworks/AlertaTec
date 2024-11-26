@@ -29,6 +29,12 @@ $consulta = obtenerPapelera();
 
 
 echo "<!-- Tabla de denuncias -->";
+
+echo "<div class='borrarPapelera'>
+        <a href='javascript:void(0);' onclick='limpiarPapelera()'>Limpiar Papelera</a>
+        <a href='javascript:void(0);' onclick='limpiarPapelera()'><img src='img/borrar.png' alt='' class='imgB'></a>
+      </div>";
+
 echo "<table class='report-table'>";
 echo "<thead>
         <tr>
@@ -53,8 +59,8 @@ while ($reporte = mysqli_fetch_assoc($consulta)) {
           </td>";
     echo "<td>
         <div class='contBtn'>
-            <button class='action-btn' onclick='restaurarReporte(".$reporte['idReporte'].")'><img src='img/Aceptar.png' alt='' class='imgB'></button>
-            <button class='action-btn' onclick='borrarDefReporte(".$reporte['idReporte'].")'><img src='img/Rechazar.png' alt='' class='imgB'></button>
+            <button class='action-btn' onclick='restaurarReporte(".$reporte['idReporte'].")'><img src='img/restaurar.png' alt='' class='imgB'></button>
+            <button class='action-btn' onclick='borrarDefReporte(".$reporte['idReporte'].")'><img src='img/borrar.png' alt='' class='imgB'></button>
         </div>
     </td>";
     echo "</tr>";            

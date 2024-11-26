@@ -123,21 +123,65 @@ function obtener_evidencias($idReporte){
 function aceptarReporte($idReporte){
     try {
         require 'database.php';
+
+        $conexion->begin_Transaction();
         
-        $stmt = $conexion->prepare("UPDATE REPORTE SET estadoDenuncia = 'En Progreso' WHERE idReporte = $idReporte") ;
-        // $stmt->bindParam('estado', $user_name);
-        // $stmt->bindParam('idReporte', $passw);
-        if ($stmt->execute()){
-            
-            return "Reporte #".$idReporte." Aceptado con Exito";
-        }else{
-            return "Error: No se pudo enviar a la papelera el reporte";
-        }
+        $stmt1 = $conexion->prepare("   DELETE FROM EVIDENCIAS
+                                        WHERE idE IN (
+                                            SELECT idE
+                                            FROM REPORTE_EVIDENCIAS
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt1->execute();
+        $stmt2 = $conexion->prepare("   DELETE FROM TESTIGOS
+                                        WHERE idT IN (
+                                            SELECT idTestigo
+                                            FROM REPORTE_TESTIGO
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt2->execute();
+        $stmt3 = $conexion->prepare("   DELETE FROM AGRESORES
+                                        WHERE idA IN (
+                                            SELECT idAgresor
+                                            FROM REPORTE_AGRESOR
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt3->execute();
+        $stmt4 = $conexion->prepare("   DELETE FROM DENUNCIANTE_TESTIGO
+                                        WHERE idD IN (
+                                            SELECT idD
+                                            FROM REPORTE
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt4->execute();
+        $stmt5 = $conexion->prepare("   DELETE FROM DENUNCIANTE
+                                        WHERE idD IN (
+                                            SELECT idD
+                                            FROM REPORTE
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt5->execute();
+        
+        $stmt6 = $conexion->prepare("DELETE FROM REPORTE WHERE idReporte = $idReporte");
+        $stmt6->execute();
+
+        // Confirmar transacción
+        $conexion->commit();
+        return "Reporte #".$idReporte." Aceptado con éxito";
+        
     } catch (\Throwable $th) {
+        $conexion->rollback();
         var_dump($th);
+        return "Error: No se pudo aceptar el reporte";
     }
                     
 }
+
 
 function papeleraReporte($idReporte){
     try {
@@ -166,7 +210,6 @@ function restaurarReporte($idReporte){
         // $stmt->bindParam('estado', $user_name);
         // $stmt->bindParam('idReporte', $passw);
         if ($stmt->execute()){
-            
             return "Reporte #".$idReporte." restaurado.";
         }else{
             return "Error: No se pudo enviar a la papelera el reporte";
@@ -180,16 +223,61 @@ function restaurarReporte($idReporte){
 function borrarDefReporte($idReporte){
     try {
         require 'database.php';
+
+        $conexion->begin_transaction();
+
+        $stmt1 = $conexion->prepare("   DELETE FROM EVIDENCIAS
+                                        WHERE idE IN (
+                                            SELECT idE
+                                            FROM REPORTE_EVIDENCIAS
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt1->execute();
+        $stmt2 = $conexion->prepare("   DELETE FROM TESTIGOS
+                                        WHERE idT IN (
+                                            SELECT idTestigo
+                                            FROM REPORTE_TESTIGO
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt2->execute();
+        $stmt3 = $conexion->prepare("   DELETE FROM AGRESORES
+                                        WHERE idA IN (
+                                            SELECT idAgresor
+                                            FROM REPORTE_AGRESOR
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt3->execute();
+        $stmt4 = $conexion->prepare("   DELETE FROM DENUNCIANTE_TESTIGO
+                                        WHERE idD IN (
+                                            SELECT idD
+                                            FROM REPORTE
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt4->execute();
+        $stmt5 = $conexion->prepare("   DELETE FROM DENUNCIANTE
+                                        WHERE idD IN (
+                                            SELECT idD
+                                            FROM REPORTE
+                                            WHERE idReporte = $idReporte
+                                        );
+                                        ");
+        $stmt5->execute();
         
-        $stmt = $conexion->prepare("DELETE FROM REPORTE WHERE idReporte = $idReporte") ;
-        if ($stmt->execute()){
-            
-            return "Reporte #".$idReporte." eliminado definitivamente";
-        }else{
-            return "Error: No se pudo eliminar.";
-        }
+        $stmt6 = $conexion->prepare("DELETE FROM REPORTE WHERE idReporte = $idReporte");
+        $stmt6->execute();
+
+        // Confirmar transacción
+        $conexion->commit();
+        return "Reporte #".$idReporte." eliminado definitivamente";
+
     } catch (\Throwable $th) {
+        $conexion->rollback();
         var_dump($th);
+        return "Error: No se pudo eliminar.";
     }
 }
 

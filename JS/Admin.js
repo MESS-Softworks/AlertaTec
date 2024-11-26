@@ -24,13 +24,14 @@ function aceptarReporte(idReporte, tipoDenuncia) {
     accionesReportes(idReporte, 'aceptar');
     alert("Denuncia confirmada.");
     actualizarReportes(tipoDenuncia || '');
-    
+    actualizarEvidencias('Recargar');
 }
 
 function papeleraReporte(idReporte, tipoDenuncia) {
     accionesReportes(idReporte, 'papelera');
     alert("Denuncia enviada a papelera");
     actualizarReportes(tipoDenuncia || '');
+    actualizarEvidencias('Recargar');
     
 }
 
@@ -38,15 +39,23 @@ function restaurarReporte(idReporte){
     accionesReportes(idReporte, 'restaurar');
     alert("Denuncia Restaurada");
     mostrarPapelera();
+    actualizarEvidencias('Recargar');
     
 }
 
 function borrarDefReporte(idReporte){
-    window.location.href = "./includes/PDFHandler.php?accion=eliminar&archivo=Reporte_"+idReporte+".pdf";
+    //window.location.href = "./includes/borrarArchivos.php?idReporte="+idReporte+"&archivo=Reporte_"+idReporte+".pdf";
     accionesReportes(idReporte, 'borrarDef');
     alert("Denuncia Borrada Definitivmente");
     mostrarPapelera();
-    
+    actualizarEvidencias('Recargar'); 
+}
+
+function limpiarPapelera(){
+    accionesReportes('papelera', 'limpiar');
+    alert("La limpieza de la papelera ha sido completada con exito.");
+    mostrarPapelera();
+    actualizarEvidencias('Recargar'); 
 }
 
 function cambiarTituloA(idE,nuevoTitulo) {
@@ -105,8 +114,11 @@ function actualizarTabla(tipoAdmin){
 }
 
 function actualizarEvidencias(idReporte) {
-    cambiarTituloA('TE', `Reporte #${idReporte}` || 'Todas');
-    
+    if(idReporte != 'Recargar'){
+        cambiarTituloA('TE', `Reporte #${idReporte}`);
+    }else{
+        cambiarTituloA('TE', '');
+    }
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {

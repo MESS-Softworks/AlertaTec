@@ -65,7 +65,7 @@
                         } else {
                             $error = "No se encontró un SuperAdministrador con ese nombre para actualizar.";
                         }
-                        // Si no se afectaron registros
+                        
                         
                     }
 

@@ -1,7 +1,6 @@
 <?php
 // Incluir el archivo que contiene la función
-require 'PDF.php';
+require 'encryption.php';
 
-// Llamar a la función pasando el ID del reporte
-generarReportePDF(5);  // Aquí 3 es el ID del reporte
+echo decryptData('nx2XO6VILVnybnQynPbje4T2A9ui0euMDqIYgF623Rra9MeDI7z5KMC8xWmOvQhijpry7hQhni75Hpnd6KCZpUuyNv7MDFDaus31khdGqD9JoesFMkJyf7PnumYqLmxRSq9vLCfmya1WASTj9FWhgbdAzIzocwFcfdcY20C5S4mHEZZOGSWM4d6pFLCk7SDDx6H9m9uNJztmYJPy+SsPaLOV+E3h7USAXVMjggT1+5LXnRJR+UYtqG4vWr8mqr+tsZJx/X3hquT4yfJMksRr123AjfCRiqxhBc/WZ/JQcpmWxhIEyuO2naL1IWD8vpb3MXVWXiUkKuHpqTs+82Ycjw==  ');
 ?>
