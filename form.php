@@ -170,7 +170,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
                         if ($stmtEvidencia->execute()) {
                             $idEvidencia = $stmtEvidencia->insert_id;
-                            $stmtReporteEvidencia = $conexion->prepare("INSERT INTO REPORTE_EVIDENCIAS (idReporte, idE) VALUES (?, ?)");
+                            //Inserta La evidencia en la base de datos
+                            $stmtReporteEvidencia = $conexion->prepare("INSERT INTO REPORTE_EVIDENCIAS (idReporte, idE) VALUES (?, ?)"); 
                             $stmtReporteEvidencia->bind_param("ii", $idReporte, $idEvidencia);
                             $stmtReporteEvidencia->execute();
                         }
@@ -178,6 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
+            //Si El usuario quiere recibir actualizaciones, se le envia un correo para confirmar la recepcion de la denuncia
             if ($bandC == "Sí") {
                 $correo = new Correo();
             
@@ -200,6 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <li><strong>Apoyo:</strong> Si necesitas asistencia adicional, puedes comunicarte con nuestro equipo al correo <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a>.</li>
                         </ul>";
             
+                        //Si el usuario dijo necesitar asistencia 
                 if ($bandP == "Sí") {
                     $mensaje .= "
                         <h3>Apoyo Psicológico</h3>
@@ -215,11 +218,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a> | [Teléfono] | [Página Web, si aplica]</p>
                     </body>
                     </html>";
-            
+                //Enviar correo
                 $correo->enviarCorreo($destinatario, $titulo, $mensaje);
             }
             
-
             generarReportePDF($idReporte);
 
         } else {
@@ -249,15 +251,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <script src="JS/Admin.js"></script>
         <link rel="icon" href="img/Huella3.png">
     </head>
-
     <body>
-
-        <!-- <span class="openbtn" onclick="openNav()">☰</span> -->
-
         <a href="Formulario.html" class="openbtn">
             <img src="img/Regresar.png" class="BA">
         </a>
-
 
         <div id="main">
             <div class="huella">
@@ -891,6 +888,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         <?php
+            //Manda a mostrar el mensaje de confirmación si se envia el formulario
             if($Envio){
                 echo "window.onload = mostrarSeccion('seccion6');";
             }

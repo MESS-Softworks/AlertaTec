@@ -1,9 +1,11 @@
 function openNav() {
     document.getElementById("sidebar").style.width = "250px";
+    document.getElementById("abrir").classList.add("oculto"); // Oculta el icono de hamburguesa
 }
 
 function closeNav() {
-    document.getElementById("sidebar").style.width = "0";
+    document.getElementById("sidebar").style.width = "0";   
+    document.getElementById("abrir").classList.remove("oculto");
 }
 
 function accionesReportes(idReporte, accion){

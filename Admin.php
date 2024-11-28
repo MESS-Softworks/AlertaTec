@@ -33,34 +33,34 @@
 </head>
 <body class="Fondo">
 
+
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <h2>Agresiones</h2>
-    <div class="botones">
-        <details class="detalle-recurso"> 
-            <summary class="resumen-recurso">Tipos:</summary>   
-            <button onclick="actualizarReportes('')" class="btnMenu">Todas</button>
-            <button onclick="actualizarReportes('Agresión verbal')" class="btnMenu">Verbal</button>
-            <button onclick="actualizarReportes('Agresión física')" class="btnMenu">Física</button>
-            <button onclick="actualizarReportes('Agresión sexual')" class="btnMenu">Sexual</button>
-            <button onclick="actualizarReportes('Acoso')" class="btnMenu">Acoso</button>
-            <button onclick="actualizarReportes('Discriminación')" class="btnMenu">Discriminación</button>
-            <button onclick="actualizarReportes('Ciberacoso')" class="btnMenu">Ciberacoso</button>
-            <button onclick="actualizarReportes('Hostigamiento laboral o académico')" class="btnMenu">Hostigamiento</button>
-            <button onclick="actualizarReportes('otros')" class="btnMenu">Otros</button>
-        </details>
-        <br>
-        <button onclick="mostrarPapelera()" class="btnMenu">Papelera</button>
+        <div class="botones">
+            <details class="detalle-recurso"> 
+                <summary class="resumen-recurso">Tipos:</summary>   
+                <button onclick="actualizarReportes('')" class="btnMenu">Todas</button>
+                <button onclick="actualizarReportes('Agresión verbal')" class="btnMenu">Verbal</button>
+                <button onclick="actualizarReportes('Agresión física')" class="btnMenu">Física</button>
+                <button onclick="actualizarReportes('Agresión sexual')" class="btnMenu">Sexual</button>
+                <button onclick="actualizarReportes('Acoso')" class="btnMenu">Acoso</button>
+                <button onclick="actualizarReportes('Discriminación')" class="btnMenu">Discriminación</button>
+                <button onclick="actualizarReportes('Ciberacoso')" class="btnMenu">Ciberacoso</button>
+                <button onclick="actualizarReportes('Hostigamiento laboral o académico')" class="btnMenu">Hostigamiento</button>
+                <button onclick="actualizarReportes('otros')" class="btnMenu">Otros</button>
+            </details>
+            <br>
+            <button onclick="mostrarPapelera()" class="logout-btn">&nbsp;&nbsp;&nbsp;&nbsp;Papelera&nbsp;&nbsp;&nbsp;</button>
+            <br>
 
+        </div>
+        <form method="POST">
+            <button type="submit" name="logout" class="logout-btn">Cerrar sesión</button>
+        </form>
     </div>
-    <form method="POST">
-        <button type="submit" name="logout" class="logout-btn">Cerrar sesión</button>
-    </form>
-        <!-- <button type="button" onclick="" class="logout-btn">Cerrar Sesión</button> -->
-    </div>
 
-    <span class="openbtn" onclick="openNav()">☰</span>
-
+    <span id ="abrir" class="openbtn" onclick="openNav()">☰</span>
 
     <div id="main">
         <div class="huella">
@@ -75,13 +75,9 @@
             </div>
         </div>
 
-        <div id="Mensaje">
-
-        </div>
-
-        <div>
-            <h1 id="TA" class="tituloT">Agresión</h1>
-        </div>
+        <div id="Mensaje"><!-- Aqui se cargara el mensaje de confirmacion --></div>
+        
+        <h1 id="TA" class="tituloT">Agresión</h1>
 
         <div id="tablaReportes">
                     <!-- Aquí se cargará la tabla de reportes -->
@@ -91,14 +87,12 @@
             <h1 id="TE" class="tituloT"></h1>
         </div>
 
-        <div id ="tablaEvidencias">
-
-        </div>
-        
+        <div id ="tablaEvidencias"><!-- Aqui se cargara la tabla de evidencias --></div>
     </div>
 
     <script>
         // Ejecuta actualizarTabla cuando la página termine de cargarse
+        // para cargar la tabla
         window.onload = actualizarReportes('');
     </script>
 </body>

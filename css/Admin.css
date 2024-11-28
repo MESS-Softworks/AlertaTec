@@ -239,6 +239,10 @@
     height: 30px;             /* Ajusta el tamaño de la imagen según lo necesario */
   }
 
+  .oculto {
+    display: none;
+  }
+
 @media screen and (max-width: 1000px) {
     .imagen{
         width: 30%;

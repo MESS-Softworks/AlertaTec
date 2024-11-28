@@ -3,7 +3,7 @@ session_start(); // Inicia la sesión
 
 // Verifica si el usuario ha iniciado sesión y si tiene el rol adecuado
 if (!isset($_SESSION['usuario']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php"); // Redirige al login si no está autorizado
+    header("Location: ../login.php"); // Redirige al login si no está autorizado
     exit();
 }
 

@@ -291,6 +291,10 @@ input[type="submit"], input[type="reset"]{
     display: block;
 }
 
+.oculto {
+    display: none;
+}
+
 @media screen and (max-width: 768px) {
     .Admin{
         display: grid;
