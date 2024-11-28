@@ -1,34 +1,13 @@
 <?php
-// session_start();
-
-// // Variables de usuario para validar (esto debe reemplazarse por validación en la base de datos)
-// $usuario_valido = "admin@ejemplo.com";
-// $contraseña_valida = "contraseña123";
-
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $usuario = $_POST['user_name'];
-//     $contraseña = $_POST['passw'];
-
-//     if ($usuario == $usuario_valido && $contraseña == $contraseña_valida) {
-//         $_SESSION['usuario'] = $usuario;
-//         header("Location: form.php");
-//         exit();
-//     } else {
-//         $error = "Usuario o contraseña incorrectos";
-//     }
-// }
-?>
-
-<?php
 require './includes/conexion.php';
 require './includes/encryption.php';
 
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombreAdmin = $_POST['user_name'];
-    $contraseñaAdmin = $_POST['passw'];
-    $role = $_POST['role'];
+    $nombreAdmin = $_POST['user_name']; //Guarda el valor escrito en el campo "usuario"
+    $contraseñaAdmin = $_POST['passw']; //Guarda el valor escrito en el campo "contraseña"
+    $role = $_POST['role']; //Guarda el rol para seleccionar la tabla adecuada
 
     // Determinar la tabla y la página de redirección según el rol
     if ($role === "admin") {
@@ -50,8 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if($user != false){
     $passW = $user[$passwordColumn];
-
-    //echo $passW;
     $passW = decryptData($passW);
     }
     
@@ -60,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Inicio de sesión exitoso, guardamos los datos en la sesión
         $_SESSION['usuario'] = $nombreAdmin;
         $_SESSION['role'] = $role;
-        header("Location: $redirectPage");
+        header("Location: $redirectPage"); //Redirige a la pagina adecuada
         exit();
     } else {
         // Usuario o contraseña incorrectos
@@ -100,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form class="formD" method="post" action="Login.php">  
                 <img src="img/Usuario.png" class="imagenU"><br>
                 <h2 class="TxI">Iniciar Sesion</h2>
-                <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+                <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?> <!-- Imprime un mensaje de error si ocurre -->
                 <input type="hidden" id="role" name="role" value="">
                 <label for="user_name" class="etiqueta">Usuario:</label>
                 <input type="text" id="user_name" name="user_name" required><br>
@@ -108,12 +85,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" id="passw" name="passw" required><br>
                 <input type="submit" onclick="setRole('admin')" value="Administrador" class="boton"><br> 
                 <input type="submit" onclick="setRole('superadmin')" value="SuperAdministrador" class="boton"><br> 
-                <!-- <input type="reset" value="Reset" class="boton"> -->
             </form>
         </div>
     </div>
 
     <script>
+        //Función para salir del formulario.
         function regresar(){
             window.location.href = "index.html"
         }

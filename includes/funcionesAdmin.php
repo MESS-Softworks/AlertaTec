@@ -286,24 +286,22 @@ function obtenerCorreo($idReporte){
         require 'database.php';
 
         $sql = "SELECT 
-                    DENUNCIANTE.correoD AS correoD
+                    DENUNCIANTE.correoD AS correoD,
+                    REPORTE.seguimiento AS seguimiento
                 FROM 
                     DENUNCIANTE
                 JOIN 
                     REPORTE ON DENUNCIANTE.idD = REPORTE.idD
                 WHERE 
-                    REPORTE.idReporte = '$idReporte';";
+                    REPORTE.idReporte = $idReporte;";
 
         // Realizar la consulta
         $correo = mysqli_query($conexion, $sql);
 
-        if (mysqli_num_rows($correo) > 0) {
-            // Hay coincidencias
+    
+        // Hay coincidencias
             return $correo;
-        } else {
-            // No hay coincidencias
-            return null; // O algún otro valor para indicar que no hay resultados
-        }
+        
 
     } catch (\Throwable $th) {
         var_dump($th);

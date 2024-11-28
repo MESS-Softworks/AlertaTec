@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,6 @@
     <title>Inicio</title>
     <link rel="icon" href="img/Huella3.png">
 </head>
-
 <body class="Fondo">
     <div class="todo">
         <div class="contenedor">
@@ -29,22 +27,16 @@
                     </div>
                 </div>
             </div>
-
-
+            
             <div class="contenedor2">
                 <div id="info">
-
-                    <a href="Inicio.html" class="menu">Inicio</a>
+                    <!-- Controlan la navegación del codigo -->
+                    <a href="" class="menu">Inicio</a>
                     <a href="Formulario.html" class="menu">Formulario de denuncia</a>
                     <a href="RecursoApoyo.html" class="menu">Recursos de apoyo</a>
                     <a href="Contactanos.html" class="menu">Contactanos</a>
                 </div>
-
-
-                <!-- <p class="sep">___________________________________________________________________</p> -->
             </div>
-
-
         </div>
 
         <div class="segundo">
@@ -63,11 +55,6 @@
                     <img src="img/TuVoz.png" class="imagen4">
                     <div>
                         <h1 class="preg">¿Te sientes listo para hacer tu denuncia?</h1>
-                        <script>
-                            function redirigir() {
-                                window.location.href = "Formulario.html";
-                            }
-                        </script>
                         <button onclick="redirigir()" class="boton">Ir a formulario</button>
                         <img src="img/HuellaSin.png" class="img2">
                     </div>
@@ -75,6 +62,13 @@
             </div>
         </div>
     </div>
+
+    <script>
+        //Navega a la pantalla Formulario
+        function redirigir() {
+            window.location.href = "Formulario.html";
+        }
+    </script>
 </body>
 
 </html>

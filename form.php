@@ -5,6 +5,7 @@ require './includes/PDF.php';
 
 session_start();
 
+//Limita a los usuarios a subir un formulario, evitando el reenvio.
 if (isset($_GET['action']) && $_GET['action'] === 'finish') {
     session_unset();
     session_destroy();
@@ -19,56 +20,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['form_submitted'] = true;
 
         // Capturar datos del formulario
-        $tipoReporte = $_POST['tipoReporte'];
-        $nombreD = $_POST['nombreD'] ?? null; // 
-        $correoD = $_POST['correoD'] ?? null; // Es opcional si es anonimo
-        if($tipoReporte == "Sí"){
-            $correoD = $_POST['correoDA'] ?? null;
+        $tipoReporte = $_POST['tipoReporte']; //Denuncia Anonima?
+        $nombreD = $_POST['nombreD'] ?? null; // Nombre del denunciante
+        $correoD = $_POST['correoD'] ?? null; // Correo del denunciante
+        if($tipoReporte == "Sí"){   //Si es denuncia anonima entonces...
+            $correoD = $_POST['correoDA'] ?? null;  //Obtenemos el correo de este otro campo
         }
         
-        $numTelD = $_POST['numTelD'] ?? null; //
-        $tipoDenunciante = $_POST['tipoDenunciante'];
-        $relAfectado = $_POST['relacion_afectada'] ?? NULL;
-        $relUniD = $_POST['relacion_universidad']; //Hay que modificar
-        $departamentoD = NULL;
-        $semestreD = NULL;
-        if($relUniD == "Otro"){
-            $relUniD = $_POST['relacion_otro'];
-        }else{
-            if($relUniD == "Alumno"){
-                $departamentoD = $_POST['carrera'];
-                $semestreD = $_POST['semestre'];
+        $numTelD = $_POST['numTelD'] ?? null; // Numero telefonico del denunciante
+        $tipoDenunciante = $_POST['tipoDenunciante'];// Tipo de denunciante
+        $relAfectado = $_POST['relacion_afectada'] ?? NULL; //Relacion con el afectado si es un testigo
+        $relUniD = $_POST['relacion_universidad'];  //Relacion con la universidad del denunciante
+        $departamentoD = NULL; //Departamente al que pertenece el denunciante
+        $semestreD = NULL; //Semestre que esta cursando si es alumno(Se declara nulo por si no es un alumno)
+        if($relUniD == "Otro"){ //Si la relación con la universidad es "Otro"
+            $relUniD = $_POST['relacion_otro']; //Obtiene la relación del campo de texto 'relacion_otro'
+        }else{                          //Si no 
+            if($relUniD == "Alumno"){ //Si es un alumno
+                $departamentoD = $_POST['carrera']; //Obtiene el departamento del denunciante
+                $semestreD = $_POST['semestre']; //Obtiene el semestre que cursa el denunciante
             }else if($relUniD == "Docente"){
-                $departamentoD = $_POST['departamento_docente'];
+                $departamentoD = $_POST['departamento_docente']; //Obtiene el departamento del denunciante
             }else if($relUniD == "Personal administrativo"){
-                $departamentoD = $_POST['departamento_admin'];
+                $departamentoD = $_POST['departamento_admin']; //Obtiene el departamento del denunciante
             }
         }
 
-        $tipoD = $_POST['tipoD'];
-        $fechaHecho = $_POST['fechaHecho'];
-        $lugarHecho = $_POST['lugarHecho'];
-        $detallesLugar = $_POST['detallesLugar'] ?? null; //Opcional 
-        $descripcionR = $_POST['descripcionR'] ?? null; 
+        $tipoD = $_POST['tipoD']; //Tipos de denuncia 
+        $fechaHecho = $_POST['fechaHecho']; //Fecha en que ocurrio el hecho
+        $lugarHecho = $_POST['lugarHecho']; //Lugar en que ocurrio el hecho
+        $detallesLugar = $_POST['detallesLugar'] ?? null; //Detalles del lugar en que ocurrio (Si aplica) 
+        $descripcionR = $_POST['descripcionR'] ?? null;  //Descripción del hecho
         $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
-        //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
-        $prioridad = 3;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
-        $evi = $_POST['evidencia'];
-        $numTestigos = $_POST['num_testigos'];
-        $bandC = $_POST['actualizaciones'];
-        $bandP = $_POST['psicologico'];
+        $prioridad = 3;  //Prioridad de la denuncia: Comienza en 3 porque el usuario ingresa detalles del hecho
+        $evi = $_POST['evidencia']; // incica si hay evidencias
+        $numTestigos = $_POST['num_testigos']; //Numero de testigos que presenciaron el hecho
+        $bandC = $_POST['actualizaciones']; //Bandera que indica si el usuario desea recibir actualizaciones
+        $bandP = $_POST['psicologico']; //Bandera que indica si el usuario desea recibir apoyo psicologico
 
-        if($evi = "Sí"){
-            $prioridad += 5;
+        if($evi = "Sí"){        // Si hay evidencia
+            $prioridad += 5; //Se le aumentan 5 puntos a la prioridad
         }
-        if($tipoReporte == "No"){ //Reporte anonimo
-            $prioridad += 4;
+        if($tipoReporte == "No"){ //Si el reporte No es anonimo
+            $prioridad += 4;    //Se le aumentan 4 puntos a la prioridad
         }
-        if($numTestigos != "0"){
-            $prioridad += 3;
+        if($numTestigos != "0"){  //Si hay al menos 1 testigo
+            $prioridad += 3;    //Se le aumentan 3 puntos a la prioridad
         }
 
-        //Encriptamos la información sensible
+        //Encriptamos la información sensible del usuario
         $nombreD = encryptData($nombreD);
         $correoD = encryptData($correoD);
         $numTelD = encryptData($numTelD);
@@ -77,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmtDen = $conexion->prepare("INSERT INTO DENUNCIANTE (nombreD, correoD, numTelD, relUniD, tipoD, departamentoD, semestreD) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmtDen->bind_param("sssssss", $nombreD, $correoD, $numTelD, $relUniD, $tipoDenunciante, $departamentoD, $semestreD);
         if ($stmtDen->execute()){
-            $idDenunciante = $stmtDen->insert_id;
-            if($tipoDenunciante == "Testigo"){
+            $idDenunciante = $stmtDen->insert_id;   //El id de cada tabla se pone automaticamente
+            if($tipoDenunciante == "Testigo"){      //Si se un Testigo se inserta tambien en Denunciante_Testigo
                 $stmtDenTes = $conexion->prepare("INSERT INTO DENUNCIANTE_TESTIGO (idD, relAfectado) VALUES (?, ?)");
                 $stmtDenTes->bind_param("is",$idDenunciante, $relAfectado);
                 $stmtDenTes->execute();
@@ -87,12 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         // Insertar datos del reporte en la tabla REPORTE
-        $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, idD, tipoReporte, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssi", $idDenunciante, $tipoReporte, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
+        $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, idD, tipoReporte, seguimiento, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssssssi", $idDenunciante, $tipoReporte, $bandC, $tipoD, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
 
         if ($stmt->execute()) {
             $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
-            //echo "Reporte registrado con éxito. ID: " . $idReporte;
 
             // Primero, verifica si se seleccionó algún número de testigos
             if (isset($_POST['num_testigos']) && $_POST['num_testigos'] > 0) {
@@ -122,13 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-            // Primero, verifica si se seleccionó algún número de testigos
+            // Ahora, verifica si se seleccionó algún número de agresores
             if (isset($_POST['num_agresores']) && $_POST['num_agresores'] > 0) {
                 $numAgresores = $_POST['num_agresores'];
                 
-                // Recorre cada número de testigo y guarda los datos en la base de datos
+                // Recorre cada número de agresor y guarda los datos en la base de datos
                 for ($i = 1; $i <= $numAgresores; $i++) {
-                    // Obtiene el rol del testigo y el nombre
+                    // Obtiene el rol del agresor y el nombre
                     $rolA = $_POST["agresor_rol_{$i}"];
                     $nombreA = $_POST["nombre_agresor_{$i}"];
                     
@@ -137,14 +136,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $rolA = $_POST["agresor_otro_especificar_{$i}"];
                     }
 
-                    // Inserta el testigo en la base de datos
+                    // Inserta el agresor en la base de datos
                     $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
                     $stmtAgresor->bind_param("ss", $nombreA, $rolA);
 
                     if ($stmtAgresor->execute()) {
                         $idAgresor = $stmtAgresor->insert_id;
 
-                        // Inserta la relación entre el reporte y el testigo
+                        // Inserta la relación entre el reporte y el agresor
                         $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
                         $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
                         $stmtReporteAgresor->execute();
@@ -154,21 +153,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Insertar evidencias si se proporcionaron
             if (isset($_FILES['evidencias'])) {
-                $rutaEvidencia = 'evidencias/'.$idReporte;
+                $rutaEvidencia = 'evidencias/'.$idReporte; //Crea una ruta para las evidencias del reporte que se esta enviando.
                 if (!is_dir($rutaEvidencia)) {
                     mkdir($rutaEvidencia, 0777, true); // 0777 da permisos completos, y true crea directorios recursivamente
                 }
 
+                //Obtiene las evidencias
                 foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
                     $nombreEvidencia = $_FILES['evidencias']['name'][$index];
                     $rutaEvidencia = 'evidencias/'.$idReporte.'/'.basename($nombreEvidencia);
 
-                    
-
                     if (move_uploaded_file($tmpName, $rutaEvidencia)) {
                         //Insertar registro en la tabla evidencias
                         $stmtEvidencia = $conexion->prepare("INSERT INTO EVIDENCIAS (nombreE, rutaArchivoE, descripcionE) VALUES (?, ?, ?)");
-                        $descripcionE = $_POST['descripcionE']; // Suponiendo que existe un array con las descripciones
+                        $descripcionE = $_POST['descripcionE']; //Toma la descripción de la evidencia.
                         $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
                         if ($stmtEvidencia->execute()) {
                             $idEvidencia = $stmtEvidencia->insert_id;

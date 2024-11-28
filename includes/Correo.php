@@ -43,7 +43,6 @@ class Correo {
             $this->mail->AltBody = strip_tags($mensaje); 
 
             $this->mail->send();
-            echo 'Correo enviado';
         } catch (Exception $e) {
             echo "Error al enviar el correo: {$this->mail->ErrorInfo}";
         }

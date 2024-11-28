@@ -31,10 +31,7 @@ function eliminarCarpeta($carpeta) {
 // Obtener los parámetros enviados por AJAX
 $idReporte = isset($_GET['idReporte']) ? $_GET['idReporte'] : '';
 $accion = isset($_GET['accion']) ? $_GET['accion'] : '';
-$correoD = obtenerCorreo($idReporte); 
-$correoD = mysqli_fetch_assoc($correoD);
-$correoD = $correoD['correoD'];
-$correoD = decryptData($correoD);
+
 $ruta_pdf = '../reportes/';
 $ruta_evidencia = "../evidencias/".$idReporte."/";
 
@@ -42,51 +39,38 @@ $correo = new Correo();
 
 switch($accion){
     case 'aceptar':
-        echo "<p style='text-align: center;'>".aceptarReporte($idReporte)."</p>";
-        
-        if($correoD != ''){
-            echo "<p style='text-align: center;'>Si hubo correo</p>";
-            // $correo = new Correo();
+        $consulta = obtenerCorreo($idReporte); 
+        $consultaD = mysqli_fetch_assoc($consulta);
+        $correoD = $consultaD['correoD'];
+        $seguimiento = $consultaD['seguimiento'];
+
+        if($seguimiento == 'Sí'){
+             $correo = new Correo();
             
-            //     $destinatario = decryptData($correoD);
-            //     $titulo = "Confirmación de Recepción de Tu reporte - $idReporte";
+                $destinatario = decryptData($correoD);
+                $titulo = "Actualización sobre tu Reporte - $idReporte";
             
-            //     $mensaje = "
-            //         <html>
-            //         <head>
-            //             <title>Confirmación de Recepción de Tu Caso</title>
-            //         </head>
-            //         <body>
-            //             <p>Estimado/a <strong>Denunciante</strong>,</p>
-            //             <p>Gracias por confiar en nuestra plataforma para reportar tu caso. Este correo es para confirmarte que hemos recibido correctamente tu denuncia con el número de caso <strong>$idReporte</strong>.</p>
-            //             <p>Queremos reiterarte que tu reporte será tratado con la máxima confidencialidad y que nuestro equipo se encargará de analizarlo de manera justa y profesional. En esta etapa inicial, nuestro equipo está revisando los detalles proporcionados para evaluar las medidas necesarias y los próximos pasos a seguir.</p>
-            //             <h3>¿Qué puedes esperar ahora?</h3>
-            //             <ul>
-            //                 <li><strong>Evaluación inicial:</strong> Uno de nuestros especialistas revisará tu caso para determinar las acciones inmediatas necesarias, si aplican.</li>
-            //                 <li><strong>Seguimiento:</strong> Te mantendremos informado/a sobre el progreso del caso según el canal de comunicación que elegiste al momento del registro.</li>
-            //                 <li><strong>Apoyo:</strong> Si necesitas asistencia adicional, puedes comunicarte con nuestro equipo al correo <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a>.</li>
-            //             </ul>";
+                $mensaje = "
+                    <html>
+                    <head>
+                        <title>Actualización sobre tu Reporte</title>
+                    </head>
+                    <body>
+                        <p>Estimado/a <strong>Denunciante</strong>,</p>
+                        <p>Gracias por confiar en AlertaTec para reportar tu situación. Queremos informarte que tu reporte con el número <strong>$idReporte</strong> ha sido aceptado y está en la fase de investigación.</p>
+                        <p>En esta fase se realiza la recopilación de pruebas, que puede incluir testimonios y cualquier otra evidencia relevante que respalde la denuncia y ayude a esclarecer los hechos.</p>
+                        <h3>¿Qué puedes esperar ahora?</h3>
+                        <p>Es posible que se te contacte en el futuro a ti y a los testigos para realizar entrevistas y para realizar el análisis de las pruebas presentadas. Por lo que te pedimos que estes atento al correo por cualquier posible contacto.</p>
+                        <p>Estamos aquí para apoyarte en este proceso y asegurar que se respete tu integridad y bienestar en todo momento.</p>
+                        <p><strong>Habla, nosotros te respaldamos.</strong></p>
+                        <p>Atentamente,</p>
+                        <p><strong>Equipo AlertaTec<br>
+                        Instituto Tecnológico de la Laguna</strong><br>
+                        <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a> |  <a href='alertatec.infinityfreeapp.com'>alertatec.infinityfreeapp.com</a> </p>
+                    </body>
+                    </html>";
             
-            //     if ($bandP == "Sí") {
-            //         $mensaje .= "
-            //             <h3>Apoyo Psicológico</h3>
-            //             <p>Hemos registrado que solicitaste asistencia psicológica. Nuestro equipo especializado se pondrá en contacto contigo en las próximas [X horas/días] para coordinar el apoyo que necesites. Si tienes alguna preferencia respecto al horario o el medio de contacto, por favor háznoslo saber respondiendo a este correo.</p>";
-            //     }
-            
-            //     $mensaje .= "
-            //             <p>Estamos aquí para apoyarte en este proceso y asegurar que se respete tu integridad y bienestar en todo momento.</p>
-            //             <p><strong>Habla, nosotros te respaldamos.</strong></p>
-            //             <p>Atentamente,</p>
-            //             <p><strong>Equipo AlertaTec<br>
-            //             Instituto Tecnológico de la Laguna</strong><br>
-            //             <a href='mailto:alertateclag@gmail.com'>alertateclag@gmail.com</a> | [Teléfono] | [Página Web, si aplica]</p>
-            //         </body>
-            //         </html>";
-            
-            //     $correo->enviarCorreo($destinatario, $titulo, $mensaje);
-            //$correo->correoAceptar($idReporte, $correoD); /////////////////////////////////////////
-        }else{
-            echo "<p style='text-align: center;'>No hubo correo</p>";
+                $correo->enviarCorreo($destinatario, $titulo, $mensaje);
         }
 
         $archivo = "Reporte_".$idReporte.".pdf";
@@ -96,6 +80,7 @@ switch($accion){
         }
     
         eliminarCarpeta($ruta_evidencia);
+        echo "<p style='text-align: center;'>".aceptarReporte($idReporte)."</p>";
         break;
     case 'papelera':
         echo "<p style='text-align: center;'>".papeleraReporte($idReporte)."</p>";
@@ -133,40 +118,4 @@ switch($accion){
         echo "<p style='text-align: center;'>Todos los reportes de la papelera han sido eliminados definitivamente</p>";
         break;
         }
-        
-        
-// echo "<!-- Tabla de denuncias -->";
-// echo "<table class='report-table'>";
-// echo "<thead>
-//         <tr>
-//             <th class='Cab'>ID</th>
-//             <th class='Cab'>Denuncia</th>
-//             <th class='Cab'>Prioridad</th>
-//             <th class='Cab'>Evidencias</th>
-//             <th class='Cab'>Acciones</th>
-//         </tr>
-//       </thead>
-//       <tbody>";
-// while ($reporte = mysqli_fetch_assoc($consulta)) {
-//     $prioridad = $reporte['prioridad'];
-//     echo "<tr>";
-//     echo "<td>".$reporte['idReporte']."</td>";
-//     echo "<td><a href='./includes/verReporte.php?carpeta=reportes&archivo=Reporte_".$reporte['idReporte'].".pdf' target='_blank'>Ver reporte</a></td>";
-//     echo "<td>".Prioridad($prioridad)."</td>";
-//     echo "<td>  
-//             <div class='contBtn'>
-//                 ".evidencia($reporte['idReporte'])."
-//             </div>
-//           </td>";
-//     echo "<td>
-//         <div class='contBtn'>
-//             <button class='action-btn' onclick='confirmAction()'><img src='img/Aceptar.png' alt='' class='imgB'></button>
-//             <button class='action-btn' onclick='deleteAction()'><img src='img/Rechazar.png' alt='' class='imgB'></button>
-//         </div>
-//     </td>";
-//     echo "</tr>";            
-// }
-
-// echo "</tbody>
-//     </table>";
 ?>
