@@ -3,6 +3,27 @@
 //En este archivo estan la mayoria de funciones que usa la aplicacion 
 //que hacen uso de una base de datos
 
+//Obtener reportes
+function obtener_reportes(){
+    try{
+        //Importar las credenciales
+        require 'database.php'; 
+
+        //Consulta SQL 
+        $sql = "SELECT idReporte FROM REPORTE;";
+
+        //Realizar la consulta
+        $reportes = mysqli_query($conexion, $sql);
+
+        //Acceder a los resultados
+        return $reportes;
+
+
+    } catch(\Throwable $th){
+        var_dump($th);
+    }
+}
+
 //Obtener los reportes, respeta los filtros.
 function obtener_reportes_por_tipo($tipoDenuncia) {
     try {
