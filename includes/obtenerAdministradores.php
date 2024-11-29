@@ -8,6 +8,7 @@ $tipoAdmin = isset($_GET['tipoAdmin']) ? $_GET['tipoAdmin'] : '';
 $consulta = obtener_admins($tipoAdmin);
 
 
+//Generar el codigo html que se debe desplegar en la pantalla de SuperAdministrador.
 echo "<!-- Tabla de Admins -->";
 echo "<table class='report-table'>";
 echo "<thead>

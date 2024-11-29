@@ -11,8 +11,7 @@ if($idReporte == 'Recargar'){
 // Llamar a la función para obtener los reportes
 $consulta = obtener_evidencias($idReporte);
 
-//<th class='Cab'>Tipo de archivo</th> //Puede que lo ponga
-
+    //Genera el codigo html para desplegar la tabla con las evidencias de un determinado reporte
     echo "<!-- Tabla de denuncias -->";
     echo "<table class='report-table'>";
     echo "<thead>
@@ -24,9 +23,8 @@ $consulta = obtener_evidencias($idReporte);
         </thead>
         <tbody>";
     while ($evi= mysqli_fetch_assoc($consulta)) {
-        //$prioridad = $evi['prioridad'];
         echo "<tr>";
-        echo "<td>".$evi['idE']."</td>";
+        echo "<td>".$evi['nombreE']."</td>";
         echo "<td>".$evi['descripcionE']."</td>";
         echo "<td>
                 <div class='contBtn'>

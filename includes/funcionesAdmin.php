@@ -1,25 +1,9 @@
 <?php
 
-function obtener_reportes(){
-    try{
-        //Importar las credenciales
-        require 'database.php'; 
+//En este archivo estan la mayoria de funciones que usa la aplicacion 
+//que hacen uso de una base de datos
 
-        //Consulta SQL 
-        $sql = "SELECT idReporte FROM REPORTE;";
-
-        //Realizar la consulta
-        $reportes = mysqli_query($conexion, $sql);
-
-        //Acceder a los resultados
-        return $reportes;
-
-
-    } catch(\Throwable $th){
-        var_dump($th);
-    }
-}
-
+//Obtener los reportes, respeta los filtros.
 function obtener_reportes_por_tipo($tipoDenuncia) {
     try {
         require 'database.php';
@@ -49,6 +33,7 @@ function obtener_reportes_por_tipo($tipoDenuncia) {
     }
 }
 
+//Obtener la papelera, los reportes que estan en la papelera.
 function obtenerPapelera() {
     try {
         require 'database.php';
@@ -66,6 +51,7 @@ function obtenerPapelera() {
     }
 }
 
+//Obtener los administradores o SuperAdministradores
 function obtener_admins($tipoAdmin){
     try {
         require 'database.php';
@@ -87,6 +73,7 @@ function obtener_admins($tipoAdmin){
     }
 }
 
+//Obtener las evidencias de un determinado reporte
 function obtener_evidencias($idReporte){
     try {
         require 'database.php';
@@ -120,6 +107,7 @@ function obtener_evidencias($idReporte){
     }
 }
 
+//Realiza las acciones necesarias en la base de datos cuando se acepta un reporte
 function aceptarReporte($idReporte){
     try {
         require 'database.php';
@@ -182,7 +170,7 @@ function aceptarReporte($idReporte){
                     
 }
 
-
+//Realiza las acciones necesarias en la base de datos cuando se envia a la papelear un reporte
 function papeleraReporte($idReporte){
     try {
         require 'database.php';
@@ -202,6 +190,7 @@ function papeleraReporte($idReporte){
                     
 }
 
+//Realiza las acciones necesarias en la base de datos cuando se restaura un reporte de la papelera
 function restaurarReporte($idReporte){
     try {
         require 'database.php';
@@ -220,6 +209,7 @@ function restaurarReporte($idReporte){
                     
 }
 
+//Realiza las acciones necesarias en la base de datos cuando se borra definitivamente un reporte
 function borrarDefReporte($idReporte){
     try {
         require 'database.php';
@@ -281,6 +271,7 @@ function borrarDefReporte($idReporte){
     }
 }
 
+//Obtiene el correo del Denunciante relacionado con un determinado reporte
 function obtenerCorreo($idReporte){
     try {
         require 'database.php';
